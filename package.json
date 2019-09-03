@@ -1,15 +1,15 @@
 {
-  "name": "webapi-ii-challenge",
+  "name": "node-api2-project",
   "version": "0.0.1",
-  "description": "Challenge for Web API II Module",
+  "description": "Project for Node API 2 Module",
   "private": true,
   "main": "index.js",
   "scripts": {
     "server": "nodemon index.js"
   },
   "dependencies": {
-    "knex": "^0.18.3",
-    "sqlite3": "^4.0.9"
+    "knex": "^0.19.3",
+    "sqlite3": "^4.1.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"

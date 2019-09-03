@@ -1,20 +1,20 @@
 exports.up = function(knex) {
   return knex.schema.createTable('comments', tbl => {
-      tbl.increments();
-      tbl
-        .string('text')
-        .notNullable()
-      tbl.timestamps(true, true);
+    tbl.increments();
 
-      tbl
-        .integer('post_id')
-        .notNullable()
-        .unsigned()
-        .references('id')
-        .inTable('posts')
-        .onDelete('CASCADE')
-        .onUpdate('CASCADE');
-    });
+    tbl.string('text').notNullable();
+
+    tbl
+      .integer('post_id')
+      .unsigned()
+      .notNullable()
+      .references('id')
+      .inTable('posts')
+      .onDelete('CASCADE')
+      .onUpdate('CASCADE');
+
+    tbl.timestamps(true, true);
+  });
 };
 
 exports.down = function(knex) {
