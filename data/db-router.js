@@ -64,10 +64,10 @@ router.post('/:id/comments', (req, res) => {
         text === '' ? res.status(400).json({ message: "Please provide text for the comment." }) : res.status(201).json(comment);
     })
     .catch( error => {
-        console.log('error from POST/:id/comments');
+        console.log('error from POST/:id/comments', error);
         res.status(400).json({ errorMessage: "Please provide text for the comment." })
-    })
-})
+    });
+});
 
 //DELETE request
 
@@ -75,7 +75,6 @@ router.delete('/:id', (req, res) => {
     Posts.remove(req.params.id)
     .then(count => {
         count > 0 ? res.status(200).json({ message: 'post successfully deleted' }) : res.status(404).json({ message: "The post with the specified ID does not exist." });
-
     })
     .catch(error => {
         console.log(error);
@@ -85,8 +84,22 @@ router.delete('/:id', (req, res) => {
 
 //PUT request
 
-router.put('/', (req, res) => {
-    
+router.put('/:id', (req, res) => {
+    const updates = req.body;
+    Posts.insertComment(req.params.id, updates)
+    .then(changes => {
+        if( !changes.id ) {
+            res.status(404).json({ message: "The post with the specified ID does not exist." })
+        } else if ( !changes.title || !changes.contents) {
+            res.status(400).json({ errormessage: "Please provide title and contents for the post."})
+        } else {
+            res.status(200).json(changes);
+        }
+    })
+    .catch(error => {
+        console.log('error from PUT/:id', error);
+        res.status(500).json({ error: "The post information could not be modified." })
+    })
 })
 
 module.exports = router;
