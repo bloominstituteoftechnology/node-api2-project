@@ -6,8 +6,8 @@ const server = express();
 
 server.use(express.json());
 
-server.get('/', (req, res) =>{
-    res.send(`hello from port 5000!`);
+server.get('/', (req, res) => {
+    res.send(`Hello from Server.js`);
 });
 
 server.use('/api/posts', postsRouter);
