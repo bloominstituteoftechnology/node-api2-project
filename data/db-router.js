@@ -46,10 +46,9 @@ router.get('/:id/comments', (req, res) => {
 //POST requests
 
 router.post('/', (req, res) => {
-    const userPosts = req.body;
-    Posts.insert(userPosts)
+    const {title, contents} = Posts.insert(req.body)
     .then(posts => {
-        userPosts.title && userPosts.contents === '' ?
+       title && contents === '' ?
             res.status(400).json({ errorMessage: "Please provide title and contents for the post."}) : res.status(201).json(posts);
     })
     .catch(error => {
@@ -59,15 +58,29 @@ router.post('/', (req, res) => {
 
 });
 
-router.post('/', (req, res) => {
-    
+router.post('/:id/comments', (req, res) => {
+    const { text } = Posts.findCommentById(req.params.id)
+    .then(comment => {
+        text === '' ? res.status(400).json({ message: "Please provide text for the comment." }) : res.status(201).json(comment);
+    })
+    .catch( error => {
+        console.log('error from POST/:id/comments');
+        res.status(400).json({ errorMessage: "Please provide text for the comment." })
+    })
 })
 
 //DELETE request
 
+router.delete('/:id', (req, res) => {
+    Posts.remove(req.params.id)
+    .then(count => {
+        count > 0 ? res.status(200).json({ message: 'post successfully deleted' }) : res.status(404).json({ message: "The post with the specified ID does not exist." });
 
-router.delete('/', (req, res) => {
-    
+    })
+    .catch(error => {
+        console.log(error);
+        res.status(500).json({ error: "The post could not be removed" })
+    })
 })
 
 //PUT request
