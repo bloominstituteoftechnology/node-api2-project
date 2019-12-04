@@ -13,6 +13,7 @@
     "sqlite3": "^4.1.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.1"
+    "nodemon": "^2.0.1",
+    "prettier": "^1.19.1"
   }
 }
