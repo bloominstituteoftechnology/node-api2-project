@@ -29,15 +29,13 @@ router.post('/', (req, res) => {
 router.post('/:id/comments', (req, res) => {
   // const id = req.params.id;
   const data = req.body;
-  console.log(data);
   if (!data.text) {
     res.status(400).json({ errorMessage: 'Please provide text for the comment.'})
   } else {
     db.insertComment(data)
     .then(comment => {
-      console.log(comment);
       if (comment) {
-        res.status(201).json(data)
+        res.status(201).json(comment)
       } else {
         res.status(404).json({ errorMessage: 'The post with the specified ID does not exist.' })
       }
@@ -49,6 +47,20 @@ router.post('/:id/comments', (req, res) => {
       })
     })
   }
+})
+
+// Returns an array of all the post objects contained in the database.
+router.get('/', (req, res) => {
+  db.find()
+  .then(posts => {
+    res.status(200).json(posts);
+  })
+  .catch(error => {
+    console.log('erron on GET /api/posts/', error);
+    res.status(500).json({
+      errorMessage: 'The posts information could not be retrieved.'
+    })
+  })
 })
 
 
