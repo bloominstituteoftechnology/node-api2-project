@@ -56,9 +56,29 @@ router.get('/', (req, res) => {
     res.status(200).json(posts);
   })
   .catch(error => {
-    console.log('erron on GET /api/posts/', error);
+    console.log('error on GET /api/posts/', error);
     res.status(500).json({
       errorMessage: 'The posts information could not be retrieved.'
+    })
+  })
+})
+
+// Returns the post object with the specified id.
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
+
+  db.findById(id)
+  .then(post => {
+    if (post.length !== 0) {
+      res.status(200).json(post)
+    } else {
+      res.status(404).json({ errorMessage: 'The post with the specified ID does not exist.' })
+    }
+  })
+  .catch(error => {
+    console.log('error on GET /api/posts/:id', error);
+    res.status(500).json({
+      errorMessage: 'The post information could not be retrieved.'
     })
   })
 })
