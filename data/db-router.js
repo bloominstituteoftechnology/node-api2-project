@@ -48,7 +48,7 @@ router.get('/:id/comments', (req, res) => {
 router.post('/', (req, res) => {
     const {title, contents} = Posts.insert(req.body)
     .then(posts => {
-       !title || !contents  ?
+       title || contents  ?
             res.status(400).json({ errorMessage: "Please provide title and contents for the post."}) : res.status(201).json(posts);
     })
     .catch(error => {
@@ -82,8 +82,8 @@ router.post("/:id/comments", (req, res) => {
         });
         }
     })
-    .catch(err => {
-        console.log(err);
+    .catch(error => {
+        console.log(error);
         res.status(500).json({
         error: "There was an error while saving the comment to the database."
         });
