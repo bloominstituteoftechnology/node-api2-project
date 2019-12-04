@@ -107,7 +107,8 @@ router.get('/:id/comments', (req, res) => {
 router.delete('/:id', (req, res) => {
   const id = req.params.id;
 
-  db.remove(id).then(post => {
+  db.remove(id)
+  .then(post => {
     if (post) {
       res.status(200).json(post)
     } else {
@@ -120,6 +121,30 @@ router.delete('/:id', (req, res) => {
       errorMessage: 'The post could not be removed'
     })
   })
+})
+
+// Updates the post with the specified ID using information sent thru req.body.
+router.put('/:id', (req, res) => {
+  const id = req.params.id;
+  const data = req.body;
+  if (!data.title || !data.contents) {
+    res.status(400).json({ errorMessage: 'Please provide title and contents for the post.'})
+  } else {
+    db.update(id, data)
+    .then(post => {
+      if (post) {
+        res.status(200).json(data)
+      } else {
+        res.status(404).json({ errorMessage: 'The post with the specified ID does not exist.'})
+      }
+    })
+    .catch(error => {
+      console.log('error on PUT /api/posts/:id', error)
+      res.status(500).json({
+        errorMessage: 'The post information could not be modified.'
+      })
+    }) 
+  }
 })
 
 
