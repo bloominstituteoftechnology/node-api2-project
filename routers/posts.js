@@ -14,27 +14,43 @@ router.post("/api/posts", (req, res) => {
     if(!req.body.name) {
         return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
     }
-    db.add(req.body)
+
+    db.findPostComments(req.body)
     .then(db => {
-        res.status(201).json(db)
+        return res.status(201).json(db)
     })
     .catch(err => {
-        res.status(500).json({ error: "There was an error while saving the post to the database" })
+        return res.status(500).json({ error: "There was an error while saving the post to the database" })
     })
 })
 
-router.post("/api/posts/:id/comments", (req, res) => {
-    
+router.post("/api/posts/:id/comments", async (req, res) => {
+    try {   
+        if(!req.body.text) {
+            return res.status(400).json({ errorMessage: "Please provide text for the comment."  })
+        }
+  
+        const post = await db.findById(req.body)
+        if(!post) {
+            return res.status(404).json({ message: "The post with the specified ID does not exist." }) 
+        }
+
+        const comment = db.insertComment(req.body)
+        return res.status(201).json(comment)
+    }
+    catch(err) {
+        return res.status(500).json({ error: "There was an error while saving the comment to the database" })
+    }
 })
 
 
 router.get("/api/posts", (req, res) => {
     db.find()
         .then(posts => {
-            res.json(posts)
+            return res.json(posts)
         })
         .catch(err => {
-            res.status(500).json({ message: "The posts information could not be retrieved." })
+            return res.status(500).json({ message: "The posts information could not be retrieved." })
         })
 })  
 
@@ -44,21 +60,21 @@ router.get("/api/posts/:id", (res, req) => {
             if (id) {
               res.json(id)
             } else {
-                res.status(404).json({ message: "The post with the specified ID does not exist." })
+                return res.status(404).json({ message: "The post with the specified ID does not exist." })
             }
         })
         .catch(err => {
-            res.status(500).json({ error: "The post information could not be retrieved." })
+            return res.status(500).json({ error: "The post information could not be retrieved." })
         })
 })
 
 router.get("/api/posts/:id/comments", (res, req) => {
     db.insert()
     .then(posts => {
-        if(id) => {
+        if(id) {
             res.json(posts)
         } else {
-            res.status(404).json({ message: "The post with the specified ID does not exist." })
+            return res.status(404).json({ message: "The post with the specified ID does not exist." })
         }
     })
         .catch(err => {
@@ -66,3 +82,19 @@ router.get("/api/posts/:id/comments", (res, req) => {
         })
 })
 
+router.delete("/api/posts/:id", (res, req) => {
+    db.remove(req.params.id)
+    .then(id => {
+        if(id) {
+            return db.remove(req.params.id)
+        }
+        res.status(404).json({ message: "The post with the specified ID does not exist." })
+    })
+    .catch(err => {
+        res.status(500).json({ error: "The post could not be removed" })
+    })
+})
+
+router.put("/api/posts/:id", (req, res) => {
+
+})
