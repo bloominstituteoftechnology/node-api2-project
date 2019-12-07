@@ -9,6 +9,25 @@ const router = express.Router()
 
 router.use('/:id/comments', commentRouter)
 
+
+router.post("/api/posts", (req, res) => {
+    if(!req.body.name) {
+        return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+    }
+    db.add(req.body)
+    .then(db => {
+        res.status(201).json(db)
+    })
+    .catch(err => {
+        res.status(500).json({ error: "There was an error while saving the post to the database" })
+    })
+})
+
+router.post("/api/posts/:id/comments", (req, res) => {
+    
+})
+
+
 router.get("/api/posts", (req, res) => {
     db.find()
         .then(posts => {
@@ -47,4 +66,3 @@ router.get("/api/posts/:id/comments", (res, req) => {
         })
 })
 
-router.
