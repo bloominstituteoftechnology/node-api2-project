@@ -85,7 +85,7 @@ router.delete("/api/posts/:id", (res, req) => {
     db.remove(req.params.id)
     .then(id => {
         if(id) {
-            return db.remove(req.params.id)
+         return db.remove(req.params.id)
         }
 
          return res.status(404).json({ message: "The post with the specified ID does not exist." })
@@ -102,14 +102,15 @@ router.put("/api/posts/:id", async (req, res) => {
             return res.status(404).json({ message: "The post with the specified ID does not exist." })
         }
 
-        const contents = await db.findById(req.body)
+        const contents = await db.update(req.body)
         if (!contents) {
             return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
         }
         } catch(err) {
-            return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+            return res.status(500).json({
+            errorMessage: "The post information could not be modified." })
         }
         
         const contents = db.update(req.body)
-        return res.status(200).json(contents)
+            return res.status(200).json(contents)
 })
