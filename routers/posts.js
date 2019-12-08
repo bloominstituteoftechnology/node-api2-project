@@ -97,8 +97,19 @@ router.delete("/api/posts/:id", (res, req) => {
 
 router.put("/api/posts/:id", async (req, res) => {
     try {
-        if (!req.body.text) {
+        const title = await db.findById(req.params.id)
+        if (!title) {
+            return res.status(404).json({ message: "The post with the specified ID does not exist." })
+        }
+
+        const contents = await db.findById(req.body)
+        if (!contents) {
             return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
         }
-    }
+        } catch(err) {
+            return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+        }
+        
+        const contents = db.update(req.body)
+        return res.status(200).json(contents)
 })
