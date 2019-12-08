@@ -43,7 +43,6 @@ router.post("/api/posts/:id/comments", async (req, res) => {
     }
 })
 
-
 router.get("/api/posts", (req, res) => {
     db.find()
         .then(posts => {
@@ -78,7 +77,7 @@ router.get("/api/posts/:id/comments", (res, req) => {
         }
     })
         .catch(err => {
-            res.status(500).json({ error: "The post information could not be retrieved." })
+            return res.status(500).json({ error: "The post information could not be retrieved." })
         })
 })
 
@@ -88,13 +87,18 @@ router.delete("/api/posts/:id", (res, req) => {
         if(id) {
             return db.remove(req.params.id)
         }
-        res.status(404).json({ message: "The post with the specified ID does not exist." })
+
+         return res.status(404).json({ message: "The post with the specified ID does not exist." })
     })
     .catch(err => {
-        res.status(500).json({ error: "The post could not be removed" })
+        return res.status(500).json({ error: "The post could not be removed" })
     })
 })
 
-router.put("/api/posts/:id", (req, res) => {
-
+router.put("/api/posts/:id", async (req, res) => {
+    try {
+        if (!req.body.text) {
+            return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+        }
+    }
 })
