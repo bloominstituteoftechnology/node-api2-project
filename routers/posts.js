@@ -107,8 +107,7 @@ router.put("/api/posts/:id", async (req, res) => {
             return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
         }
         } catch(err) {
-            return res.status(500).json({
-            errorMessage: "The post information could not be modified." })
+            return res.status(500).json({ errorMessage: "The post information could not be modified." })
         }
         
         const contents = db.update(req.body)
