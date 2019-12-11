@@ -9,6 +9,46 @@ const router = express.Router()
 
 router.use('/:id/comments', commentRouter)
 
+router.get("/api/posts", (req, res) => {
+    db.find()
+        .then(posts => {
+            return res.json(posts)
+        })
+        .catch(err => {
+            return res.status(500).json({ message: "The posts information could not be retrieved." })
+        })
+})  
+
+router.get("/api/posts/:id", (req, res) => {
+    console.log(req.params)
+    db.findById(req.params.id)
+        .then(post => {
+            if (post) {
+             return res.status(200).json(post)
+              
+            } else {
+                return res.status(404).json({ message: "The post with the specified ID does not exist." })
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(500).json({ error: "The post information could not be retrieved." })
+        })
+})
+
+router.get("/api/posts/:id/comments", (res, req) => {
+    db.findPostComments(req.params.id)
+    .then(comments => {
+        if(id) {
+           return res.json(comments)
+        } else {
+            return res.status(404).json({ message: "The post with the specified ID does not exist." })
+        }
+    })
+        .catch(err => {
+            return res.status(500).json({ error: "The post information could not be retrieved." })
+        })
+})
 
 router.post("/api/posts", (req, res) => {
     if(!req.body.name) {
@@ -43,44 +83,6 @@ router.post("/api/posts/:id/comments", async (req, res) => {
     }
 })
 
-router.get("/api/posts", (req, res) => {
-    db.find()
-        .then(posts => {
-            return res.json(posts)
-        })
-        .catch(err => {
-            return res.status(500).json({ message: "The posts information could not be retrieved." })
-        })
-})  
-
-router.get("/api/posts/:id", (res, req) => {
-    db.findById(req.params.id)
-        .then(id => {
-            if (id) {
-              res.json(id)
-            } else {
-                return res.status(404).json({ message: "The post with the specified ID does not exist." })
-            }
-        })
-        .catch(err => {
-            return res.status(500).json({ error: "The post information could not be retrieved." })
-        })
-})
-
-router.get("/api/posts/:id/comments", (res, req) => {
-    db.insert()
-    .then(posts => {
-        if(id) {
-            res.json(posts)
-        } else {
-            return res.status(404).json({ message: "The post with the specified ID does not exist." })
-        }
-    })
-        .catch(err => {
-            return res.status(500).json({ error: "The post information could not be retrieved." })
-        })
-})
-
 router.delete("/api/posts/:id", (res, req) => {
     db.remove(req.params.id)
     .then(id => {
@@ -97,19 +99,23 @@ router.delete("/api/posts/:id", (res, req) => {
 
 router.put("/api/posts/:id", async (req, res) => {
     try {
-        const title = await db.findById(req.params.id)
-        if (!title) {
+        // Call validations (error 400's) first!
+        if (!req.body.title || !req.body.contents) {
+            return res.status(400).json({ errorMessage: "Please provide title and contents for the post. " })
+        }
+        // Validate before sending user to the db.
+        const post = await db.findById(req.params.id)
+        if (!post) {
             return res.status(404).json({ message: "The post with the specified ID does not exist." })
         }
 
-        const contents = await db.update(req.body)
-        if (!contents) {
-            return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
-        }
+        const updatedPost = await db.update(req.body)
+        return res.status(200).json(updatedPost)
+       
+        // 500's always in my catch and last.
         } catch(err) {
             return res.status(500).json({ errorMessage: "The post information could not be modified." })
         }
-        
-        const contents = db.update(req.body)
-            return res.status(200).json(contents)
 })
+
+module.exports = router
