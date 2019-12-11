@@ -118,4 +118,58 @@ router.post("/:id/comments", (req, res) => {
  }
 });
 
+//DELETE /api/posts/:id
+router.delete("/:id", (req, res) => {
+ const id = req.params.id;
+ dbs.findById(id).then(post => {
+   if (post.length) {
+     dbs
+       .remove(id)
+       .then(() => {
+         res.status(204).json(post);
+       })
+       .catch(error => {
+         res.status(500).json({
+           error: "The post could not be removed"
+         });
+       });
+   } else {
+     res.status(404).json({
+       message: "The post with the specified ID does not exist"
+     });
+   }
+ });
+});
+
+//PUT /api/posts/:id
+router.put("/:id", (req, res) => {
+ const changes = req.body;
+ const id = req.params.id;
+ if (changes.title && changes.contents) {
+   dbs.findById(id).then(post => {
+     if (post.length) {
+       dbs
+         .update(id, changes)
+         .then(modified => {
+           dbs.findById(id).then(post => {
+             res.status(200).json(post);
+           });
+         })
+         .catch(error => {
+           res.status(500).json({
+             error: "The post information could not be modifed"
+           });
+         });
+     } else {
+       res.status(404).json({
+         message: "The post with the specified ID does not exist"
+       });
+     }
+   });
+ } else {
+   res.status(400).json({
+     errorMessage: "Please provide title and contents for the post"
+   });
+ }
+});
 module.exports = router;
