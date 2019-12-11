@@ -36,7 +36,7 @@ router.get("/api/posts/:id", (req, res) => {
         })
 })
 
-router.get("/api/posts/:id/comments", (res, req) => {
+router.get("/api/posts/:id/comments", (req, res ) => {
     db.findPostComments(req.params.id)
     .then(comments => {
         if(id) {
@@ -83,7 +83,7 @@ router.post("/api/posts/:id/comments", async (req, res) => {
     }
 })
 
-router.delete("/api/posts/:id", (res, req) => {
+router.delete("/api/posts/:id", (req, res) => {
     db.remove(req.params.id)
     .then(id => {
         if(id) {
