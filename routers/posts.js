@@ -103,7 +103,7 @@ router.put("/api/posts/:id", async (req, res) => {
         if (!req.body.title || !req.body.contents) {
             return res.status(400).json({ errorMessage: "Please provide title and contents for the post. " })
         }
-        // Validate before sending user to the db.
+        // Validate (above) before sending user to the db.
         const post = await db.findById(req.params.id)
         if (!post) {
             return res.status(404).json({ message: "The post with the specified ID does not exist." })
