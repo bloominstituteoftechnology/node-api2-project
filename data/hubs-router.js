@@ -39,5 +39,53 @@ router.get("/:id", (req, res) => {
    });
 });
 
+//POST api/posts
+router.post("/", (req, res) => {
+ const newBlog = req.body;
+ if (newBlog.title && newBlog.contents) {
+   dbs
+     .insert(newBlog)
+     .then(id => {
+       dbs.findById(id.id).then(blog => {
+         res.status(201);
+         res.json(blog);
+       });
+     })
+     .catch(error => {
+       res.status(500);
+       res.json({
+         error: "There was an error while saving the post to the database"
+       });
+     });
+ } else {
+   res.status(400);
+   res.json({
+     errorMessage: "Please provide title and contents for the post"
+   });
+ }
+});
+
+// GET /api/posts/:id/comments
+router.get("/:id/comments", (req, res) => {
+ const id = req.params.id;
+ dbs.findById(id).then(post => {
+   if (post.length) {
+     dbs
+       .findPostComments(id)
+       .then(comments => {
+         res.status(200).json(comments);
+       })
+       .catch(error => {
+         res.status(500).json({
+           error: "The comments information could not be retrieved"
+         });
+       });
+   } else {
+     res.status(404).json({
+       message: "The post with the specified ID does not exist"
+     });
+   }
+ });
+});
 
 module.exports = router;
