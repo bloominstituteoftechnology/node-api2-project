@@ -88,4 +88,34 @@ router.get("/:id/comments", (req, res) => {
  });
 });
 
+//POST /api/posts/:id/comments
+router.post("/:id/comments", (req, res) => {
+ const comment = req.body;
+ if (comment.text) {
+   dbs
+     .insertComment(comment)
+     .then(id => {
+       dbs
+         .findCommentById(id.id)
+         .then(postedComment => {
+           res.status(201).json(comment);
+         })
+         .catch(error => {
+           res.status(404).json({
+             message: "The post with the specified ID does not exist"
+           });
+         });
+     })
+     .catch(error => {
+       res.status(500).json({
+         error: "There was an error while saving the comment to the database"
+       });
+     });
+ } else {
+   res.status(400).json({
+     errorMessage: "Please provide text for the comment."
+   });
+ }
+});
+
 module.exports = router;
