@@ -6,7 +6,8 @@ app.use(express.json())
 app.use('/api/posts', postRouter)
 app.use('/api/posts/:id/comments', commentRouter)
 
-const port = 8000
+const port = process.env.PORT || 8080
+
 app.listen(port, () => {
     console.log(`Server is listening on http://localhost:${port}`)
 })
