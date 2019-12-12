@@ -6,6 +6,7 @@ app.use(express.json())
 app.use('/api/posts', postRouter)
 app.use('/api/posts/:id/comments', commentRouter)
 
+const host = process.env.HOST || "0.0.0.0"
 const port = process.env.PORT || 8080
 
 app.listen(port, () => {
