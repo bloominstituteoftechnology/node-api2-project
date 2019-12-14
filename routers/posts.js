@@ -3,11 +3,40 @@ const commentRouter = require('./comments')
 const db = require('../data/db')
 const router = express.Router()
 
-// let db = require('./comments') 
-// const app = express()
-// app.use(express.json())
-
 router.use('/:id/comments', commentRouter)
+
+router.post("/api/posts", (req, res) => {
+    if (!req.body.name) {
+        return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+    }
+
+    db.findPostComments(req.body)
+        .then(db => {
+            return res.status(201).json(db)
+        })
+        .catch(err => {
+            return res.status(500).json({ error: "There was an error while saving the post to the database" })
+        })
+})
+
+router.post("/api/posts/:id/comments", async (req, res) => {
+    try {
+        const post = await db.findById(req.body)
+        if (!post) {
+            return res.status(404).json({ message: "The post with the specified ID does not exist." })
+        }
+
+        if (!req.body.text) {
+            return res.status(400).json({ errorMessage: "Please provide text for the comment." })
+        }
+
+        const comment = db.insertComment(req.body)
+        return res.status(201).json(comment)
+    }
+    catch (err) {
+        return res.status(500).json({ error: "There was an error while saving the comment to the database" })
+    }
+})
 
 router.get("/api/posts", (req, res) => {
     db.find()
@@ -48,39 +77,6 @@ router.get("/api/posts/:id/comments", (req, res ) => {
         .catch(err => {
             return res.status(500).json({ error: "The post information could not be retrieved." })
         })
-})
-
-router.post("/api/posts", (req, res) => {
-    if(!req.body.name) {
-        return res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
-    }
-
-    db.findPostComments(req.body)
-    .then(db => {
-        return res.status(201).json(db)
-    })
-    .catch(err => {
-        return res.status(500).json({ error: "There was an error while saving the post to the database" })
-    })
-})
-
-router.post("/api/posts/:id/comments", async (req, res) => {
-    try {   
-        if(!req.body.text) {
-            return res.status(400).json({ errorMessage: "Please provide text for the comment."  })
-        }
-  
-        const post = await db.findById(req.body)
-        if(!post) {
-            return res.status(404).json({ message: "The post with the specified ID does not exist." }) 
-        }
-
-        const comment = db.insertComment(req.body)
-        return res.status(201).json(comment)
-    }
-    catch(err) {
-        return res.status(500).json({ error: "There was an error while saving the comment to the database" })
-    }
 })
 
 router.delete("/api/posts/:id", (req, res) => {
