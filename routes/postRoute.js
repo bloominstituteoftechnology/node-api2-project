@@ -22,7 +22,7 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
   db.findById(req.params.id)
     .then(post => {
-      if (post.length > 1) {
+      if (post.length > 0) {
         res.status(200).json(post);
       } else {
         res.status(404).json({
