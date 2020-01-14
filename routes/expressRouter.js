@@ -24,7 +24,7 @@ router.get("/", (req, res) => {
     });
 });
 
-// gets all the comments from the database
+// gets a specific posts comments from the database
 router.get("/:id/comments", (req, res) => {
     const postId = req.params.id
     data.findPostComments(postId)
@@ -35,6 +35,27 @@ router.get("/:id/comments", (req, res) => {
         console.log(err);
         res.status(404).json({
             message: "The post with the specifin ID does not exist"
+        });
+    });
+});
+
+// gets a specific post from the database
+router.get("/:id", (req, res) => {
+    const id = req.params.id
+    data.findById(id)
+    .then(specific => {
+        if (id) {
+            res.status(200).json(specific);
+        } else {
+            res.status(404).json({
+                message: "The post with the specific ID does not exist"
+            })
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: "The post information could not be retrieved"
         })
     })
 })
