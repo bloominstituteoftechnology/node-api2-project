@@ -8,6 +8,6 @@ server.get("/", (req, res) => {
     res.send("Server Running!");
 });
 
-server.use("/api/blog", expressRouter)
+server.use("/api/posts", expressRouter)
 
 server.listen(7000, () => console.log("API running"));
