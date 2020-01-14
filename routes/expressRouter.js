@@ -10,7 +10,7 @@ router.use(express.json());
 //     res.status(200).send("hello from the GET /api/posts")
 // });
 
-// gets all the data from database
+// gets all the posts from database
 router.get("/", (req, res) => {
     data.find()
     .then(post => {
@@ -20,6 +20,21 @@ router.get("/", (req, res) => {
         console.log(err);
         res.status(500).json({
             error: "The posts information could not be retrieved"
+        });
+    });
+});
+
+// gets all the comments from the database
+router.get("/:id/comments", (req, res) => {
+    const postId = req.params.id
+    data.findPostComments(postId)
+    .then(comments => {
+        res.status(200).json(comments);        
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(404).json({
+            message: "The post with the specifin ID does not exist"
         })
     })
 })
