@@ -21,18 +21,30 @@ app.get('/', (req, res) => {
 
 })
 
+app.get('/api/posts/:id/comments', (req, res) => {
+    const {id} = req.params;
+    console.log(req.params);
+    findPostComments(id)
+    .then(res => {
+        console.log('get comment res',res)
+    })
+    .catch(error => {
+        console.log('get comment error',error)
+    })
+
+})
+
 app.post(`/api/posts`, (req, res) => {
 
     const {title, contents} = req.body;
     console.log(req.body);
 
-    if(!title || contents) {
+    if(!title || !contents) {
         res 
             .status(400)
             .json("Please provide title and contents for the post.")
     } else {
         insert(req.body)
-        console.log(req.body)
             .then( post => {
                 res.status(201).json(post)
             })
@@ -40,6 +52,31 @@ app.post(`/api/posts`, (req, res) => {
                 res.status(500).json("There was an error while saving the post to the database", error)
             })
     }
+
+    app.post("/api/posts/:id/comments", (req, res)=> {
+        const data = req.body;
+        console.log(req.body)
+
+        if(!data.text) {
+            res.status(400).json( 'please provide text for the post')
+        } else {
+            insertComment(data)
+
+            .then(comment => {
+                if (comment) {
+                    res.status(201).json(comment)
+                } else {
+                    res.status(404).json( 'the specific id does not exist')
+                }
+            })
+
+            .catch(error => {
+                console.log(error);
+                    res.status(500).json({errormessage: 
+                        'Error while saving the comment to the database'})
+            })
+        }
+    })
 })
 
 
