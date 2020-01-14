@@ -56,6 +56,49 @@ router.get("/:id", (req, res) => {
         console.log(err);
         res.status(500).json({
             error: "The post information could not be retrieved"
+        });
+    });
+});
+
+// create a new post
+router.post("/", (req, res) => {
+    const newPost = req.body
+    data.insert(newPost)
+    .then(newwPost => {
+        if (title && contents) {
+            res.status(201).json(newwPost);
+        } else {
+            res.status(400).json({
+                errorMessage: "Please provide title and contexts for the post"
+            })
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: "There was an error while saving the post to the database"
+        });
+    });
+});
+
+// create a new comment
+router.post("/:id/comments", (req, res) => {
+    const newCom = req.body
+    const postId = req.params.post_id
+    data.insertComment(newCom)
+    .then(newwCom => {
+        if (postId) {
+            res.status(201).json(newwCom);
+        } else {
+            res.status(404).json({
+                message: "The post with the specific ID does not exist"
+            })
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(400).json({
+            errorMessage: "Please provide text for the comment"
         })
     })
 })
