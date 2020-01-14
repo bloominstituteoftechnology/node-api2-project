@@ -21,6 +21,27 @@ app.get('/', (req, res) => {
 
 })
 
+app.post(`/api/posts`, (req, res) => {
+
+    const {title, contents} = req.body;
+    console.log(req.body);
+
+    if(!title || contents) {
+        res 
+            .status(400)
+            .json("Please provide title and contents for the post.")
+    } else {
+        insert(req.body)
+        console.log(req.body)
+            .then( post => {
+                res.status(201).json(post)
+            })
+            .catch(error => {
+                res.status(500).json("There was an error while saving the post to the database", error)
+            })
+    }
+})
+
 
 
 
