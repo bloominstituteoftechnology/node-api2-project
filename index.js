@@ -1,9 +1,9 @@
 const express = require('express') 
 const app = express()
-const PORT = 6000;
+const PORT = 5001;
 const hostname = '127.0.0.1';
 
-const { 
+const  { 
     find,
     findById,
     insert,
@@ -17,9 +17,19 @@ const {
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.status(200).json( "App runs");
+    find()
+    .then(posts => {
+        res.status(200).json(posts);
+    })
+    .catch(error => {
+        console.log(error);
+        res.status(500).json({
+            message: 'error finding the post'
+        });
+    });
+});
 
-})
+
 
 app.get('/api/posts/:id/comments', (req, res) => {
     const {id} = req.params;
