@@ -32,14 +32,20 @@ app.get('/', (req, res) => {
 
 
 app.get('/api/posts/:id/comments', (req, res) => {
-    const {id} = req.params;
-    console.log(req.params);
+    const id = req.params.id;
+    
+    
     findPostComments(id)
-    .then(res => {
-        console.log('get comment res',res)
+    .then(comments => {
+        if(comments.lenght < 0) {
+            res.status(200).json(comments)
+        } else {
+            return res.status(404).json({message: `the post with that id does not exist`})
+        }
     })
+
     .catch(error => {
-        console.log('get comment error',error)
+        return res.status(500).json({error: `error whilst saving the post with id to the database`, error})
     })
 
 })
