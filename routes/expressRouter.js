@@ -65,7 +65,7 @@ router.post("/", (req, res) => {
     const newPost = req.body
     data.insert(newPost)
     .then(newwPost => {
-        if (title && contents) {
+        if (newPost.title || newPost.contents) {
             res.status(201).json(newwPost);
         } else {
             res.status(400).json({
@@ -84,21 +84,25 @@ router.post("/", (req, res) => {
 // create a new comment
 router.post("/:id/comments", (req, res) => {
     const newCom = req.body
-    const postId = req.params.post_id
-    data.insertComment(newCom)
+    // const ID = req.params.id
     .then(newwCom => {
-        if (postId) {
-            res.status(201).json(newwCom);
-        } else {
+        if (this.post.length === 0) {
             res.status(404).json({
                 message: "The post with the specific ID does not exist"
             })
+        } else if (!newCom.text) {
+            res.status(400).json({
+                errorMessage: "Please provide text for the comment"
+            });
+        } else {
+            data.insertComment(newCom)
+            res.status(201).json(newwCom)
         }
     })
     .catch(err => {
         console.log(err);
         res.status(400).json({
-            errorMessage: "Please provide text for the comment"
+            errorMessage: "There was an error while saving the post to the database"
         })
     })
 })
