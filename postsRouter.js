@@ -152,7 +152,7 @@ router.put('/:id', (req, res) => {
       .then(updated => {
         if (updated) {
           posts.findById(id)
-            .then (post => res.status(201).json(post)); // TODO: This is only returning the ID
+            .then (post => res.status(201).json(post));
         }
       })
       .catch(err => {
@@ -172,7 +172,34 @@ router.put('/:id', (req, res) => {
 //   { message: "The post with the specified ID does not exist." }
 // Failure: 500. { error: "The post could not be removed" }
 router.delete('/:id', (req, res) => {
-
+  let id = req.params.id;
+  posts.findById(id)
+    .then(deleting => {
+      if (deleting.length) { // Found it
+        posts.remove(id)
+        .then(removed => {
+          res.status(200).json(deleting);
+        })
+        .catch(err => {
+          console.log("Deletion error:", err);
+          res.status(500).json({ // Database error
+            error: "The post could not be removed"
+          })
+        })
+      }
+      else {  // Post ID not found.
+        console.log(`Cannot delete post ${id}. Not found`);
+        res.status(404).json({
+          message: "The post with the specified ID does not exist."
+        });
+      }
+    })
+    .catch (err => { // We'll get here if findById() fails.
+      console.log(`Cannot delete post ${id}. Not found.`, err);
+      res.status(500).json({
+        error: "The post could not be removed"
+      });
+    })
 });
 
 module.exports = router;
