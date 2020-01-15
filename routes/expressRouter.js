@@ -31,12 +31,18 @@ router.get("/:id/comments", (req, res) => {
   data
     .findPostComments(postId)
     .then(comments => {
-      res.status(200).json(comments);
+        if (postId) {
+            res.status(200).json(comments);
+        } else {
+            res.status(404).json({
+                message: "The post with the specific ID does not exist"
+            })
+        }
     })
     .catch(err => {
       console.log(err);
-      res.status(404).json({
-        message: "The post with the specifin ID does not exist"
+      res.status(500).json({
+        error: "The comments information could not be retrieved"
       });
     });
 });
@@ -107,7 +113,7 @@ router.post("/:id/comments", (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(400).json({
+      res.status(500).json({
         errorMessage: "There was an error while saving the post to the database"
       });
     });
