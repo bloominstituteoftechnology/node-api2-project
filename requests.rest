@@ -8,28 +8,28 @@ GET http://localhost:3456/api/posts
 GET http://localhost:3456/api/posts/2
 
 ### OK Get comments from a specific post
-GET http://localhost:3456/api/posts/11/comments
+GET http://localhost:3456/api/posts/17/comments
 
 ### TODO Create a post
 POST http://localhost:3456/api/posts/
 content-type: application/json
 
 {
-    "title": "Spaceballs",
-    "contents": "When will then be now? Soon."
+    "title": "Princess Bride",
+    "contents": "I'm not a witch! I'm your wife!"
 }
 
 ### TODO Modify a post
-PUT http://localhost:3456/api/posts/10
+PUT http://localhost:3456/api/posts/11
 content-type: application/json
 
 {
-    "title": "Spacefools",
+    "title": "Spaceballs",
     "contents": "I said across her nose, not up it!"
 }
 
 ### TODO Create a comment
-POST http://localhost:3456/api/posts/11/comments
+POST http://localhost:3456/api/posts/17/comments
 content-type: application/json
 
 {
@@ -37,5 +37,5 @@ content-type: application/json
 }
 
 ### Delete a post
-DELETE http://localhost:3456/api/posts/8
+DELETE http://localhost:3456/api/posts/15
 

@@ -89,7 +89,9 @@ router.post('/', (req, res) => {
   else {
     posts.insert(postData)
       .then(post => {
-        res.status(201).json(post); // TODO: This is only returning the ID
+        let newId = post.id;
+        posts.findById(newId)
+          .then(newPost => res.status(201).json(newPost));
       })
       .catch(err => {
         console.log("Error posting message:", err);
@@ -120,7 +122,9 @@ router.post('/:id/comments', (req, res) => {
   else {
     posts.insertComment(commentData)
     .then(comment => {
-      res.status(201).json(comment); // TODO: Doesn't return the comment
+      let newId = comment.id;
+      posts.findCommentById(newId)
+        .then(newComment => res.status(201).json(newComment));
     })
     .catch(err => {
       console.log("Error posting comment:", err);
@@ -162,8 +166,6 @@ router.put('/:id', (req, res) => {
         });
       })
   }
-
-
 });
 
 // ** Delete a post **
