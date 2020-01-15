@@ -84,9 +84,11 @@ router.post("/", (req, res) => {
 // create a new comment
 router.post("/:id/comments", (req, res) => {
     const newCom = req.body
-    // const ID = req.params.id
+    data.insertComment(newCom)
+    const ID = req.params.id
+    data.findById(ID)
     .then(newwCom => {
-        if (this.post.length === 0) {
+        if (newwCom.length === 0) {
             res.status(404).json({
                 message: "The post with the specific ID does not exist"
             })
@@ -95,16 +97,36 @@ router.post("/:id/comments", (req, res) => {
                 errorMessage: "Please provide text for the comment"
             });
         } else {
-            data.insertComment(newCom)
-            res.status(201).json(newwCom)
+            res.status(201).json({newCom})
         }
     })
     .catch(err => {
         console.log(err);
         res.status(400).json({
             errorMessage: "There was an error while saving the post to the database"
-        })
+        });
+    });
+});
+
+// delete a post 
+router.delete("/:id", (req, res) => {
+    const delId = req.params.id
+    data.remove(delId)
+    .then(deleted => {
+        if (!delId) {
+            res.status(404).json({
+                message: "The post with the specific ID does not exist"
+            })
+        } else {
+            res.status(200).json({deleted})
+        }
     })
-})
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: "The post could not be removed"
+        });
+    });
+});
 
 module.exports = router;
