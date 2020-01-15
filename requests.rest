@@ -1,0 +1,41 @@
+### OK Check on the server
+GET http://localhost:3456/
+
+### OK Get all posts
+GET http://localhost:3456/api/posts
+
+### OK Get a specific post
+GET http://localhost:3456/api/posts/2
+
+### OK Get comments from a specific post
+GET http://localhost:3456/api/posts/11/comments
+
+### TODO Create a post
+POST http://localhost:3456/api/posts/
+content-type: application/json
+
+{
+    "title": "Spaceballs",
+    "contents": "When will then be now? Soon."
+}
+
+### TODO Modify a post
+PUT http://localhost:3456/api/posts/10
+content-type: application/json
+
+{
+    "title": "Spacefools",
+    "contents": "I said across her nose, not up it!"
+}
+
+### TODO Create a comment
+POST http://localhost:3456/api/posts/11/comments
+content-type: application/json
+
+{
+    "text": "This is a duplicate"
+}
+
+### Delete a post
+DELETE http://localhost:3456/api/posts/8
+
