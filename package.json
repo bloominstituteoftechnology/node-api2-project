@@ -5,7 +5,8 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "server": "nodemon index.js"
+    "server": "nodemon index.js",
+    "start": "node index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
