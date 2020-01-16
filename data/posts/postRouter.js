@@ -73,21 +73,23 @@ router.get("/:id", (req, res) => {
 // return the following JSON object: { error: "The comments information could not be retrieved." }.
 
 router.get("/:id/comments", (req, res) => {
-  const { postId } = req.params.postId;
-  if (!postId) {
-    return res.status(404).json({
-      message: "The post with the specified ID does not exist"
-    });
-  }
-  Posts.findPostComments(postId)
-    .then(comments => {
+  // const { postId } = req.params;
+
+  console.log(req.params);
+
+  Posts.findPostComments(req.params.id).then(comments => {
+    if (!comments[0]) {
+      res.status(404).json({
+        message: "The post with the specified ID does not exist."
+      });
+    } else if (comments) {
+      console.log(comments);
       res.status(200).json(comments);
-    })
-    .catch(err => {
+    } else
       res.status(500).json({
         error: "The comments information could not be retrieved."
       });
-    });
+  });
 });
 
 // TODO When the client makes a POST request to /api/posts:
@@ -147,28 +149,69 @@ router.post("/", (req, res) => {
 // respond with HTTP status code 500 (Server Error).
 // return the following JSON object: { error: "There was an error while saving the comment to the database" }.
 
-router.post("/:id", (req, res) => {
-  const { id, text } = posts.params.id;
-  if (!id) {
+router.post("/:id/comments", (req, res) => {
+  console.log(req.body);
+  console.log(req.body.text);
+  console.log(req.params);
+  console.log(req.params.id);
+  const { text } = req.body;
+  const post_id = Number(req.params.id);
+  if (!req.params.id) {
+    // console.log(req.params.id);
     res.status(404).json({
-      message: "The post with the specified ID does not exist."
+      errorMessage: "The post with the specified ID does not exist."
     });
   }
-  if (!text) {
+  if (!req.body.text) {
+    // console.log(text);
     res.status(400).json({
-      errorMessage: "Please provide the text for the comment."
+      errorMessage: "Please provide text for the comment."
     });
   }
-  Posts.insertComment(req.body)
-    .then(comment => {
-      res.status(201).json(comment);
+  Posts.insertComment({ post_id, text })
+    .then(comments => {
+      // console.log(post_id);
+      res.status(201).json(comments);
     })
     .catch(err => {
+      console.log("error", err);
+      console.log({ post_id, text });
       res.status(500).json({
-        error: "There was an error while saving the comment to the database."
+        error: "There was an error while saving the post to the database."
       });
     });
 });
+
+// router.post("/:id/comments", (req, res) => {
+//   const { text } = req.body;
+//   // const { id } = req.params
+//   const post_id = req.params.id;
+//   Posts.findById(req.params.id).then(post => {
+//     if (post[0]) {
+//       Posts.insertComment({ text, post_id })
+//         .then(data => {
+//           console.log(data.id);
+//           res.status(201).json(data);
+//         })
+//         .catch(error => {
+//           console.log(error);
+//           res.status(500).json({
+//             errorMessage:
+//               "Error 500: This is a server side error. If this error persists contact your server admin. "
+//           });
+//         });
+//       //
+//     } else {
+//       if (!req.body.text) {
+//         res
+//           .status(400)
+//           .json({ errorMessage: "Please provide contents for the post." });
+//       } else {
+//         res.status(404).json("The post with the specified ID does not exist.");
+//       }
+//     }
+//   });
+// });
 
 // TODO When the client makes a DELETE request to /api/posts/:id:
 
@@ -225,7 +268,7 @@ router.put("/:id", (req, res) => {
   const { title, contents } = req.body;
   const id = req.params.id;
 
-  if (!id) {
+  if (!id[0]) {
     res.status(404).json({
       message: "The postwith the specified ID does not exist."
     });
