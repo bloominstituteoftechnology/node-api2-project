@@ -6,6 +6,8 @@ const router = require('./router')
 
 const server = express();
 
+server.use(express.json());
+
 
 
 
@@ -17,6 +19,6 @@ server.get('/', (req, res) => {
   `);
 });
 
-server.use('/api/post', router)
+server.use('/api', router)
 
 module.exports = server;
