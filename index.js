@@ -4,7 +4,7 @@ const server = express();
 
 const expressRouter = require("./routes/expressRouter.js")
 
-const port = process.env.PORT || 8500;
+const port = process.PORT || 8500;
 
 server.get("/", (req, res) => {
     res.send("Server Running!");
