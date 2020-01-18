@@ -74,22 +74,63 @@ router.post('/:id/comments', (req, res) => {
 	comment.post_id = req.params.id;
 
 	if (comment.text.length > 0) {
-		// put this if statement inside the db.insert func.
-		if (comment) {
-			db
-				.insertComment(comment)
-				.then((comment) => {
-					console.log(comment);
-					res.status(201).json(comment);
-				})
-				.catch((err) => {
+		db
+			.insertComment(comment)
+			.then((id) => {
+				if (id) {
+					console.log(id);
+					res.status(201).json(id);
+				} else {
 					res.status(500).json({ error: 'there was an error while saving this comment to the database.' });
-				});
-		} else {
-			res.status(404).json({ error: 'the post with the specified id does not exist' });
-		}
+				}
+			})
+			.catch((err) => {
+				res.status(404).json({ error: 'the post with the specified id does not exist' });
+			});
 	} else {
 		res.status(400).json({ error: 'please provide text for the comment' });
+	}
+});
+
+router.delete('/:id', (req, res) => {
+	const id = req.params.id;
+
+	db
+		.remove(id)
+		.then((deleted) => {
+			if (deleted) {
+				console.log(deleted);
+				res.status(200).json({ message: 'record deleted' });
+			} else {
+				res.status(404).json({ error: 'the post with the specified id does not exist' });
+			}
+		})
+		.catch((err) => {
+			res.status(500).json({ error: 'the post could not be removed' });
+		});
+});
+
+router.put('/:id', (req, res) => {
+	const changes = req.body;
+	const { id } = req.params;
+
+	if (changes.title && changes.contents) {
+		db
+			.update(id, changes)
+			.then((record) => {
+				if (record) {
+					res.status(200).json(record);
+				} else {
+					res.status(404).json({ error: 'the post with the specified id does not exist' });
+				}
+			})
+			.catch((error) => {
+				res.status(500).json({
+					message: 'The post information could not be modified'
+				});
+			});
+	} else {
+		res.status(400).json({ error: 'please provide title and contents for the post' });
 	}
 });
 
