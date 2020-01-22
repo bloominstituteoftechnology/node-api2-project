@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Field, withFormik } from "formik";
 import axios from "axios";
+import MyPost from "./MyPost";
 
 function UpdatePost(props) {
   const [myPost, setMyPost] = useState({});
@@ -27,10 +28,14 @@ function UpdatePost(props) {
   );
 }
 
+const { title, contents } = myPost;
 const FormikUpdatePostForm = withFormik({
+  initialValues: {
+    ...title
+  },
   mapPropsToValues({ title, contents }) {
     return {
-      title: title || "",
+      title: title || title,
       contents: contents || ""
     };
   },

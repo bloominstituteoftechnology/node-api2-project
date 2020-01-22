@@ -4,7 +4,7 @@ import { Route, Link } from "react-router-dom";
 import PostLists from "./PostLists";
 import AddPost from "./AddPost";
 import MyPost from "./MyPost";
-import UpdatePost from "./UpdatePost_bkup";
+import UpdatePost from "./UpdatePost.js";
 
 export default function Nav(props) {
   return (
