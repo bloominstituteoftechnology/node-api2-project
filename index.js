@@ -1,6 +1,5 @@
-const server = require('./server');
+const server = require("./server");
 
-
-server.listen(4000, () => {
-  console.log("*** listening on port 4000");
+server.listen(5000, () => {
+  console.log("*** listening on port 5000");
 });

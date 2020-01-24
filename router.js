@@ -1,10 +1,10 @@
 const express = require("express");
-const db = require("./data/db");
 const router = express.Router();
+const db = require("./data/db");
 
 //client post req w/ title and contents error
-router.post("/", (req, res) => {
-  const { title, contents } = req.body;
+router.post("/posts", (req, res) => {
+  // const { title, contents } = req.body;
 
   if (!req.body.title || !req.body.contents) {
     return res
@@ -13,13 +13,7 @@ router.post("/", (req, res) => {
   } else {
     db.insert(req.body)
       .then(post => {
-        db.findById(post.id)
-          .then(blog => {
-            res.status(201).json(blog);
-          })
-          .catch(err => {
-            console.log("trouble adding blog post", err);
-          });
+        res.status(201).json(post);
       })
       .catch(err => {
         console.log(err.response);
@@ -32,7 +26,7 @@ router.post("/", (req, res) => {
 });
 
 //client makes a post req to comments
-router.post("/:id/comments", (req, res) => {
+router.post("/api/posts/:id/comments", (req, res) => {
   const id = req.params.id;
   const text = req.body;
 
@@ -63,7 +57,7 @@ router.post("/:id/comments", (req, res) => {
 });
 
 //client get request w/ standard error
-router.get("/", (req, res) => {
+router.get("/api/posts", (req, res) => {
   db.find()
     .then(response => {
       res.status(201).json(response);
@@ -77,7 +71,7 @@ router.get("/", (req, res) => {
 });
 
 //client makes get req for specific id
-router.get("/:id", (req, res) => {
+router.get("/api/posts/:id", (req, res) => {
   const id = req.params.id;
   db.findCommentById(id)
     .then(resp => {
@@ -98,7 +92,7 @@ router.get("/:id", (req, res) => {
 });
 
 //client get req for comment by id
-router.get("/:id/comments", (req, res) => {
+router.get("/api/posts/:id/comments", (req, res) => {
   const id = req.params.id;
   db.findPostComments(id)
     .then(resp => {
@@ -119,7 +113,7 @@ router.get("/:id/comments", (req, res) => {
 });
 
 //client makes delete req
-router.delete("/:id", (req, res) => {
+router.delete("/api/posts/:id", (req, res) => {
   const id = req.params.id;
   db.findById(id)
     .then(resp => {
@@ -146,7 +140,7 @@ router.delete("/:id", (req, res) => {
 });
 
 //client makes an update request - PUT
-router.put("/:id", (req, res) => {
+router.put("/api/posts/:id", (req, res) => {
   const id = req.params.id;
   const { title, contents } = req.body;
 
@@ -163,7 +157,7 @@ router.put("/:id", (req, res) => {
       } else {
         db.update(id, req.body)
           .then(response => {
-            console.log(response)
+            console.log(response);
             db.findById(id).then(post => {
               res.status(200).json(post);
             });
