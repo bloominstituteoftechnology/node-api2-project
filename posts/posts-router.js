@@ -27,4 +27,18 @@ router.get('/:id', (req, res) => {
     });
 });
 
+router.get('/:id/comments', (req, res) => {
+  const {id} = req.params;
+
+  console.log(id);
+  Hubs.findCommentById(id)
+    .then(hubs => {
+      res.status(200).json(hubs);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({message: 'The post with the specified ID does not exist.'});
+    });
+});
+
 module.exports = router;
