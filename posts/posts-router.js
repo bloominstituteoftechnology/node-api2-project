@@ -63,4 +63,17 @@ router.post('/:id/comments', (req, res) => {
       res.status(500).json({error: 'The comments information could not be retrieved.'});
     });
 });
+
+router.delete('/:id', (req, res) => {
+  const {id} = req.params;
+  Hubs.remove(id)
+    .then(hubs => {
+      res.status(200).json(hubs);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({error: 'The post could not be removed'});
+    });
+});
+
 module.exports = router;
