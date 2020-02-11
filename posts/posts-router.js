@@ -41,4 +41,26 @@ router.get('/:id/comments', (req, res) => {
     });
 });
 
+router.post('/', (req, res) => {
+  const post = req.body;
+  Hubs.insert(post)
+    .then(hubs => {
+      res.status(201).json(hubs);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({error: 'There was an error while saving the post to the database'});
+    });
+});
+
+router.post('/:id/comments', (req, res) => {
+  const {id} = req.params;
+
+  Hubs.findPostComments(id)
+    .then(hubs => res.status(201).json(hubs))
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({error: 'The comments information could not be retrieved.'});
+    });
+});
 module.exports = router;
