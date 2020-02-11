@@ -95,7 +95,7 @@ When the client makes a `POST` request to `/api/posts`:
 
 - If the information about the _post_ is valid:
 
-  - save the new _post_ the the database.
+  - save the new _post_ the thpe database.
   - return HTTP status code `201` (Created).
   - return the newly created _post_.
 

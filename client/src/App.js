@@ -3,6 +3,8 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import "./App.css";
 
+import NewPostForm from "./components/NewPostForm"
+
 function App() {
   const [posts, setPosts] = useState([]);
   const [editing, setEditing] = useState(false);
@@ -111,21 +113,7 @@ function App() {
           </div>
         );
       })}
-      <form onSubmit={handleSubmit(addPost)}>
-        <label htmlFor="title">
-          Title:{" "}
-          <input type="text" name="title" ref={register({ required: true })} />
-        </label>
-        <label htmlFor="contents">
-          Post:{" "}
-          <input
-            type="text"
-            name="contents"
-            ref={register({ required: true })}
-          />
-        </label>
-        <input type="submit"/>
-      </form>
+      <NewPostForm addPost={addPost}/>
     </div>
   );
 }
