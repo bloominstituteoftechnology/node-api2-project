@@ -30,24 +30,25 @@ server.get('/api/posts/:id', (req, res) => {
       res.status(500).json({ error: "The posts information could not be retrieved." })
     })
 })
-// When the client makes a `POST` request to `/api/posts`:
 
-// - If the request body is missing the `title` or `contents` property:
+//returns an array of comments associated with a particular post
+server.get(`/api/posts/:id/comments`, (req, res) => {
+  const {id} = req.params;
+  db.findPostComments(id)
+    .then(comments => {
+      if (!comments){
+        res.status(404).json({ message: "The post with the specified ID does not exist or has no comments" })
+      } else {
+        res.status(200).json(comments)
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: "The posts comments could not be retrieved." })
+    })
+})
 
-//   - cancel the request.
-//   - respond with HTTP status code `400` (Bad Request).
-//   - return the following JSON response: `{ errorMessage: "Please provide title and contents for the post." }`.
-
-// - If the information about the _post_ is valid:
-
-//   - save the new _post_ the the database.
-//   - return HTTP status code `201` (Created).
-//   - return the newly created _post_.
-
-// - If there's an error while saving the _post_:
-//   - cancel the request.
-//   - respond with HTTP status code `500` (Server Error).
-//   - return the following JSON object: `{ error: "There was an error while saving the post to the database" }`.
+//posts a new post and returns the id of the post
 server.post('/api/posts', (req, res) => {
   if (!req.body.title || !req.body.contents){
     res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
@@ -59,6 +60,60 @@ server.post('/api/posts', (req, res) => {
       .catch(err => {
       console.log(err);
       res.status(500).json({ error: "The posts has not been created" })
+    })
+  }
+})
+
+//NOT WORKING, NOT SURE WHY
+server.post(`/api/posts/:id/comments`, (req, res) => {
+  if (!req.body.text ){
+    res.status(400).json({ errorMessage: "Please provide text for the comment." })
+  } else {
+    db.insertComment(req.body)
+      .then(commentId => {
+        res.status(201).json(commentId)
+      })
+      .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: "The comment has not been created" })
+    })
+  }
+})
+
+//deletes a post by id and returns how many times it's deleted things for some reason
+server.delete(`/api/posts/:id`, (req, res) => {
+  const {id} = req.params
+  db.remove(id)
+    .then(count => {
+      if(!count) {
+        res.status(404).json({ message: "The post with the specified ID does not exist." })
+      }
+      res.status(200).json(count)
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: "The comment has not been created" })
+    })
+})
+
+//edits an existing post by id and returns the changed post
+server.put(`/api/posts/:id`, (req, res) => {
+  const {id} = req.params;
+  if (!req.body.title || !req.body.contents){
+    res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+  }
+  else{
+    db.update(id, req.body)
+      .then(count => {
+        if (count !== 1){
+          res.status(404).json({ message: "The post with the specified ID does not exist." })
+        } else {
+          res.status(200).json(req.body)
+        }
+      })
+      .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: "The comment has not been created" })
     })
   }
 })
