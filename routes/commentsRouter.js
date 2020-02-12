@@ -1,14 +1,15 @@
 const express = require('express');
 
-const Posts = require('../data/db.js');
+const posts = require('../data/db.js');
 
 const router = express.Router({mergeParams: true});
 
+//GET - Get all comments by post ID
+
 router.get('/', (req, res) => {
-    //get all comments for post
     const { id } = req.params;
 
-    Posts.findPostComments(id)
+    posts.findPostComments(id)
     .then( comments => {
         if(comments.length === 0) {
             res.status(404).json({errorMessage: "The specified post could not be found."})
@@ -21,23 +22,34 @@ router.get('/', (req, res) => {
     })
 })
 
+// POST - post a new comment to specific post id
+//  if the post ID doesn't exist, return 404
+
 router.post('/', (req, res) => {
 
-    // post a new comment to specific post id
-    const { id } = req.params;
+  const { id } = req.params;
 
-    Posts.insertComment({post_id: id, ...req.body})
-    .then( comId => {
-        if(comId === 0) {
+  if (!req.body.text) {
+    res.status(400).json({errorMessage: "Please provide text for the comment."})
+  } else {
+    posts.insertComment({post_id: id, ...req.body})
+    .then(comment => {
+        if(comment === 0) {
             res.status(404).json({errorMessage: "could not find specified post"})
         } else {
-            res.status(201).json({id: comId.id, post_id: id, ...req.body})
+            res.status(201).json({id: comment.id, post_id: id, ...req.body})
         }
     })
     .catch( err => {
         res.status(500).json({errorMessage: "could not add the comment"})
     })
-
+  }
 })
+
+
+
+
+
+module.exports = router
 
 
