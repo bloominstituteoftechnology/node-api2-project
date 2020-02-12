@@ -2,12 +2,58 @@
 
 const express = require('express');
 
-const hubsRouter = require('../hubs/hubs-router.js');
+const PostsRouter = require('../data/db.js');
 
 const router = express.Router();
 
 // this router handles requests beginning in /api
 // handle /api  /posts
-router.use("/posts", hubsRouter);
 
 module.exports = router;
+// End of API router ------------------
+
+// middleware
+
+// route handlers - handles what comes after /api/posts
+
+// GET for rendering the blog posts
+router.get("/posts", (req, res) => {
+
+    console.log("retrieving GET /posts");
+
+    PostsRouter.find()
+    .then(posts => {
+        res.status(200).json(posts);
+    })
+    .catch(error => {
+        // log error to database
+        console.log(error)
+        res.status(500).json({
+            message: "Error retrieving the posts",
+        });
+    });
+});
+// WORKING ✅
+
+router.post("/posts", (req, res) => {
+    console.log("sending POST /posts");
+    const { title, contents } = req.body;
+
+// start if statement with Error - truthy 
+    if (!title || !contents) {
+        res.status(400).json({
+            errorMessage: 'Neither title, nor contents are included in this post'
+        })
+    } else {
+        PostsRouter.insert({title, contents})
+        .then(post => {
+            console.log('posted the blog!', post);
+            res.status(201).json(req.body);
+        })
+        .catch(err => {
+            res.status(500).json({errorMessage: 'Theres an err in insert'})
+        })
+    }
+})
+// WORKING ✅
+
