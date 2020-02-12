@@ -72,6 +72,26 @@ router.put('/:id', (req, res) => {
         res.status(404).json({errorMessage: "The post with the specified ID does not Exist"})
       }
     })
+    .catch(err => {
+      res.status(500).json({errorMessage: "There was an error editing the post."})
+    })
+  }
+})
+
+// POST new post
+// - if title or contents prop missing, return 400
+
+router.post('/', (req, res) => {
+  if(!req.body.title || !req.body.contents) {
+    res.status(400).json({errorMessage: "Please provide title and content for the post."})
+  } else {
+    posts.insert(req.body)
+    .then(post => {
+      res.status(201).json(post)
+    })
+    .catch(err => {
+      res.status(500).json({errorMessage: "There was an error while saving the post to the database."})
+    })
   }
 })
 
