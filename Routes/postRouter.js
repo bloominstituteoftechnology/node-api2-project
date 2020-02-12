@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.get("/", (req, res) => {
   db.find()
-  .then((res) => {
-    res.status(200).json(result)
+  .then((postResult) => {
+    res.status(200).json(postResult)
   })
   .catch((err) => {
     res.status(201).json({ message: 'My bad!'})

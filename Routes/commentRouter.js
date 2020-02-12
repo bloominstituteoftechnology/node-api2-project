@@ -5,16 +5,12 @@ const router = express.Router({
 });
 
 router.get("/", (req, res) => {
-  db.findById(req.params.id).then(result => {
-    db.findPostComments(req.params.id)
-      .then(res => {
-        res.status(200).json(res);
-      })
-      .catch(err => {
-        res
-          .status(404)
-          .json({ message: "The post with that specific ID does not exist." });
-      });
+  db.find().then(result => {  
+      res.status(200).json(result)    
+  })
+    .catch(err => {
+      res.status(500).json ({ message: "Unable to retrieve comments" })
+    })
   });
 
   router.post("/", (req, res) => {
@@ -43,6 +39,6 @@ router.get("/", (req, res) => {
           .json({ message: "The post with that specific ID does not exist." });
       });
   });
-});
+
 
 module.exports = router;
