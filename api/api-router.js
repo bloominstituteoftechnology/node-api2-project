@@ -69,7 +69,21 @@ router.get("/posts/:id", (req, res) => {
     .catch(err => {
         res.status(500).json({errorMessage: 'Theres an err in finding post by id'})
     })
-})
+});
 // WORKING ✅
 
-// DELETE  /
+// DELETE  /post/:id for specific post
+router.delete("/posts/:id", (req, res) => {
+    const id = req.params.id;
+
+    PostsRouter.remove(id)
+        .then(deleted => {
+            console.log('Deleted the post', deleted)
+            res.status(200).json(deleted)
+        })
+        .catch(err => {
+            res.status(500).json({deleted})
+        });
+});
+// WORKING ✅
+
