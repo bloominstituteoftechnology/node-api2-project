@@ -16,7 +16,7 @@ module.exports = router;
 
 // route handlers - handles what comes after /api/posts
 
-// GET /posts for rendering the blog posts
+// 🐝 GET /posts for rendering the blog posts
 router.get("/posts", (req, res) => {
 
     console.log("retrieving GET /posts");
@@ -35,7 +35,7 @@ router.get("/posts", (req, res) => {
 });
 // WORKING ✅
 
-// POST /posts for posting to the blog board
+// 🐝 POST /posts for posting to the blog board
 router.post("/posts", (req, res) => {
     console.log("sending POST /posts");
     const { title, contents } = req.body;
@@ -58,7 +58,7 @@ router.post("/posts", (req, res) => {
 })
 // WORKING ✅
 
-// GET /posts/:id for specific post
+// 🐝 GET /posts/:id for specific post
 router.get("/posts/:id", (req, res) => {
     const { id } = req.params;
     PostsRouter.findById(id)
@@ -72,7 +72,7 @@ router.get("/posts/:id", (req, res) => {
 });
 // WORKING ✅
 
-// DELETE  /post/:id for specific post
+// 💡 DELETE  /post/:id for specific post
 router.delete("/posts/:id", (req, res) => {
     const id = req.params.id;
 
@@ -84,6 +84,23 @@ router.delete("/posts/:id", (req, res) => {
         .catch(err => {
             res.status(500).json({deleted})
         });
+});
+// WORKING ✅
+
+// 💡 GET /post/:id/comments
+router.get("/posts/:id/comments", (req, res) => {
+    const { id } = req.params;
+
+    PostsRouter.findPostComments(id)
+    .then(comments => {
+        console.log("retrieving post comments", comments)
+        res.status(200).json(comments)
+    })
+    .catch(error => {
+        res.status(500).json({
+            errorMessage: "Not able to find comments"
+        })
+    });
 });
 // WORKING ✅
 

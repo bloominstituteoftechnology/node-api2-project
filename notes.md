@@ -6,6 +6,8 @@
 
 ## `Emoji: Insert Emoji` in Command Palette
 😃
-✅
-⛔
+💡
+🐝: new function
+✅: works
+⛔: not working
 
