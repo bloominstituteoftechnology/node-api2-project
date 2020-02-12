@@ -16,7 +16,7 @@ module.exports = router;
 
 // route handlers - handles what comes after /api/posts
 
-// GET for rendering the blog posts
+// GET /posts for rendering the blog posts
 router.get("/posts", (req, res) => {
 
     console.log("retrieving GET /posts");
@@ -35,6 +35,7 @@ router.get("/posts", (req, res) => {
 });
 // WORKING ✅
 
+// POST /posts for posting to the blog board
 router.post("/posts", (req, res) => {
     console.log("sending POST /posts");
     const { title, contents } = req.body;
@@ -57,3 +58,18 @@ router.post("/posts", (req, res) => {
 })
 // WORKING ✅
 
+// GET /posts/:id for specific post
+router.get("/posts/:id", (req, res) => {
+    const { id } = req.params;
+    PostsRouter.findById(id)
+    .then(post => {
+        console.log('Finding post by ID', post)
+        res.status(200).json(post);
+    })
+    .catch(err => {
+        res.status(500).json({errorMessage: 'Theres an err in finding post by id'})
+    })
+})
+// WORKING ✅
+
+// DELETE  /
