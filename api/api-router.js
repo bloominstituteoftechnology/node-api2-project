@@ -107,4 +107,37 @@ router.get("/posts/:id/comments", (req, res) => {
 });
 // WORKING ✅
 
+// 💡 POST /post/:id/comments
+router.post("/posts/:id/comments", (req, res) => {
+    const id = req.params.id;
+    const body = {...req.body, post_id: id}
 
+    PostsRouter.insertComment(body, id)
+        .then(post => {
+            res.status(201).json(post)
+        })
+        .catch(error => {
+            res.status(500).json({
+                errorMessage: "Not able to post"
+            });
+        });
+});
+// WORKING ✅
+
+// 💡 PUT /post/:id/
+router.put("/posts/:id", (req, res) => {
+    const id = req.params.id;
+    const changes = req.body;
+
+    PostsRouter.update(id, changes)
+    .then(posts => {
+            console.log(posts)
+            res.status(200).json(posts)
+    })
+    .catch(error => {
+        res.status(500).json({
+            errorMessage: "Not able to update post"
+        });
+    });
+});
+// WORKING ✅
