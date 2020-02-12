@@ -109,7 +109,7 @@ router.get("/", (req, res) => {
     })
 })
 
-    router.put('/api/users/:id', (req, res) => {
+    router.put('/:id', (req, res) => {
         const {title, contents} = req.body;
         const changes = req.body
         const {id} = req.params
