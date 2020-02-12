@@ -93,9 +93,12 @@ router.get("/posts/:id/comments", (req, res) => {
 
     PostsRouter.findPostComments(id)
     .then(comments => {
+        if (comments.length === 0) {
+            res.status(404).json("No comments found")
+        } else {
         console.log("retrieving post comments", comments)
-        res.status(200).json(comments)
-    })
+        res.status(200).json(comments)}
+        })
     .catch(error => {
         res.status(500).json({
             errorMessage: "Not able to find comments"
@@ -103,4 +106,5 @@ router.get("/posts/:id/comments", (req, res) => {
     });
 });
 // WORKING ✅
+
 
