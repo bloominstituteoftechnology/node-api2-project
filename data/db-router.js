@@ -69,7 +69,7 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
   Posts.findById(req.params.id)
     .then(post => {
-      if (!post) {
+      if (post <= 0) {
         res.status(404).json({
           errorMessage: "The post with the specified ID does not exist."
         });
@@ -83,12 +83,12 @@ router.get("/:id", (req, res) => {
         .status(500)
         .json({ errorMessage: "The post information could not be retrieved." });
     });
-}); //this one has an issue with its 404 not firing
+});
 
 router.get("/:id/comments", (req, res) => {
   Posts.findPostComments(req.params.id)
     .then(comments => {
-      if (comments) {
+      if (comments.length > 0) {
         res.status(200).json(comments);
       } else {
         res.status(404).json({
@@ -102,7 +102,7 @@ router.get("/:id/comments", (req, res) => {
         errorMessage: "The comments information could not be retrieved."
       });
     });
-}); //only returns empty array on 404
+});
 
 //DELETE requests
 router.delete("/:id", (req, res) => {
