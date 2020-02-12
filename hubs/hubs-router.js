@@ -6,78 +6,95 @@ const router = express.Router();
 
 router.get("/", (req, res) => {
   Posts.find(req.query)
-    .then(hubs => {
-      res.status(200).json(hubs);
+    .then(post => {
+      res.status(200).json(post);
     })
     .catch(error => {
       console.log(error);
       res.status(500).json({
-        message: "Error retrieving the hubs"
+        message: "Error retrieving the post"
       });
     });
 });
 
 router.get("/:id", (req, res) => {
   Posts.findById(req.params.id)
-    .then(hub => {
-      if (hub) {
-        res.status(200).json(hub);
+    .then(post => {
+      if (post) {
+        res.status(200).json(post);
       } else {
-        res.status(404).json({ message: "Hub not found" });
+        res.status(404).json({ message: "post not found" });
       }
     })
     .catch(error => {
       console.log(error);
       res.status(500).json({
-        message: "Error retrieving the hub"
+        message: "Error retrieving the post"
       });
     });
 });
 
-router.post("/posts", (req, res) => {
-  Posts.add(req.body)
-    .then(hub => {
-      res.status(201).json(hub);
+router.get("/:id/comments", (req, res) => {
+  Posts.findPostComments(req.params.id)
+    .then(post => {
+      if (post) {
+        res.status(200).json(post);
+      } else {
+        res.status(404).json({ message: "Comment not found" });
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json({ message: "Error retrieving comment" });
+    });
+});
+
+router.post(":id/comments", (req, res) => {
+  const { id } = req.params;
+  const comment = { ...req.body, post_id: id };
+
+  Posts.insert(comment)
+    .then(post => {
+      res.status(201).json(post);
     })
     .catch(error => {
       console.log(error);
       res.status(500).json({
-        message: "Error adding the hub"
+        message: "Error adding the post"
       });
     });
 });
 
 router.delete("/:id", (req, res) => {
-  Posts.remove(req.params.id)
-    .then(count => {
-      if (count > 0) {
-        res.status(200).json({ message: "The hub has been nuked" });
-      } else {
-        res.status(404).json({ message: "The hub could not be found" });
-      }
-    })
-    .catch(error => {
-      console.log(error);
-      res.status(500).json({
-        message: "Error removing the hub"
-      });
-    });
+  Posts.findById(req.params.id).then(post => {
+    if (!post) {
+      res.status(404).json({ message: "The post with that ID does not exist" });
+    }
+    res.status(200).json(post);
+  });
+  Posts.remove(req.params.id).catch(err => {
+    console.log(err);
+    res
+      .status(500)
+      .json({ message: "The post information could not be retrieved." });
+  });
 });
 
 router.put("/:id", (req, res) => {
   const changes = req.body;
-  Posts.update(req.params.id, changes)
-    .then(hub => {
-      if (hub) {
-        res.status(200).json(hub);
+  const { id } = req.params;
+  Posts.update(id, changes)
+    .then(post => {
+      if (!post) {
+        res.status(404).json({ message: "The post could not be found" });
       } else {
-        res.status(404).json({ message: "The hub could not be found" });
+        res.status(200).json(post);
       }
     })
     .catch(error => {
       console.log(error);
       res.status(500).json({
-        message: "Error updating the hub"
+        message: "Error updating the post"
       });
     });
 });
