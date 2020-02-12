@@ -55,5 +55,24 @@ router.delete('/:id', (req,res) => {
  })
 })
 
+// PUT Post
+//  - Edit Post within the database (requires ID)
+//  - if ID doesn't exist, return 404
+//  - if title or contents property is missing, return 400
+
+router.put('/:id', (req, res) => {
+  if(!req.body.title || !req.body.contents) {
+    res.status(400).json({errorMessage: "Please provide title and content for the post."})
+  } else {
+    posts.update(req.params.id, req.body)
+    .then(post => {
+      if(post){
+        res.status(200).json({...req.body, id: req.params.id})
+      }else{
+        res.status(404).json({errorMessage: "The post with the specified ID does not Exist"})
+      }
+    })
+  }
+})
 
 module.exports = router
