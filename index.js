@@ -10,6 +10,9 @@ server.use(express.json())
 server.use(cors())
 server.use("/api/posts", postRouter)
 
+server.get("/", (req, res) =>{
+    res.json({ message: "We're all mad here..."})
+})
 
 
 server.listen(port, () => {
