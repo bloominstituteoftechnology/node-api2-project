@@ -1,15 +1,12 @@
 const express = require('express');
-
-const server = express();
-
 const postsRouter = require('../posts/posts-router');
+const server = express();
 
 server.use(express.json());
 
-server.get('/', (req, res) => {
-  res.send(`Working`)
-})
+server.get("/", (req, res) => {
+    res.send("Server is working");
+});
 
-server.use('/api/posts', postsRouter)
-
+server.use('/api/posts', postsRouter);
 module.exports = server; 
