@@ -33,7 +33,7 @@ router.post("/:id/comments", (req, res) => {
               });
         } else {
             if (req.body.text) {
-                db.insertComment(req.body)
+                db.insertComment(req.body.text)
                   .then(comment => res.status(201).json(comment))
                   .catch(() =>
                     res.status(500).json({
