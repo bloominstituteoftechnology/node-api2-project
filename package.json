@@ -1,18 +1,20 @@
 {
-  "name": "node-api2-project",
-  "version": "0.0.1",
-  "description": "Project for Node API 2 Module",
-  "private": true,
-  "main": "index.js",
-  "scripts": {
-    "server": "nodemon index.js"
-  },
-  "dependencies": {
-    "express": "^4.17.1",
-    "knex": "^0.20.7",
-    "sqlite3": "^4.1.1"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.2"
-  }
+	"name": "node-api2-project",
+	"version": "0.0.1",
+	"description": "Project for Node API 2 Module",
+	"private": true,
+	"main": "index.js",
+	"scripts": {
+		"server": "nodemon index.js",
+		"start": "node index.js"
+	},
+	"dependencies": {
+		"cors": "^2.8.5",
+		"express": "^4.17.1",
+		"knex": "^0.20.7",
+		"sqlite3": "^4.1.1"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.2"
+	}
 }

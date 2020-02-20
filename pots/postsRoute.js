@@ -66,7 +66,7 @@ router.post('/:id/comments', (req, res) => {
 	if (!req.body.text) {
 		res.status(400).json({ errorMessage: 'Please provide text for the comment.' });
 	} else {
-		database.findPostComments(req.params.id).then((data) => {
+		database.findById(req.params.id).then((data) => {
 			if (data.length > 0) {
 				database
 					.insertComment({ text: req.body.text, post_id: req.params.id })
