@@ -1,7 +1,5 @@
 
 exports.seed = function(knex, Promise) {
-  return knex('comments').truncate()
-    .then(function () {
       return knex('comments').insert([
         {text: "Let your workings remain a mystery. Just show people the results.", post_id: 1},
         {text: "True mastery can be gained by letting things go their own way. It can't be gained by interfering.", post_id: 1 },
@@ -16,5 +14,4 @@ exports.seed = function(knex, Promise) {
         {text: "Do you have the patience to wait until your mud settles and the water is clear? Can you remain unmoving until the right action arises by itself?", post_id: 8 },
         {text: "He who tries to shine dims his own light. He who defines himself can't know who he really is. He who clings to his work will do nothing that endures. Just do your job, then let go.", post_id: 8 }
       ]);
-    });
 };
