@@ -8,21 +8,10 @@
     "server": "nodemon index.js"
   },
   "dependencies": {
-    "knex": "^0.20.11",
+    "knex": "^0.20.7",
     "sqlite3": "^4.1.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mastaryan/node-api2-project.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mastaryan/node-api2-project/issues"
-  },
-  "homepage": "https://github.com/mastaryan/node-api2-project#readme"
+  }
 }
