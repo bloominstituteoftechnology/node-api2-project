@@ -17,8 +17,14 @@ function find() {
   return db('posts');
 }
 
+// function findById(id) {
+//   return db('posts').where({ id: Number(id) });
+// }
+
 function findById(id) {
-  return db('posts').where({ id: Number(id) });
+  return db('posts')
+    .where({ id })
+    .first();
 }
 
 function insert(post) {
