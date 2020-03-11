@@ -1,7 +1,5 @@
 const express = require("express");
-
 const db = require("../data/db");
-
 const router = express.Router();
 
 //route handlers go here:
@@ -88,7 +86,7 @@ router.post("/:id/comments", (req, res) => {
     .then(inserted => {
       if (!id.length) {
         res.status(404).json({
-          message: "The post with the specified ID does not exist."
+          error: "The post with the specified ID does not exist."
         });
       } else if (!req.body.text) {
         res.status(400).json({
@@ -104,6 +102,51 @@ router.post("/:id/comments", (req, res) => {
         error: "There was an error while saving the comment to the database"
       });
     });
+});
+
+router.delete("/:id", (req, res) => {
+  const id = req.params.id;
+  db.remove(id)
+    .then(post => {
+      if (!post) {
+        res.status(404).json({
+          error: "No post was found to delete."
+        });
+      } else {
+        res.status(200).json(post);
+      }
+    })
+    .catch(error => {
+      console.log("Delete error", error);
+      res.status(500).json({
+        error: "The post could not be removed"
+      });
+    });
+});
+
+router.put("/:id", (req, res) => {
+  const title = req.body.title;
+  const contents = req.body.contents;
+  if (!title || !contents) {
+    res.status(400).json({
+      error: "Please provide title and contents for the post."
+    });
+  } else if (!req.params.id) {
+    res.status(404).json({
+      error: "The post with the specified ID does not exist."
+    });
+  } else {
+    db.update(req.params.id, req.body)
+      .then(changes => {
+        res.status(200).json(req.body);
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({
+          error: "The post information could not be modified."
+        });
+      });
+  }
 });
 
 module.exports = router;
