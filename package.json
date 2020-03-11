@@ -13,5 +13,16 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mastaryan/node-api2-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mastaryan/node-api2-project/issues"
+  },
+  "homepage": "https://github.com/mastaryan/node-api2-project#readme"
 }
