@@ -14,7 +14,7 @@ router.post('/', (req, res) => {
         Posts
     .insert(req.body)
     .then(post => {
-        res.status(200).json(post);
+        res.status(201).json(post);
     })
     .catch(err => {
         console.log("Error inserting post to db", err);
@@ -47,7 +47,7 @@ router.post('/:id/comments', (req, res) => {
         } else if (data.text){
             Posts.insertComment(data)
             .then(comment => {
-                res.status(200).json(data.text)
+                res.status(201).json(data.text)
             })
             .catch(err => {
                 console.log("Error inserting comment to DB...", err);
