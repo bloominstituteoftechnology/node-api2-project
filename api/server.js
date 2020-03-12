@@ -11,8 +11,6 @@ server.get('/', (req, res) => {
     res.status(200).json(query)
 });
 
-
-
 server.use('/api/posts', postsRouter);
 
 module.exports = server;
