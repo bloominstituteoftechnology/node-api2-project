@@ -1,6 +1,7 @@
 const knex = require('knex');
-const knexConfig = require('../knexfile.js');
+const knexConfig = require('../knexfile.js')[environment];
 const db = knex(knexConfig.development);
+const environment = process.env.DB_ENV || 'development';
 
 module.exports = {
   find,
@@ -18,7 +19,7 @@ function find() {
 }
 
 function findById(id) {
-  return db('posts').where({ id: Number(id) });
+  return db('posts').where({id}).first();
 }
 
 function insert(post) {
