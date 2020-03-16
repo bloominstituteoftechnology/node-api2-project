@@ -1,5 +1,8 @@
+/* eslint-disable no-use-before-define */
 const knex = require('knex');
+
 const knexConfig = require('../knexfile.js');
+
 const db = knex(knexConfig.development);
 
 module.exports = {
@@ -24,7 +27,7 @@ function findById(id) {
 function insert(post) {
   return db('posts')
     .insert(post, 'id')
-    .then(ids => ({ id: ids[0] }));
+    .then((ids) => ({ id: ids[0] }));
 }
 
 function update(id, post) {
@@ -56,5 +59,5 @@ function findCommentById(id) {
 function insertComment(comment) {
   return db('comments')
     .insert(comment)
-    .then(ids => ({ id: ids[0] }));
+    .then((ids) => ({ id: ids[0] }));
 }
