@@ -6,7 +6,7 @@ const router = express.Router();
 router.get("/", (_, res) => {
     try {
         db.find()
-            .then(res.status(200).json)
+            .then(res2 => {res.status(200).json(res2)})
             .catch(() => res.status(500).json({ error: "The posts information could not be retrieved." }));
     } catch {
         res.status(500).json({ error: "The posts information could not be retrieved." });
@@ -16,7 +16,7 @@ router.get("/", (_, res) => {
 router.get("/:id", (req, res) => {
     try {
         db.findById(req.params.id)
-            .then(res.status(200).json)
+            .then(res2 => res.status(200).json(res2))
             .catch(() => res.status(404).json({ message: "The post with the specified ID does not exist." }));
     } catch {
         res.status(500).json({ error: "The posts information could not be retrieved." });
@@ -26,7 +26,7 @@ router.get("/:id", (req, res) => {
 router.get("/:id/comments", (req, res) => {
     try {
         db.findPostComments(req.params.id)
-            .then(res.status(200).json)
+            .then(res2 => res.status(200).json(res2))
             .catch(() => res.status(404).json({ message: "The post with the specified ID does not exist." }));
     } catch {
         res.status(500).json({ error: "The comments information could not be retrieved." });
@@ -41,7 +41,7 @@ router.post("/", ({body}, res) => {
                 contents: body.contents,
             };
             db.insert(post)
-                .then(res.status(201).json)
+                .then(res2 => res.status(201).json(res2))
                 .catch(() => res.status(500).json({ error: "There was an error while saving the post to the database" }));
         } else {
             res.status(400).json({ errorMessage: "Please provide title and contents for the post." });
@@ -59,7 +59,7 @@ router.post("/:id/comments", (req, res) => {
                 post_id: req.params.id,
             };
             db.insert(comment)
-                .then(res.status(201).json)
+                .then(res2 => res.status(201).json(res2))
                 .catch(() => res.status(404).json({ message: "The post with the specified ID does not exist." }));
         } else {
             res.status(400).json({ errorMessage: "Please provide text for the comment." });
@@ -85,7 +85,7 @@ router.put("/:id", ({body}, res) => {
             db.update(req.params.id, {
                 title: body.title,
                 contents: body.contents,
-            }).then(res.status(200).json)
+            }).then(res2 => res.status(200).json(res2))
                 .catch(() => res.status(404).json({ message: "The post with the specified ID does not exist." }));
         } else {
             res.status(400).json({ errorMessage: "Please provide title and contents for the post." });
