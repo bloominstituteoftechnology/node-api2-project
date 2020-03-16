@@ -1,5 +1,5 @@
 const express = require('express');
-const postRouter = require('./data/db-router.js').default;
+const postRouter = require('./data/db-router.js');
 
 const server = express();
 

@@ -1,4 +1,4 @@
-const app = require('./server.js').default;
+const app = require('./server.js');
 
 app.listen(5000, () => {
   // eslint-disable-next-line no-console
