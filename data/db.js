@@ -14,6 +14,7 @@ module.exports = {
 };
 
 function find() {
+  console.log(db('posts'));
   return db('posts');
 }
 
