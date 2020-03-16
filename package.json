@@ -8,8 +8,14 @@
     "server": "nodemon index.js"
   },
   "dependencies": {
+    "axios": "^0.19.2",
+    "bootstrap": "^4.4.1",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "knex": "^0.20.11",
+    "react-dom": "^16.13.0",
+    "react-router-dom": "^5.1.2",
+    "reactstrap": "^8.4.1",
     "sqlite3": "^4.1.1"
   },
   "devDependencies": {

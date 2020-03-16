@@ -1,12 +1,11 @@
 /* eslint-disable react/jsx-indent */
 import React, { useState, useEffect } from 'react';
 import {
-  Container,
-  Row,
-  Col,
+  CardColumns,
   Card,
   CardTitle,
   CardText,
+  CardBody,
 } from 'reactstrap';
 import axios from 'axios';
 
@@ -25,11 +24,10 @@ const PostsList = () => {
   return (
     <div>
         <div className="cards-wrapper">
+        <CardColumns>
                     {postsList.map((post) => (
-                    <Container style={{ margin: '50px auto' }} className="card-wrapper">
-                        <Row>
-                            <Col xs="12" lg={{ size: 4, offset: 4 }}>
-                                <Card key={post.id}>
+                            <Card>
+                                <CardBody key={post.id}>
                                     <CardTitle>
                                         Title:
                                       {post.title}
@@ -38,11 +36,10 @@ const PostsList = () => {
                                         Contents:
                                         {post.contents}
                                     </CardText>
-                                </Card>
-                            </Col>
-                        </Row>
-                    </Container>
+                                </CardBody>
+                            </Card>
                     ))}
+        </CardColumns>
         </div>
     </div>
   );
