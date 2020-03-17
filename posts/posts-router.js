@@ -3,6 +3,17 @@ const Posts = require('../data/db.js');
 
 const router = express.Router();
 
+router.get('/', (req, res) => {
+    Posts.find(req.query)
+        .then(posts => {
+            res.status(200).json(posts);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ err: "The posts information could not be retrieved." })
+        })
+})
+
 router.post('/', (req, res) => {
     const { title, contents } = req.body;
     !title || !contents 
