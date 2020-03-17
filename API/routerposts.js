@@ -19,17 +19,46 @@ router.get("/", (req, res)=>{
 })
 })
 
+// GET with ID  (api/posts)
+router.get("/:id", (req, res)=>{
+    const {id}=req.params
+    db.findById(id)
+    .then(users=>{
+        if(users.length>0){
+            res.status(200).json(users)
+        } else{
+            res.status(404).json({error: " The user with the specific id doesn't exist"})
+        }
+    })
+.catch(err=>{
+    res.status(500).json({error: " The information is not received"})
+})
+})
+
+
 //  POST   | /api/posts | Creates a post using the information sent inside the `request body`.  
 
 router.post("/", (req,res) =>{
-    db.insert(req.body)
-    .then( addpost => {
-       res.status(201).json(addpost)
+  const data=req.body
+  if(!data.title || !data.contents){
+      res.status(400).json({
+          error: "Please provide title and contents for the post"
+      })
+  } else if (data.title && data.contents){
+          db.insert(req.body)
+          .then( post =>{
+              res.status(201).json(post)
+          })
+          .catch(err=>{
+              console.log(err)
+              res.status(500).json({message:"error inserting the post"})
+          })
+      } else{
+          res.status(500).json({error:"error inserting the post "})
+      }
     })
-    .catch(err=>{
-     res.status(500).json({error:" Error while making a post"})
-    })
-})
+  
+    
 
 // POSTS WITH ID 
 
@@ -45,4 +74,25 @@ router.post('/:id/comments', (req,res)=>{
 })
 
 
+// DELETE 
+
+router.delete('/:id', (req,res)=>{
+    const {id}=req.params;
+    db.remove(id)
+    .then( removeposts=>{
+        res.status(200).json(removeposts)
+    })
+    .catch(err=>{
+        res.status(500).json({error:" Could not remove the post"})
+    })
+})
+
 module.exports=router;
+
+// PUT 
+
+router.put("/:id", (req,res)=>{
+    const {id}=req.params;
+    const body=req.body
+    db.update(id,body)
+})
