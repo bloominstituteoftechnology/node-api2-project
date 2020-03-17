@@ -20,8 +20,8 @@ router.get("/", (req, res)=>{
 })
 
 // GET with ID  (api/posts)
-router.get("/:id", (req, res)=>{
-    const {id}=req.params
+router.get("/:id/comments", (req, res)=>{
+    const {id}=req.params;
     db.findById(id)
     .then(users=>{
         if(users.length>0){
@@ -94,5 +94,22 @@ module.exports=router;
 router.put("/:id", (req,res)=>{
     const {id}=req.params;
     const body=req.body
-    db.update(id,body)
-})
+    db.findById(id)
+    .then(userid=>{
+        if (!userid.length){
+            res.status(404).json({ message: "The post with the specified ID does not exist."})
+        } 
+        else if (!body.title || !body.contents ){
+             res.status(400).jsonp({errorMessage: "Please provide title and contents for the post."})
+        } else if (body.title && body.contents){
+            db.update(id, body)
+                .then(put=>{
+                    res.status(200).json(body)
+                })
+                .catch(err=>{
+                    console.log(" error from update", err)
+                    res.status(500).json({error : " The information cannot be modified"})
+                })
+        }})
+    })
+    
