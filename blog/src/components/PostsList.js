@@ -6,8 +6,11 @@ import {
   CardTitle,
   CardText,
   CardBody,
+  Button,
 } from 'reactstrap';
+
 import axios from 'axios';
+import AddPost from './AddPost';
 
 const PostsList = () => {
   const [postsList, setPostList] = useState([]);
@@ -21,13 +24,21 @@ const PostsList = () => {
       .catch((err) => (err));
   }, [postsList]);
 
+  const deletePost = (id) => {
+    axios
+      .delete(`http://localhost:5000/api/posts/${id}`)
+      .then((res) => (res))
+      .catch((err) => (err));
+  };
+
   return (
     <div>
+      <AddPost postsList={postsList} setPostList={setPostList} />
         <div className="cards-wrapper">
         <CardColumns>
                     {postsList.map((post) => (
-                            <Card>
-                                <CardBody key={post.id}>
+                            <Card key={post.id}>
+                                <CardBody>
                                     <CardTitle>
                                         Title:
                                       {post.title}
@@ -36,6 +47,7 @@ const PostsList = () => {
                                         Contents:
                                         {post.contents}
                                     </CardText>
+                                    <Button onClick={() => deletePost(post.id)}>Delete</Button>
                                 </CardBody>
                             </Card>
                     ))}
