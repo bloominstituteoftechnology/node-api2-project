@@ -54,7 +54,7 @@ router.put("/:id", (req, res) => {
     const changes = req.body;
     const { title, contents } = req.body;
   
-    !title || !contents // either or - if one of them is missing, err
+    !title || !contents 
     ? res.status(400).json({ errorMessage: "Please provide title and contents for the post." }) // Bad Request response - Worked on postman
   
     : posts
@@ -75,8 +75,8 @@ router.put("/:id", (req, res) => {
       });
   });
   router.post("/:id/comments", (req, res) => {
-    const { text } = req.body; // pulling out one piece out of the db.js
-    const post_id = req.params.id; // this dynamic id from above is going to come from the URL - params
+    const { text } = req.body; 
+    const post_id = req.params.id; 
   
     !text ? // Not Text? 
         res.status(400).json({ errorMessage: "Please provide text for the comment." }) // if the request body is missing the text property (Bad Request) - worked on postman
@@ -106,7 +106,7 @@ router.put("/:id", (req, res) => {
     const { id } = req.params
     posts
       .findPostComments(id)
-      .then(data => { // 200 response working on postman
+      .then(data => { 
         data ? res.status(200).json(data) : res.status(404).json({ message: 'The Post ID Does NOT Exist.' }) // 404 working on postman
       }) // If there's data, return 200. If not, return 404
       .catch(err => {
