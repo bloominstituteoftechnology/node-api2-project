@@ -55,7 +55,7 @@ router.put("/:id", (req, res) => {
     const { title, contents } = req.body;
   
     !title || !contents 
-    ? res.status(400).json({ errorMessage: "Please provide title and contents for the post." }) // Bad Request response - Worked on postman
+    ? res.status(400).json({ errorMessage: "Please provide title and contents for the post." }) 
   
     : posts
       .update(changes, id)
@@ -82,16 +82,16 @@ router.put("/:id", (req, res) => {
         res.status(400).json({ errorMessage: "Please provide text for the comment." }) // if the request body is missing the text property (Bad Request) - worked on postman
     : posts.findById(post_id) // : else
       .then(post => {
-        if (!post) { res.status(404).json({ error: "The post with the specified ID does not exist." }) // working on postman
+        if (!post) { res.status(404).json({ error: "The post with the specified ID does not exist." }) 
       } else {
         let newComment = {
           text: text, post_id: post_id
         }
-        posts.insertComment(newComment) // saves the new comment to the db
+        posts.insertComment(newComment) 
           .then(({ id }) => {
         posts.findCommentById(id)
           .then(comment => {
-            res.status(201).json(comment) // If the info re: comment is valid, save the new comment to the db - worked on postman
+            res.status(201).json(comment) 
         });
       }) // add your if (!text) conditional to the top of the .catch block
       .catch(err => {
@@ -99,7 +99,7 @@ router.put("/:id", (req, res) => {
         res.status(500).json({ errorMessage: "There was an error while saving the comment to the database"
           })
         })
-      } // POST request is possible to do 500 error on postman
+      }
     })
   });
   router.get('/:id/comments', (req, res) => {
