@@ -108,11 +108,12 @@ router.put('/:id', (req,res) => {
 
     Posts.update (id, updates)
     .then(post => {
-        if(post ===1) {res.status(200).json(post)}
-        else if (!updates.title || !updates.comments) {
-            res.status(400).json({message: 'Provide context for the post'})
-        } else (post === 0) {
-            res.status(404).json({message: 'the post you were looking for by id does not exist'})
+        if (post === 1) {
+            res.status(200).json(post)
+        } else if (!updates.title || !updates.contents) {
+            res.status(400).json({message: 'provide a title and contents for the post.' })
+        } else if (post === 0) {
+            res.status(404).json({ message: 'The post with the specified ID does not exist, please try again.' })
         }
     })
     .catch(err => {
