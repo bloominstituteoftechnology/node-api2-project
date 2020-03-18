@@ -66,10 +66,10 @@ router.post('/:id/comments', (req, res) => {
     const { text }  = req.body;
     !text ?
     res.status(400).json({ errorMessage: "Please provide text for the comment." })
-    : Posts.findById(req.params.id)
+    : Posts.insertComment(req.body)
         .then((post) => {
             if (post) {
-                res.status(201).json(req.body)
+                res.status(201).json(post)
             } else {
                 res.status(404).json({ message: "The post with the specified ID does not exist." })
             }
@@ -79,6 +79,8 @@ router.post('/:id/comments', (req, res) => {
             res.status(500).json({ error: "There was an error while saving the comment to the database" })
         })
 })
+
+
 
 
 
