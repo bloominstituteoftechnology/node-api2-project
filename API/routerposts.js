@@ -15,12 +15,30 @@ router.get("/", (req, res)=>{
     
 })
 .catch(err=>{
+    res.status(500).json({error: " The information could  not be  received"})
+})
+})
+
+// GET with ID  comments  (api/posts)
+router.get("/:id/comments", (req, res)=>{
+    const {id}=req.params;
+    db.findPostComments(id)
+    .then(comment=>{
+        if(comment.length>0){
+            res.status(200).json(comment)
+        } else{
+            res.status(404).json({error: " The user with the specific id doesn't exist"})
+        }
+    })
+.catch(err=>{
     res.status(500).json({error: " The information is not received"})
 })
 })
 
-// GET with ID  (api/posts)
-router.get("/:id/comments", (req, res)=>{
+
+// GET with ID (api/posts)
+
+router.get("/:id", (req, res)=>{
     const {id}=req.params;
     db.findById(id)
     .then(users=>{
@@ -35,7 +53,6 @@ router.get("/:id/comments", (req, res)=>{
 })
 })
 
-
 //  POST   | /api/posts | Creates a post using the information sent inside the `request body`.  
 
 router.post("/", (req,res) =>{
@@ -45,13 +62,13 @@ router.post("/", (req,res) =>{
           error: "Please provide title and contents for the post"
       })
   } else if (data.title && data.contents){
-          db.insert(req.body)
+          db.insert(data)
           .then( post =>{
               res.status(201).json(post)
           })
           .catch(err=>{
               console.log(err)
-              res.status(500).json({message:"error inserting the post"})
+              res.status(500).json({ error: "There was an error while saving the post to the database" })
           })
       } else{
           res.status(500).json({error:"error inserting the post "})
