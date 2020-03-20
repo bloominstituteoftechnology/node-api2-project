@@ -25,27 +25,28 @@ router.post('/', (req, res) => {
       });
   }
 });
-// router.post('/:id/comments', (req, res) => {
-//    const info = req.body;
-//   const id = req.params.id;
-//   const {info,id} = req.body
-//   db.insertComment(info)
-//      .then(comments => {
-//       if (info) {
-//        res.status(201).json(info);
-//       }
-//     })
-//   !id
-//   res.status(404).json()
-// }
-//     .catch(error => {
-//       // log error to database
-//       console.log(error);
-//       res.status(500).json({
-//         message: 'Error retrieving the comments '
-//       });
-//     });
-// });
+
+router.post('/:id/comments', (req, res) => {
+  const info = req.body;
+  const id = req.params.id;
+
+  info.post_id = id;
+
+  db.insertComment(info)
+    .then(comments => {
+      if (info) {
+        res.status(201).json(info);
+      }
+    })
+
+    .catch(error => {
+      // log error to database
+      console.log(error);
+      res.status(500).json({
+        message: 'Error retrieving the comments '
+      });
+    });
+});
 
 router.get('/', (req, res) => {
   db.find()
