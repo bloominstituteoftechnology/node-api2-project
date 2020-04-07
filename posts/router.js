@@ -32,6 +32,22 @@ router.get('/:id', (req, res) => {
     })
 })
 
+// GET /api/posts/:id/comments... 	Returns an array of all the comment objects associated with the post with the specified id:
+router.get('/:id/comments', (req, res) => {
+    Posts.findPostComments(req.params.id)
+    .then((comments) => {
+        if (comments) {
+            res.status(200).json(comments);
+        } else {
+            res.status(404).json({ message: "Comments not found."})
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({ message: "Error retrieving comments."})
+    })
+})
+
 // POST /api/posts... Creates a post using the info sent inside the request body:
 router.post('/', (req, res) => {
     Posts.insert(req.body)
@@ -43,5 +59,10 @@ router.post('/', (req, res) => {
         res.status(500).json({ message: "Error adding post."})
     })
 })
+
+// POST /api/posts/:id/comments... 	Creates a comment for the post with the specified id using information sent inside of the request body.
+// router.post('/:id/comments', (req, res) => {
+//     Posts.update(req.params.id, )
+// })
 
 module.exports = router;
