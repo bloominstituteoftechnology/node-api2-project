@@ -8,10 +8,22 @@
     "server": "nodemon index.js"
   },
   "dependencies": {
+    "express": "^4.17.1",
     "knex": "^0.20.11",
     "sqlite3": "^4.1.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ScottSmith23/node-api2-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ScottSmith23/node-api2-project/issues"
+  },
+  "homepage": "https://github.com/ScottSmith23/node-api2-project#readme"
 }
