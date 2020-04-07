@@ -52,17 +52,37 @@ router.get('/:id/comments', (req, res) => {
 router.post('/', (req, res) => {
     Posts.insert(req.body)
     .then((post) => {
-        res.status(200).json(post);
+        if (!post.title || !post.contents) {
+            res.status(400).json({ message: "Please provide title and contents for the post."})
+        } else {
+            res.status(201).json(post);
+        }
     })
     .catch(err => {
         console.log(err);
-        res.status(500).json({ message: "Error adding post."})
+        res.status(500).json({ error: "There was an error while saving the post to the database"})
     })
 })
 
 // POST /api/posts/:id/comments... 	Creates a comment for the post with the specified id using information sent inside of the request body.
-// router.post('/:id/comments', (req, res) => {
-//     Posts.update(req.params.id, )
-// })
+router.post('/:id/comments', (req, res) => {
+    // check that text exists:
+    if (!req.body.text) {
+        res.status(400).json({ message: "No text in comment."})
+    } else {
+        // find post id that matches req id:
+        Posts.findById(req.params.id)
+        .then((post) => {
+            // post is either post with matching id or empty array...
+            if (post.length) {
+                let comment = req.body;
+                Posts.insertComment(comment, req.params.id)
+                res.status(201).json(comment)
+            } else {
+                res.status(404).json({ message: "Post not found."})
+            }
+        })
+    }
+})
 
 module.exports = router;
