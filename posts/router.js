@@ -32,5 +32,16 @@ router.get('/:id', (req, res) => {
     })
 })
 
+// POST /api/posts... Creates a post using the info sent inside the request body:
+router.post('/', (req, res) => {
+    Posts.insert(req.body)
+    .then((post) => {
+        res.status(200).json(post);
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({ message: "Error adding post."})
+    })
+})
 
 module.exports = router;
