@@ -85,4 +85,33 @@ router.post('/:id/comments', (req, res) => {
     }
 })
 
+// DELETE /api/posts/:id... Removes the post with the specified id and returns the deleted post object. You may need to make additional calls to the database in order to satisfy this requirement.
+router.delete('/:id', (req, res) => {
+    let id = req.params.id;
+    Posts.findById(id)
+    .then((post) => {
+        // post is either post with matching id or empty array...
+        if (post.length) {
+            try {
+                Posts.remove(id)
+                .then(numRemaining => {
+                    res.status(200).json(post)
+                })
+            // change database to no longer include deleted post.
+            }
+            catch(err) {
+                res.status(500).json({ errorMessage: "The post could not be removed."})
+            }
+        } else {
+            res.status(404).json({ message: "Post not found."})
+        }
+    })
+    .catch(err => {
+        res.status(500).json({ message: "Sorry, something went wrong."})
+    })
+})
+
+
+// PUT /api/posts/:id.... Updates the post with the specified id using data from the request body. Returns the modified document, NOT the original.
+
 module.exports = router;
