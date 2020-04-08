@@ -48,25 +48,7 @@ router.get('/:id', (req, res) => {
         res.status(500).json({ error: 'Post info could not be retrieved.' })
     })
 })
-router.get("/:id/comments", (req, res) => {
-  Data.findById(req.params.id).then((post) => {
-    if (!post) {
-      res
-        .status(404)
-        .json({ message: "The post with the specified ID does not exist." });
-    } else {
-      Data.findCommentById(req.params.id)
-        .then((comments) => {
-          res.status(200).json(comments);
-        })
-        .catch((err) => {
-          res.status(500).json({
-            message: "The comments information could not be retrieved.",
-          });
-        });
-    }
-  });
-});
+
 
 router.delete("/:id", (req, res) => {
   let deletedPost;
@@ -105,7 +87,55 @@ router.put("/:id", (req, res) => {
   });
 });
 
+// /api/posts/:id/comments
 
+router.get("/:id/comments", (req, res) => {
+  Data.findById(req.params.id).then((post) => {
+    if (!post) {
+      res
+        .status(404)
+        .json({ message: "The post with the specified ID does not exist." });
+    } else {
+      Data.findCommentById(req.params.id)
+        .then((comments) => {
+          res.status(200).json(comments);
+        })
+        .catch((err) => {
+          res.status(500).json({
+            message: "The comments information could not be retrieved.",
+          });
+        });
+    }
+  });
+});
+
+router.post("/:id/comments", (req, res) => {
+  Data.findById(req.params.id).then((post) => {
+    if (!post) {
+      res
+        .status(404)
+        .json({ message: "The post with the specified ID does not exist." });
+    } else if (!req.body.text) {
+      res.status(400).json({ message: "Please provide text for the comment." });
+    } else {
+      Data.insertComment(req.body)
+        .then((comment) => {
+          Data.findCommentById(comment.id).then((comment) => {
+            res.status(201).json(comment);
+          });
+        })
+        .catch((err) => {
+          res
+            .status(500)
+            .json({
+              error:
+                "There was an error while saving the comment to the database.",
+            });
+          console.log(err);
+        });
+    }
+  });
+});
 
 
 module.exports = router;
