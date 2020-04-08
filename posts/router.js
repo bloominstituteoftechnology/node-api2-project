@@ -124,11 +124,12 @@ router.put('/:id', (req, res) => {
             // post is either post with matching id or empty array...
             if (post.length) {
                 try {
+                    // if post is valid: 
                     Posts.update(id, changes)
                     .then(count => {
                         if (count > 0) {
                             // updated correctly:
-                            res.status(200).json(post)
+                            res.status(200).json(changes)
                         }
                     })
                 }
