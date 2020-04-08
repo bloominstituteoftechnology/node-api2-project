@@ -48,29 +48,62 @@ router.get('/:id', (req, res) => {
         res.status(500).json({ error: 'Post info could not be retrieved.' })
     })
 })
+router.get("/:id/comments", (req, res) => {
+  Data.findById(req.params.id).then((post) => {
+    if (!post) {
+      res
+        .status(404)
+        .json({ message: "The post with the specified ID does not exist." });
+    } else {
+      Data.findCommentById(req.params.id)
+        .then((comments) => {
+          res.status(200).json(comments);
+        })
+        .catch((err) => {
+          res.status(500).json({
+            message: "The comments information could not be retrieved.",
+          });
+        });
+    }
+  });
+});
 
-// router.put('/:id', (req, res) => {
-//     const changes = req.body;
-//     if (req.params.id) {
-//         Data.update(req.params.id, changes)
-//         .then(post => {
-//             console.log(post);
-//             if(!req.body.title || !req.body.contents) {
-//                 res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
-//             } else {
-//                 res.status(200).json(post)
-//             }
-//         })
-//         .catch(error => {
-//             console.log(error)
-//             res.status(500).json({ error: "the post info could not be modified" })
-//         })
-//     } else {
-//         res
-//           .status(404)
-//           .json({ message: "The post with the specified ID does not exist." });
-//     }
-// })
+router.delete("/:id", (req, res) => {
+  let deletedPost;
+  Data.findById(req.params.id).then((post) => {
+    deletedPost = post;
+  });
+  Data.remove(req.params.id).then((item) => {
+    res.json(deletedPost);
+  });
+});
+
+
+
+router.put("/:id", (req, res) => {
+  let id = req.params.id;
+  Data.findById(id).then((post) => {
+    if (!post) {
+      res
+        .status(404)
+        .json({ message: "The post with the specified ID does not exist." });
+    } else if (!req.body.title || !req.body.contents) {
+      res.status(400).json({ message: "Provide title and contents." });
+    } else {
+      Data.update(id, req.body)
+        .then((val) => {
+          Data.findById(id).then((updatedPost) => {
+            res.status(200).json(updatedPost);
+          });
+        })
+        .catch((err) =>
+          res
+            .status(500)
+            .json({ message: "The post information could not be modified." })
+        );
+    }
+  });
+});
 
 
 
