@@ -48,7 +48,7 @@ router
       .then((deleted) =>
         deleted > 0
           ? res
-              .status(201)
+              .status(204)
               .json(
                 `successfully deleted ${deleted} items. ${req.params.id} deleted`
               )
@@ -64,9 +64,11 @@ router
 router
   .route("/:id/comments")
   .get(async (req, res) => {
-    if ((await db.findById(req.params.id)).length) {
+    console.log(req.params.id);
+    if ((await db.findById(Number(req.params.id))).length) {
       db.findPostComments(req.params.id)
         .then((comments) => {
+          console.log(comments);
           comments.length
             ? res.status(200).json(comments)
             : res.status(404).json({ error: "no comments found" });
@@ -84,8 +86,10 @@ router
       : db
           .insertComment(req.body)
           .then(() => {
-            db.findPostComments(req.params.id)
-              .then((addedComment) => res.status(201).json(addedComment))
+            db.findPostComments(req.body.post_id)
+              .then((addedComment) => {
+                res.status(201).json(addedComment);
+              })
               .catch((err) => res.status(500).json(err));
           })
           .catch((err) => res.status(500).json(err));
