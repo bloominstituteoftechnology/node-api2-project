@@ -3,6 +3,7 @@ const db = require("../data/db");
 
 const router = express.Router();
 
+// This GETs all the posts
 router.get("/", (req, res) => {
   db.find(req.body)
     .then((posts) => {
@@ -17,6 +18,7 @@ router.get("/", (req, res) => {
 
 // MALANI GRACE TULLOCH
 
+// This GETs a single post by ID
 router.get("/:id", (req, res) => {
   if (req.params.id) {
     db.findById(req.params.id)
@@ -33,6 +35,27 @@ router.get("/:id", (req, res) => {
   } else {
     return res.status(500).json({
       error: "The post information could not be retrieved.",
+    });
+  }
+});
+
+// This GETs all comments for a single post ID
+router.get("/:id/comments", (req, res) => {
+  if (req.params.id) {
+    db.findPostComments(req.params.id)
+      .then((comment) => {
+        res.status(200).json(comment);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else if (!req.params.id) {
+    res.status(404).json({
+      message: "The post with the specified ID does not exist.",
+    });
+  } else {
+    return res.status(500).json({
+      error: "The comments information could not be retrieved.",
     });
   }
 });
