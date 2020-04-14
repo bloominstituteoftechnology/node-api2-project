@@ -129,4 +129,24 @@ router.put("/:id", (req, res) => {
   }
 });
 
+router.delete("/:id", (req, res) => {
+  if (!req.params.id) {
+    res.status(404).json({
+      message: "The post with the specified ID does not exist.",
+    });
+  } else {
+    db.remove(req.params.id)
+      .then((count) => {
+        if (count < 0) {
+          res.status(200).json({ message: "This post has been nuked" });
+        } else {
+          res.status(404).json({ message: "This post cannot be found" });
+        }
+      })
+      .catch((err) => {
+        res.status(500).json({ error: "This post could not be removed" });
+      });
+  }
+});
+
 module.exports = router;
