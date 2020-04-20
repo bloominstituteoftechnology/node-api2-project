@@ -1,16 +1,20 @@
 const express = require('express');
-
-const postRoutes = require('./posts/postRoutes');
 const server = express();
 const PORT = 8000;
 
-server.use(express.json());
 
+const postRoutes = require('./posts/postRoutes');
+
+
+server.use(express.json());
+server.use('/', (req, res) => {
+  res.status(200).send('API up and running')
+});
+
+//Routers
 server.use('/posts', postRoutes);
 
-server.get('/', (req, res) => {
-  res.send('API up and running')
-});
+
 
 server.listen(PORT, () => {
   console.log(`\n API running on PORT ${PORT}\n`)
