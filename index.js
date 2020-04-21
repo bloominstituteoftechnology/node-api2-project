@@ -7,9 +7,9 @@ const postRoutes = require('./posts/postRoutes');
 
 
 server.use(express.json());
-server.use('/', (req, res) => {
-  res.status(200).send('API up and running')
-});
+// server.use('/', (req, res) => {
+//   res.status(200).send('API up and running')
+// });
 
 //Routers
 server.use('/posts', postRoutes);
