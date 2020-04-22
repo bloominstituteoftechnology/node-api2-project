@@ -19,7 +19,8 @@ router.post("/", (req, res) => {
 
 router.post("/:id/comments", (req, res) => {
   const { id } = req.params;
-  Posts.insertComment(id)
+  console.log(req.body)
+  Posts.insertComment(req.body)
     .then((comment) => {
       res.status(201).json(comment);
     })
