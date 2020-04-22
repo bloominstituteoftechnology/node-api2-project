@@ -75,18 +75,27 @@ router.get("/:id/comments", (req, res) => {
 router.delete("/:id", (req, res) => {
   const { id } = req.params;
   Posts.remove(id)
-  .then((post) => {
-    res.status(204).json(post)
-  })
-  .catch(err => {
-    console.log(err)
-    res.status(500).json({ error: "The post could not be removed" })
-  })
+    .then((post) => {
+      res.status(204).json(post);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: "The post could not be removed" });
+    });
 });
 
 //PUT @ /api/posts/:id
 router.put("/", (req, res) => {
   const { id } = req.params;
+  Posts.update(req.body)
+    .then((post) => {
+      res.status(200).json(post);
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .json({ error: "The post information could not be modified." });
+    });
 });
 
 module.exports = router;
