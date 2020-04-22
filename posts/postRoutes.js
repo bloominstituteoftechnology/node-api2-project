@@ -5,13 +5,30 @@ const Posts = require("../data/db");
 
 // POST @ /api/posts
 router.post("/", (req, res) => {
-  res.status(200).send(`hello from the POST /posts endpoint.`);
-  //?
+  Posts.insert(req.body)
+    .then((post) => {
+      res.status(201).json(post);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: "There was an error while saving the post to the database",
+      });
+    });
 });
 
 router.post("/:id/comments", (req, res) => {
   const { id } = req.params;
-  //?
+  Posts.insertComment(id)
+    .then((comment) => {
+      res.status(201).json(comment);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: "There was an error while saving the comment to the database",
+      });
+    });
 });
 
 //GET @ /api/posts
@@ -21,9 +38,10 @@ router.get("/", (req, res) => {
       res.status(200).json(posts);
     })
     .catch((error) => {
-      // log error from database
       console.log(error);
-      res.status(500).json({ message: "Error retrieving posts" });
+      res
+        .status(500)
+        .json({ error: "The posts information could not be retrieved." });
     });
 });
 
@@ -35,7 +53,9 @@ router.get("/:id", (req, res) => {
     })
     .catch((error) => {
       console.log(error);
-      res.status(500).json({ message: "Error retrieving post" });
+      res
+        .status(404)
+        .json({ message: "The post with the specified ID does not exist." });
     });
 });
 
