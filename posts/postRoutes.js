@@ -18,8 +18,6 @@ router.post("/", (req, res) => {
 });
 
 router.post("/:id/comments", (req, res) => {
-  const { id } = req.params;
-  console.log(req.body)
   Posts.insertComment(req.body)
     .then((comment) => {
       res.status(201).json(comment);
@@ -76,7 +74,14 @@ router.get("/:id/comments", (req, res) => {
 // DELETE @ /api/posts/:id
 router.delete("/:id", (req, res) => {
   const { id } = req.params;
-  //
+  Posts.remove(id)
+  .then((post) => {
+    res.status(204).json(post)
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(500).json({ error: "The post could not be removed" })
+  })
 });
 
 //PUT @ /api/posts/:id
