@@ -70,8 +70,21 @@ router.post("/:id/comments", (req, res) => {
 });
 
 
-//
 
+//#3 -When the client makes a GET request to /api/posts:
+// Returns an array of all the post objects contained in the database.
+router.get("/", (req, res) => {
+    Posts.find(req.query)
+        .then(postData => {
+            res.status(200).json(postData);
+        })
+        .catch(error => {
+            // log error to database
+            console.log(error);
+            //If there's an error in retrieving the posts from the database:
+            res.status(500).json({ error: "The posts information could not be retrieved." });
+        });
+});
 
 
 // mind the S in exportS
