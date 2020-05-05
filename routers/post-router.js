@@ -122,7 +122,7 @@ router.get("/:id/comments", (req, res) => {
             // log error to database
             console.log(error);
             //If there's an error in retrieving the comments from the database:
-            res.status(500).json({ error: "The post information could not be retrieved." });
+            res.status(500).json({ error: "The comments information could not be retrieved." });
         });
 });
 
