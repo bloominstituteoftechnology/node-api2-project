@@ -9,7 +9,7 @@ const router = express.Router(); // mind the UPPERCASE R by visual studio code
 //#1 -Creates a post using the information sent inside the request body.
 //@route /api/posts
 router.post("/", (req, res) => {
-    Posts.addData(req.body);
+    const addData = req.body;
     //If the request body is missing the title or contents property:
     if (!addData.title || !addData.contents) {
         res
@@ -19,7 +19,7 @@ router.post("/", (req, res) => {
             });
         //If the information about the post is valid:
     } else {
-        Post.insert(addData)
+        Posts.insert(addData)
             .then(postRes => {
                 res.status(201).json(postRes);
             })
