@@ -126,6 +126,24 @@ router.get("/:id/comments", (req, res) => {
         });
 });
 
+//#6 -When the client makes a DELETE request to /api/posts/:id
+router.delete("/:id", (req, res) => {
+    Posts.remove(req.params.id)
+        .then(post => {
+            //If the post with the specified id is not found:
+            if (!post) {
+                res.status(404).json({ message: "The post with the specified ID does not exist." });
+            } else {
+                res.status(200).json(post);
+            }
+        })
+        .catch(error => {
+            // log error to database
+            console.log(error);
+            //If there's an error in removing the post from the database:
+            res.status(500).json({ error: "The post could not be removed" });
+        });
+});
 // mind the S in exportS
 module.exports = router; // same as below
 
