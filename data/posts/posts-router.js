@@ -58,6 +58,7 @@ router.get("/:id/", (req, res) => {
         .json({ message: "The post information could not be retrieved." });
     });
 });
+
 router.get("/:id/comments", (req, res) => {
   Posts.findPostComments(req.params.id)
     .then((article) => {
@@ -74,6 +75,46 @@ router.get("/:id/comments", (req, res) => {
         .status(500)
         .json({ message: "The post information could not be retrieved." });
     });
+});
+
+router.post("/:id/comments", (req, res) => {
+  if (req.body.text === null || req.body.text === "") {
+    res.status(400).json({
+      erorrMessage: "Please provide title and contents for the post.",
+    });
+  } else {
+    Posts.findById(req.params.id)
+      .then((article) => {
+        if (article.length === 0) {
+          res.status(404).json({
+            message: "The post with the specified ID does not exist.",
+          });
+        } else {
+          const commentText = req.body;
+          commentText.post_id = req.params.id;
+          Posts.insertComment(req.body)
+            .then((article) => {
+              if (article === 0) {
+                res.status(404).json({
+                  message: "The post with the specified ID does not exist.",
+                });
+              } else {
+                res.status(200).json(article);
+              }
+            })
+            .catch((err) => {
+              res.status(500).json({
+                message: "The post information could not be retrieved.",
+              });
+            });
+        }
+      })
+      .catch((err) => {
+        res
+          .status(500)
+          .json({ message: "The post information could not be retrieved." });
+      });
+  }
 });
 
 router.put("/:id/comments", (req, res) => {
