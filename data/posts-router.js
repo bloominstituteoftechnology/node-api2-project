@@ -70,8 +70,6 @@ router.post('/', (req,res)=>{
 
 //deletes a post
 router.delete('/:id',(req,res)=>{
-    //empty array to store the deleted post
-    deletedPost = {}
     //first we check to see if there is a post matching the id
     //if we find it we add it to the deleted post array
     //if not we will respond with errors
@@ -81,7 +79,7 @@ router.delete('/:id',(req,res)=>{
                 Posts.remove(req.params.id)
                     .then(resp=>{
                         console.log(resp)
-                        res.status(200).json(post)
+                        res.status(200).json(post[0])
                     })
                     .catch(err=>{
                         res.status(500).json({
@@ -99,13 +97,37 @@ router.delete('/:id',(req,res)=>{
         })
     //next we check if the deleted post array has an element in it
     //if so we will attempt to delete it
-    //if successful we will return the contents of the deleted post array
-    
+    //if successful we will return the contents of the deleted post
 
 })
 
 //gets a list of comments for a specific post
-//router.get('/:id/comments')
+router.get('/:id/comments',(req,res)=>{
+    //checks to see if the post exists
+    //if it does we attempt to fetch the comments
+    Posts.findById(req.params.id)
+        .then(post =>{
+            if(post){
+                Posts.findPostComments(req.params.id)
+                    .then(resp=>{
+                        //console.log(resp)
+                        res.status(200).json(resp)
+                    })
+                    .catch(err=>{
+                        res.status(500).json({
+                            message: 'unable to retrieve comments'
+                        })
+                    })
+            }else{
+                res.status(404).json({message: 'there is no post with that id'})
+            }
+        })
+        .catch(err=>{
+            res.status(500).json({
+                message: 'Error retrieving data'
+            })
+        })
+})
 
 
 module.exports = router
