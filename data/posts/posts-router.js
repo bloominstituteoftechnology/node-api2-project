@@ -59,19 +59,51 @@ router.get("/:id/", (req, res) => {
     });
 });
 router.get("/:id/comments", (req, res) => {
-  Posts.findCommentById(req.params.id)
-    .then((comment) => {
-      res.status(200).json(comment);
+  Posts.findPostComments(req.params.id)
+    .then((article) => {
+      if (article.length === 0) {
+        res
+          .status(404)
+          .json({ message: "The post with the specified ID does not exist." });
+      } else {
+        res.status(200).json(article);
+      }
     })
     .catch((err) => {
       res
-        .status(404)
-        .json({ message: "The post with the specified ID does not exist." });
+        .status(500)
+        .json({ message: "The post information could not be retrieved." });
     });
 });
 
-// router.get("/:id/comments", (req, res) => {
-//   Posts.findById(id);
-// });
+router.put("/:id/comments", (req, res) => {
+  if (
+    req.body.title === undefined ||
+    req.body.title === "" ||
+    req.body.contents === undefined ||
+    req.body.contents === ""
+  ) {
+    res.status(400).json({
+      erorrMessage: "Please provide title and contents for the post.",
+    });
+  } else {
+    Posts.update(req.params.id, req.body)
+      .then((post) => {
+        if (post.length === 0) {
+          res.status(404).json({
+            message: "The post with the specified ID does not exist.",
+          });
+        } else {
+          res.status(200).json(post);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json({
+          message: "Error adding a post",
+        });
+      });
+  }
+});
 
 module.exports = router;
