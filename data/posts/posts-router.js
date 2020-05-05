@@ -89,7 +89,7 @@ router.put("/:id/comments", (req, res) => {
   } else {
     Posts.update(req.params.id, req.body)
       .then((post) => {
-        if (post.length === 0) {
+        if (post === 0) {
           res.status(404).json({
             message: "The post with the specified ID does not exist.",
           });
@@ -104,6 +104,24 @@ router.put("/:id/comments", (req, res) => {
         });
       });
   }
+});
+
+router.delete("/:id", (req, res) => {
+  Posts.remove(req.params.id)
+    .then((removed) => {
+      if (removed === 0) {
+        res.status(404).json({
+          message: "The post with the specified ID does not exist.",
+        });
+      } else {
+        res.status(200).json(removed);
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({
+        message: "Error occured, server is down.",
+      });
+    });
 });
 
 module.exports = router;
