@@ -32,7 +32,10 @@ router.post("", (req, res) => {
     // const body = req.body;
     Posts.insert(req.body)
       .then((post) => {
-        res.status(201).json(post);
+        Posts.findById(post.id).then((newPost) => {
+          res.status(201).json(newPost);
+        });
+        // res.status(201).json(post);
       })
       .catch((error) => {
         console.log(error);
