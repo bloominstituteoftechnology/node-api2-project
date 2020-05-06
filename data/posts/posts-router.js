@@ -1,8 +1,9 @@
 const express = require("express");
 
-const Posts = require("../db");
-
 const router = express.Router();
+
+//const router = require("express").Router()
+const Posts = require("../db");
 
 router.get("/", (req, res) => {
   Posts.find(req.query)
@@ -79,20 +80,24 @@ router.get("/:id/comments", (req, res) => {
 });
 
 router.post("/:id/comments", (req, res) => {
+  const commentText = req.body;
+  commentText.post_id = req.params.id;
+
   if (req.body.text === null || req.body.text === "") {
     res.status(400).json({
       erorrMessage: "Please provide title and contents for the post.",
     });
   } else {
-    Posts.findById(req.params.id)
+    Posts.findCommentById(req.params.id)
       .then((article) => {
+        // console.log({ article });
         if (article.length === 0) {
           res.status(404).json({
             message: "The post with the specified ID does not exist.",
           });
         } else {
-          const commentText = req.body;
-          commentText.post_id = req.params.id;
+          // const commentText = req.body;
+          // commentText.post_id = req.params.id;
 
           Posts.insertComment(req.body)
             .then((article) => {
@@ -101,6 +106,8 @@ router.post("/:id/comments", (req, res) => {
                   errorMessage: "Please provide text for the comment.",
                 });
               } else {
+                // let newPost = article.push(commentText);
+                // console.log(newPost);
                 res.status(201).json(commentText);
               }
             })
