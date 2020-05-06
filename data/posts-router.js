@@ -129,5 +129,103 @@ router.get('/:id/comments',(req,res)=>{
         })
 })
 
+//posts a new comment
+router.post('/:id/comments',(req,res)=>{
+    //first we check to see if the content is valid
+    //checks to see if the post exists
+    //if it does we attempt to post a new comment
+    //console.log(req.body)
+    if (!req.body.text) {
+        res.status(400).json({message: 'please add text to your comment'})  
+    }
+    else{
+    Posts.findById(req.params.id)
+        .then(post =>{
+            if(post){
+               // console.log(post[0].id)
+                Posts.insertComment({text: req.body.text, post_id: post[0].id})
+                    .then(resp=>{
+                        //console.log(resp)
+                        //if it succesfully posts it will retrieve a comment
+                        Posts.findCommentById(resp.id)
+                            .then(comment =>{
+                                if(comment.length>0){
+                                    res.status(200).json(comment[0])
+                                }else{
+                                    res.status(404).json({message: 'there is no comment with that id'})
+                                }
+                            })
+                            .catch(err=>{
+                                res.status(500).json({
+                                    message: 'Error retrieving data'
+                                })
+                            })
+                    })
+                    .catch(err=>{
+                        res.status(500).json({
+                            message: 'unable to post comment',
+                            error: err
+                        })
+                    })
+            }else{
+                res.status(404).json({message: 'there is no post with that id'})
+            }
+        })
+        .catch(err=>{
+            res.status(500).json({
+                message: 'Error retrieving data'
+            })
+        })
+    }    
+})
+
+//edits a post
+router.put('/:id',(req,res)=>{
+    //checks to see if the request body is valid
+    console.log(req.params.id)
+    if (!req.body.title || !req.body.contents) {
+        res.status(400).json({message: 'please add valid updates'})  
+    }
+    else{
+    Posts.findById(req.params.id)
+        .then(oldPost =>{
+            if(oldPost){
+               console.log(oldPost)
+                Posts.update({id: oldPost[0].id, changes: req.body})
+                    .then(resp=>{
+                        console.log(resp)
+                        //if it succesfully posts it will retrieve the updated post
+                        Posts.findById(req.params.id)
+                            .then(updatedPost =>{
+                                if(updatedPost.length>0){
+                                    res.status(200).json(updatedPost[0])
+                                }else{
+                                    res.status(404).json({message: 'there is no comment with that id'})
+                                }
+                            })
+                            .catch(err=>{
+                                res.status(500).json({
+                                    message: 'Error retrieving data after update'
+                                })
+                            })
+                    })
+                    .catch(err=>{
+                        res.status(500).json({
+                            message: 'unable to post comment',
+                            error: err
+                        })
+                    })
+            }else{
+                res.status(404).json({message: 'there is no post with that id'})
+            }
+        })
+        .catch(err=>{
+            res.status(500).json({
+                message: 'Error retrieving data before update'
+            })
+        })
+    }    
+})
+
 
 module.exports = router
