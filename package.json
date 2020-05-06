@@ -5,6 +5,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
+    "run": "run server",
     "server": "nodemon index.js"
   },
   "dependencies": {
