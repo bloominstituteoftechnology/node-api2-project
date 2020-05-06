@@ -22,11 +22,12 @@ router.get("/:id", (req,res)=> {
             res.status(200).json(post) : 
             res.status(404).json({message: "Could not find post with that ID"})
     })
+    .catch(()=> {
+        res.status(500).json({errorMessage:"Server error, could not retrieve post."})
+    })
 })
 
 router.post("/",(req,res)=>{
-    console.log(req.body)
-    console.log(req.body.blue)
     if (!req.body.title || !req.body.contents){
         res.status(400).json({errorMessage: "Missing title or contents"})
     }else {
@@ -43,6 +44,12 @@ router.post("/",(req,res)=>{
             })
     }
     
+})
+
+router.post("/:id/comments",(req,res)=>{
+    Data.findById(req.params.id)
+        .then()
+        .catch((error)=>{})
 })
 
 
