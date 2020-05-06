@@ -1,6 +1,6 @@
 const express = require("express");
 
-const dataRouter = require('./data/dataRouter');
+const dataRouter = require('./data/router');
 
 const server = express();
 
