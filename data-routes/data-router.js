@@ -10,26 +10,13 @@ router.get("/",(req,res) => {
             res.status(500).json(posts)
         })
         .catch((err)=>{
-            res.status(500).json({message: "Database error, could not find posts"})
+            res.status(500).json({ error: "The posts information could not be retrieved." })
         })
-})
-
-router.get("/:id", (req,res)=> {
-    Data.findById(req.params.id)
-    .then(post => {
-        console.log(post)
-        post.length > 0 ? 
-            res.status(200).json(post) : 
-            res.status(404).json({message: "Could not find post with that ID"})
-    })
-    .catch(()=> {
-        res.status(500).json({errorMessage:"Server error, could not retrieve post."})
-    })
 })
 
 router.post("/",(req,res)=>{
     if (!req.body.title || !req.body.contents){
-        res.status(400).json({errorMessage: "Missing title or contents"})
+        res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
     }else {
         const insertPost = {
             title: req.body.title,
@@ -40,16 +27,44 @@ router.post("/",(req,res)=>{
                 res.status(201).json({...insertPost,id:response.id})
             })
             .catch((error)=> {
-                res.status(500).json({errorMessage:"Database failure, could not add post"})
+                res.status(500).json({ error: "There was an error while saving the post to the database" })
             })
     }
     
 })
 
-router.post("/:id/comments",(req,res)=>{
+router.get("/:id", (req,res)=> {
     Data.findById(req.params.id)
-        .then()
-        .catch((error)=>{})
+    .then(post => {
+        post.length > 0 ? 
+            res.status(200).json(post) : 
+            res.status(404).json({ message: "The post with the specified ID does not exist." })
+    })
+    .catch(()=> {
+        res.status(500).json({ error: "The post information could not be retrieved." })
+    })
+})
+
+router.post("/:id/comments",(req,res)=>{
+    console.log(req.params.id)
+    Data.findById(req.params.id)
+        .then((response)=> {
+            console.log(response)
+            if(!req.body.text) {
+                res.status(400).json({ errorMessage: "Please provide text for the comment." })
+            } else {
+                Data.insertComment({...req.body,post_id:req.params.id})
+                    .then((response)=>{
+                        res.status(201).json(response)
+                    })
+                    .catch(()=>{
+                        res.status(500).json({ error: "There was an error while saving the post to the database" })
+                    })
+            }
+        })
+        .catch((error)=>{
+            res.status(400).json({ message: "The post with the specified ID does not exist." })
+        })
 })
 
 
