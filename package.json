@@ -8,6 +8,7 @@
     "server": "nodemon index.js"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "express": "^4.17.1",
     "gitignore": "^0.6.0",
     "knex": "^0.20.11",
