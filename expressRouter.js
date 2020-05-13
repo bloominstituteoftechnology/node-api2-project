@@ -3,16 +3,6 @@ const data = require("./data/db");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-    posts.find()
-        .then(posts => {
-            res.status(200).json(posts);
-        })
-        .catch(error => {
-            res.status(500).json(error)
-        })
-})
-
 // When the client makes a POST request to /api/postss
 router.post("/", (req, res) => {
     req.body.title && req.body.contents;
@@ -44,7 +34,46 @@ router.post("/:id/comments", (req, res) => {
             res.status(201).json(comment)
         })
         .catch(error => {
-            res.status(500).jsonp({ errorMessage: "There was an error while saving the comment to the database." })
+            res.status(500).json({ errorMessage: "There was an error while saving the comment to the database." })
         })
+})
+
+// When the client makes a GET request to /api/posts
+
+router.get("/api/posts", (req, res) => {
+    posts.find()
+        .then(posts => {
+            res.status(200).json(posts);
+        })
+        .catch(error => {
+            res.status(500).json({ error: "The post information could not be retrieved."})
+        })
+})
+
+// When the client makes a GET request to /api/posts/:id
+
+router.get("/api/posts/:id", (req, res) => {
+    data.findById(req.params.id)
+    .then((post) => {
+        !post ? res.status(404).json({ message:"The post with the specified ID does not exist." }) 
+            : res.status(200).json(post);
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(500).json({ error: "The post information could not be retrieved" })
+    })
+})
+
+// When the client makes a GET request to /api/posts/:id/comments
+
+router.get("/api/posts/:id/comments", (req, res) => {
+    posts.findPostComments(id)
+    .then(data => {
+        data ? res.status(200).json(data)
+            : res.status(404).json({ message: "The post with the specified ID does not exist." })
+    })
+    .catch(error => {
+        res.status(500).json({ message: "The comments information would not be retrieved" })
+    })
 })
 
