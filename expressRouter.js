@@ -39,7 +39,6 @@ router.post("/:id/comments", (req, res) => {
 })
 
 // When the client makes a GET request to /api/posts
-
 router.get("/api/posts", (req, res) => {
     posts.find()
         .then(posts => {
@@ -51,7 +50,6 @@ router.get("/api/posts", (req, res) => {
 })
 
 // When the client makes a GET request to /api/posts/:id
-
 router.get("/api/posts/:id", (req, res) => {
     data.findById(req.params.id)
     .then((post) => {
@@ -65,7 +63,6 @@ router.get("/api/posts/:id", (req, res) => {
 })
 
 // When the client makes a GET request to /api/posts/:id/comments
-
 router.get("/api/posts/:id/comments", (req, res) => {
     posts.findPostComments(id)
     .then(data => {
@@ -75,5 +72,23 @@ router.get("/api/posts/:id/comments", (req, res) => {
     .catch(error => {
         res.status(500).json({ message: "The comments information would not be retrieved" })
     })
+})
+
+// When the client makes a DELETE request to /api/posts/:id 
+
+router.delete("/api/posts/:id", (req, res) => {
+    posts.remove(id)
+    .then(removed => {
+        removed ? res.status(200).json({ message: "The post with the specified ID was deleted", deleted })
+            : res.status(404).json({message: "The post with the specified ID does not exist" })
+    })
+    .catch(error => {
+        res.status(500).json({ message: "The post could not be removed" })
+    })
+})
+
+// When the client makes a PUT request to /api/posts/:id
+router.put("/api/posts/:id", (req, res) => {
+
 })
 
