@@ -1,5 +1,5 @@
 const express = require("express");
-const data = require("./data/db");
+const posts = require("./data/db");
 
 const router = express.Router();
 
@@ -21,7 +21,7 @@ router.post("/", (req, res) => {
 
 // When the client makes a POST request to /api/posts/:id/comments
 router.post("/:id/comments", (req, res) => {
-    data.findById(req.params.id)
+    posts.findById(req.params.id)
 
     !post ? res.status(404).json({ error: "The post with the specified ID does not exist." })
         : req.comments.text && req.comments.id;
@@ -90,7 +90,7 @@ router.delete("/api/posts/:id", (req, res) => {
 // When the client makes a PUT request to /api/posts/:id
 
 router.put("/api/posts/:id", (req, res) => {
-    data.findById(req.params.id)
+    posts.findById(req.params.id)
     .then((post) => {
         !post ? res.status(404).json({ message:"The post with the specified ID does not exist." }) 
             : res.status(200).json(post);
@@ -100,13 +100,10 @@ router.put("/api/posts/:id", (req, res) => {
         res.status(500).json({ error: "The post information could not be retrieved" })
     })
 
-    req.body.title && req.body.contents;
-
     !title || !contents ? res.status(400).json({ message: "Please provide title and contents for the post." })
-        : posts
-            .update(changes, id) 
+        : posts.update(req.params.id, req.body) 
             .then(updated => {
-                updated ? res.status(200).json({ message: "The post has been successfully updated." })
+                updated ? res.status(200).json : res.status(200).json
             })
             .catch(error => {
                 res.status(500).json({ error: "The post information could not be modified." });
