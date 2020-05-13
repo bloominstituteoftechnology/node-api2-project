@@ -109,3 +109,5 @@ router.put("/api/posts/:id", (req, res) => {
                 res.status(500).json({ error: "The post information could not be modified." });
             })
 })
+
+module.exports = router

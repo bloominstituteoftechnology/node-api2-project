@@ -1,8 +1,3 @@
-const express = require("express");
-const server = express();
-
-const router = require("./expressRouter")
-
-server.use(express.json());
+const server = require("./api/server");
 
 server.listen(8000, () => console.log("server running on port 8000"));
