@@ -88,7 +88,27 @@ router.delete("/api/posts/:id", (req, res) => {
 })
 
 // When the client makes a PUT request to /api/posts/:id
+
 router.put("/api/posts/:id", (req, res) => {
+    data.findById(req.params.id)
+    .then((post) => {
+        !post ? res.status(404).json({ message:"The post with the specified ID does not exist." }) 
+            : res.status(200).json(post);
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(500).json({ error: "The post information could not be retrieved" })
+    })
 
+    req.body.title && req.body.contents;
+
+    !title || !contents ? res.status(400).json({ message: "Please provide title and contents for the post." })
+        : posts
+            .update(changes, id) 
+            .then(updated => {
+                updated ? res.status(200).json({ message: "The post has been successfully updated." })
+            })
+            .catch(error => {
+                res.status(500).json({ error: "The post information could not be modified." });
+            })
 })
-
