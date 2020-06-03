@@ -1,7 +1,9 @@
 // Server Setup
-const express = require("express")
+const express = require("express");
+const cors = require("cors");
 const server = express();
 server.use(express.json());
+server.use(cors());
 
 // Import Routers
 const postRouter = require("./posts/postRoutes");
