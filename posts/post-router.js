@@ -39,7 +39,25 @@ router.get("/api/posts/:id", (req, res) => {
     })
 });
 // Creates a post using the information sent inside the request body.
-router.post("/api/posts", (req, res) => {});
+router.post("/api/posts", (req, res) => {
+    if (!req.body.title || !req.body.contents) {
+        return res.status(400).json({
+            errorMessage: "Please provide title and contents for the post."
+        })
+    }
+
+    posts.insert(req.body)
+    .then(post => {
+        res.status(201).json(post)
+    })
+    .catch(err => {
+        console.log(err)
+
+        res.status(500).json({
+            error: "There was an error while saving the post to the database"
+        })
+    })
+});
 // Updates the post with the specified id using data from the request body.
 // Returns the modified document, NOT the original.
 router.put("/api/posts/:id", (req, res) => {});
