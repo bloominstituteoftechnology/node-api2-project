@@ -7,8 +7,8 @@ const router = express.Router();
 router.get("/api/posts", (req, res) => {
   posts
     .find()
-    .then((posts) => {
-      res.status(200).json(posts);
+    .then((post) => {
+      res.status(200).json(post);
     })
     .catch((err) => {
       console.log(err);
@@ -19,7 +19,25 @@ router.get("/api/posts", (req, res) => {
     });
 });
 // Returns the post object with the specified id.
-router.get("/api/posts/:id", (req, res) => {});
+router.get("/api/posts/:id", (req, res) => {
+    posts.findById(req.params.id)
+    .then(post=> {
+        if (post) {
+            res.status(200).json(post)
+        } else {
+            res.status(404).json({
+                message: "The post with the specified ID does not exist."
+            })
+        }
+    })
+    .catch(err => {
+        console.log(err)
+
+        res.status(500).json ({
+            error: "The post information could not be retrieved."
+        })
+    })
+});
 // Creates a post using the information sent inside the request body.
 router.post("/api/posts", (req, res) => {});
 // Updates the post with the specified id using data from the request body.
