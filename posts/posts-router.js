@@ -4,8 +4,8 @@ const posts = require("./posts-model");
 // stand alone router
 const router = express.Router();
 
-// POST /posts
-router.post("/posts", (req, res) => {
+// POST /api/posts
+router.post("/api/posts", (req, res) => {
     if (!req.body.title  || !req.body.contents) {
         return res.status(400).json({
             message: "Please provide title and contents for the post."
@@ -73,5 +73,28 @@ router.get("/posts", (req, res) => {
             })
         })
 })
+
+// GET /posts/:id
+router.get("/api/posts/:id", (req, res) => {
+    const id = req.params.id;
+    posts
+        .findById(id)
+        .then((post) => {
+            if (post) {
+                res.status(200).json(post)
+            } else {
+                res.status(404).json({
+                    message: "The post with the specified ID does not exist."
+                })
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+             res.status(500).json({
+                message: "The post information could not be retrieved."
+            })
+        })
+})
+
 
 module.exports = router;
