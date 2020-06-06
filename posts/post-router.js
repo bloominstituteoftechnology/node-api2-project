@@ -147,13 +147,26 @@ router.post("/api/posts/:id/comments", (req, res) => {
   posts
     .findById(req.params.id)
     .then((post) => {
-      if (post) {
-        res.status(201).json(post);
-      } else {
+      if (!post) {
         res.status(404).json({
           message: "The post with the specified ID does not exist.",
         });
+      } else {
+        return posts.findPostComments(req.params.id);
       }
+    })
+    .catch((err) => {
+      console.log(err);
+
+      res.status(500).json({
+        error: "There was an error while saving the comment to the database",
+      });
+    });
+
+  posts
+    .insertComment(req.body)
+    .then((post) => {
+      res.status(201).json(post);
     })
     .catch((err) => {
       console.log(err);
