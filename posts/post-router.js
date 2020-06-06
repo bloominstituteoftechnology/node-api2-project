@@ -66,6 +66,20 @@ router.get("/api/posts", (req, res) => {
 		})
 })
 
+// RETURN POST BY ID
+router.get("/api/posts/:id", (req, res) => {
+    posts.findById(req.params.id)
+        .then((posts) => {
+            res.status(200).json(posts)
+        })
+        .catch((error) => {
+            console.log(error)
+			res.status(500).json({
+				message: "Error retrieving post",
+			})
+        })
+})
+
 // RETURN POST COMMENTS
 router.get("/api/posts/:id/comments", (req, res) => {
     posts.findPostComments(req.params.id)
@@ -79,5 +93,9 @@ router.get("/api/posts/:id/comments", (req, res) => {
             })
         })
 })
+
+// DELETE POST
+
+// UPDATE POST
 
 module.exports = router
