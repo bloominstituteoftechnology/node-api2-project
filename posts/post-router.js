@@ -96,6 +96,41 @@ router.get("/api/posts/:id/comments", (req, res) => {
 
 // DELETE POST
 
+router.delete("/api/posts/:id", (req, res) => {
+    posts.remove(req.params.id)
+    .then((count) => {
+            if (count > 0) {
+                res.status(200).json({
+                    message: "The user has been nuked",
+                })
+            } else {
+                res.status(404).json({
+                    message: "The user could not be found",
+                })
+        }
+        })
+        .catch((error) => {
+            console.log(error)
+            res.status(500).json({
+                message: "Error removing the user",
+            })
+        })
+})
+
 // UPDATE POST
+
+router.put("/api/posts/:id", (req, res) => {
+    posts.update(req.params.id, req.body)
+        .then((post) => {
+            if (post) {
+                res.status(200).json(post)
+            } else {
+                res.status(404).json({
+					message: "The post could not be found",
+				})
+            }
+        })
+        .catch()
+})
 
 module.exports = router
