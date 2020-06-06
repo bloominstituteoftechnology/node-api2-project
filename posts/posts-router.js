@@ -28,7 +28,7 @@ router.post("/api/posts", (req, res) => {
 })
 
 // POST /posts/:id/comments
-// CHECK THIS LATER!!! 
+// *********
 router.post("/posts/:id/comments", (req, res) => {
     const id = req.params.id;
     const comment = req.body;
@@ -117,6 +117,7 @@ router.get("/api/posts/:id", (req, res) => {
 })
 
 // GET /api/posts/:id/comments
+// ****** check?
 router.get("/api/posts/:id/comments", (req, res) => {
     const id = req.params.id
     const comment = req.body
@@ -140,6 +141,7 @@ router.get("/api/posts/:id/comments", (req, res) => {
 })
 
 // DELETE /api/posts/:id
+// *********
 router.delete("/api/posts/:id", (req, res) => {
     const id = req.params.id
 
@@ -156,6 +158,32 @@ router.delete("/api/posts/:id", (req, res) => {
             console.log(error)
             return res.status(500).json({
                 message: "The post could not be removed."
+            })
+        })
+})
+
+// PUT /api/posts/:id
+router.put("/api/posts/:id", (req, res) => {
+    if (!req.body.title || !req.body.contents) {
+        return res.status(400).json({
+            message: "Please provide a title and contents for the post."
+        })
+    }
+    posts
+        .update(req.params.id, req.body)
+        .then((post) => {
+            if (post) {
+                res.status(200).json(post)
+            } else {
+                res.status(404).json({
+                    message: "The post with the specified ID does not exist."
+                })
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+            return res.status(500).json({
+                message: "The post information could not be modified"
             })
         })
 })
