@@ -30,6 +30,23 @@ router.post("/api/posts", (req, res) => {
 // POST /posts/:id/comments
 // CHECK THIS LATER!!! 
 router.post("/posts/:id/comments", (req, res) => {
+    const id = req.params.id;
+    const comment = req.body;
+
+    posts
+    .insertComment(req.body)
+    .then((comment) => {
+        posts.findCommentById(comment.id)
+        .then((comment) => {
+            res.status(201).json(post)
+        })
+    })
+    .catch((error) => {
+        console.log(error)
+        res.status(500).json({
+            message: "There was an error while saving the comment to the database."
+        })
+    })
     if (!posts.id) {
         return res.status(404).json({
             message: "The post with the specified ID does not exist."
@@ -40,21 +57,24 @@ router.post("/posts/:id/comments", (req, res) => {
             message: "Please provide text for the comment."
         })
     }
-    posts
-        .insertComment(req.body)
-        .then((comment) => {
-            posts.findCommentById(comment.id)
-            .then((comment) => {
-                res.status(201).json(post)
-            })
-        })
-        .catch((error) => {
-            console.log(error)
-            res.status(500).json({
-                message: "There was an error while saving the comment to the database."
-            })
-        })
 })
+
+// OR TRY THIS: 
+
+// router.post('/posts/:id/comments', (req, res) => {
+//     const id = req.params.id;
+//     const comment = req.body;
+  
+//     posts.insertComment(comment)
+//       .then(data => {
+//         res.status(201).json(data)
+//       })
+//       .catch(err => {
+//         res.status(500).json(err, {
+//             message: "There was an error while saving the comment to the database."
+//         });
+//       })
+//   });
 
 // GET /api/posts
 router.get("/posts", (req, res) => {
@@ -92,6 +112,50 @@ router.get("/api/posts/:id", (req, res) => {
             console.log(error)
              res.status(500).json({
                 message: "The post information could not be retrieved."
+            })
+        })
+})
+
+// GET /api/posts/:id/comments
+router.get("/api/posts/:id/comments", (req, res) => {
+    const id = req.params.id
+    const comment = req.body
+    posts
+        .findCommentById(id)
+        .then((comment) => {
+            if (comment) {
+                res.status(200).json(comment)
+            } else {
+                res.status(404).json({
+                    message: "The post with the specified ID does not exist."
+                })
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+            res.status(500).json({
+                message: "The comments information could not be retrieved."
+            })
+        })
+})
+
+// DELETE /api/posts/:id
+router.delete("/api/posts/:id", (req, res) => {
+    const id = req.params.id
+
+    posts
+        .remove(id)
+        .then((post) => {
+            if (!post) {
+                return res.status(404).json({
+                    message: "The post with the specified ID does not exist."
+                })
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+            return res.status(500).json({
+                message: "The post could not be removed."
             })
         })
 })
