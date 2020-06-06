@@ -28,40 +28,7 @@ router.post("/api/posts", (req, res) => {
 })
 
 // POST /posts/:id/comments
-// *********
-// router.post("/posts/:id/comments", (req, res) => {
-//     const postId = req.params.id;
-//     const comment = req.body;
-
-//     posts
-//     .insertComment(req.body)
-//     .then((comment) => {
-//         posts.findPostComments(postId)
-//         .then((comment) => {
-//             res.status(201).json(post)
-//         })
-//     })
-//     .catch((error) => {
-//         console.log(error)
-//         res.status(500).json({
-//             message: "There was an error while saving the comment to the database."
-//         })
-//     })
-//     if (!posts.id) {
-//         return res.status(404).json({
-//             message: "The post with the specified ID does not exist."
-//         })
-//     }
-//     if (!req.params.text) {
-//         return res.status(400).json({
-//             message: "Please provide text for the comment."
-//         })
-//     }
-// })
-
-// OR TRY THIS: 
-
-router.post('/posts/comments', (req, res) => {
+router.post('/posts/:id/comments', (req, res) => {
     const id = req.params.id;
     const comment = req.body;
   
@@ -117,7 +84,6 @@ router.get("/api/posts/:id", (req, res) => {
 })
 
 // GET /api/posts/:id/comments
-// ****** check?
 router.get("/api/posts/:id/comments", (req, res) => {
     const id = req.params.id
     const comment = req.body
@@ -141,7 +107,6 @@ router.get("/api/posts/:id/comments", (req, res) => {
 })
 
 // DELETE /api/posts/:id
-// *********
 router.delete("/api/posts/:id", (req, res) => {
     const id = req.params.id
 
