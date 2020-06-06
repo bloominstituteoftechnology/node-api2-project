@@ -110,7 +110,26 @@ router.delete("/api/posts/:id", (req, res) => {
 });
 // Returns an array of all the comment objects associated
 // with the post with the specified id.
-router.get("/api/posts/:id/comments", (req, res) => {});
+router.get("/api/posts/:id/comments", (req, res) => {
+    posts.findById(req.params.id)
+    .then(post => {
+        if (!post) {
+            res.status(404).json({
+                message: "The post with the specified ID does not exist."
+            })
+        } else {
+            return posts.findPostComments(req.params.id)
+        }
+    })
+    .then(comments => res.status(200).json(comments))
+    .catch(err => {
+        console.log(err)
+
+        res.status(500).json({
+            error: "The comments information could not be retrieved."
+        })
+    })
+});
 // Creates a comment for the post with the specified id using information
 // sent inside of the request body.
 router.post("/api/posts/:id/comments", (req, res) => {});
