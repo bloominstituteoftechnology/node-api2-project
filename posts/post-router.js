@@ -6,7 +6,7 @@ const router = express.Router()
 const posts = require("../data/db")
 
 // ADD POSTS
-router.post("/api/posts", (req,res) => {
+router.post("/", (req,res) => {
     if (!req.body.title || !req.body.contents) {
 		return res.status(400).json({
 			message: "Missing title or contents",
@@ -26,10 +26,10 @@ router.post("/api/posts", (req,res) => {
 })
 
 // ADD COMMENTS
-router.post('/api/posts/:id/comments', (req, res) => {
+router.post('/:id/comments', (req, res) => {
     const { id } = req.params;
-    const comment = {...req.body, post_id: id };
-    if (!id) {
+    const comment = {...req.body, post_id: req.params.id };
+    if (!req.params.id) {
         res
             .status(404)
             .json({ message: 'ID not found' });
@@ -53,7 +53,7 @@ router.post('/api/posts/:id/comments', (req, res) => {
 
 
 // RETURN POSTS
-router.get("/api/posts", (req, res) => {
+router.get("/", (req, res) => {
 	posts.find()
 		.then((posts) => {
 			res.status(200).json(posts)
@@ -67,7 +67,7 @@ router.get("/api/posts", (req, res) => {
 })
 
 // RETURN POST BY ID
-router.get("/api/posts/:id", (req, res) => {
+router.get("/:id", (req, res) => {
     posts.findById(req.params.id)
         .then((posts) => {
             res.status(200).json(posts)
@@ -81,7 +81,7 @@ router.get("/api/posts/:id", (req, res) => {
 })
 
 // RETURN POST COMMENTS
-router.get("/api/posts/:id/comments", (req, res) => {
+router.get("/:id/comments", (req, res) => {
     posts.findPostComments(req.params.id)
         .then((comments) => {
             res.status(200).json(comments)
@@ -96,7 +96,7 @@ router.get("/api/posts/:id/comments", (req, res) => {
 
 // DELETE POST
 
-router.delete("/api/posts/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
     posts.remove(req.params.id)
     .then((count) => {
             if (count > 0) {
@@ -119,7 +119,7 @@ router.delete("/api/posts/:id", (req, res) => {
 
 // UPDATE POST
 
-router.put("/api/posts/:id", (req, res) => {
+router.put("/:id", (req, res) => {
     posts.update(req.params.id, req.body)
         .then((post) => {
             if (post) {
