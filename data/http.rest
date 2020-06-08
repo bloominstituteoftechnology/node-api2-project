@@ -1,0 +1,29 @@
+// POST Request
+POST http://localhost:8000/api/posts
+Content-Type: application/json
+
+{
+	"title":"Title Tester", 
+	"contents":"Mad Men IDE Test"
+}
+###
+
+POST http://localhost:8000/api/posts/300/comments
+Content-Type: application/json
+
+
+
+###
+
+GET http://localhost:8000/api/posts/
+// Get all post
+
+###
+
+GET http://localhost:8000/api/posts/4
+// Get post by id
+
+###
+GET http://localhost:8000/api/posts/4/comments
+// get post comments by ID
+

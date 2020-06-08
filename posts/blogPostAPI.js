@@ -6,6 +6,7 @@ const router = express.Router();
 //*********************************************************************** */
 // POST Request api/posts/✅
 router.post("/", (req, res) => {
+    console.log(req.body.title)
   if (!req.body.title || !req.body.contents) {
     res.status(400).json({
       errorMessage: "Please provide title and contents for the post.",
@@ -26,19 +27,33 @@ router.post("/", (req, res) => {
 //*********************************************************************** */
 
 // POST Request api/post/:id/comments
-// router.post('/:id/comments', (req, res) => {
-//     const postId = req.params
-//     const {comment} = req.body
+router.post('/:id/comments', (req, res) => {
+    const postId = req.params.id
+    const postBody = req.body.text
 
-//     if(!comment) {
-//         return res.status(400).json({
-//             errorMessage: "Please provide text for the comment."
-//         })
-//     }
-
-//     res.send("Texting")
-
-// })
+    db.findById(postId)
+    .then(response => {
+        if(response.length === 0){
+            res.status(404).json({
+                message: "The post with the specified ID does not exist."
+            })
+        } else if (!postBody){
+            res.status(400).json({
+                message:"Please provide text for the comment"
+            })
+        } else {
+            db.insert(postBody)
+             .then(postBody, postId)
+             
+        }
+    })
+    .catch(err => {
+        res.status(500).then({
+            error: "There was an error while saving the comment to the database"
+        })
+    })
+    
+})
 
 //*********************************************************************** */
 
