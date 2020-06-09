@@ -126,7 +126,7 @@ router.get('/posts/:id/comments', (req, res) => {
 })
 
 router.get('/posts/:id/comments/:commentId', (req, res) => {
-    db.findCommentById(req.params.id, req.params.commentId)
+    db.findCommentById(req.params.commentId)
       .then(comm => {
           if(comm) {
               res.json(comm)
