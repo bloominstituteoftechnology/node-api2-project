@@ -1,16 +1,17 @@
 const express = require("express");
 const posts = require("../db");
+const checkPostData = require("./checkPostData")
 
 // creates a new standalone express router
 const router = express.Router();
 
 //POST
-router.post("/posts", (req, res) => {
-	if (!req.body.title || !req.body.contents) {
-		return res.status(400).json({
-			errorMessage: "Please provide title and contents for the post.",
-		});
-	}
+router.post("/posts", checkPostData(), (req, res) => {
+	// if (!req.body.title || !req.body.contents) {
+	// 	return res.status(400).json({
+	// 		errorMessage: "Please provide title and contents for the post.",
+	// 	});
+	// }
 
 	posts
 		.insert(req.body)
@@ -19,30 +20,23 @@ router.post("/posts", (req, res) => {
 		})
 		.catch((error) => {
 			console.log(error);
-			res
-				.status(500)
-				.json({
-					error: "There was an error while saving the post to the database",
-				});
+			res.status(500).json({
+				error: "There was an error while saving the post to the database",
+			});
 		});
 });
 
-//```````MAY NEED HELP HERE```````
 router.post("/posts/:id/comments", (req, res) => {
+	const comment = {
+		post_id: req.params.id,
+		text: req.body.text,
+	};
 	posts
-		.insertComment(req.params.ids)
+		.insertComment(comment)
 		.then((post) => {
-			if (!text) {
-				res.status(404).json({
-					message: "The post with the specified ID does not exist.",
-				});
-			} else {
-				return posts.findCommentsById(req.params.id);
-			}
+			res.status(200).json(post);
 		})
-		.then((comments) => {
-			res.json(comments);
-		})
+
 		.catch((error) => {
 			console.log(error);
 			res.status(500).json({
@@ -136,12 +130,12 @@ router.delete("/posts/:id", (req, res) => {
 });
 
 //UPDATE
-router.put("/posts/:id", (req, res) => {
-	if (!req.body.title || !req.body.contents) {
-		return res.status(400).json({
-			errorMessage: "Please provide title and contents for the post.",
-		});
-	}
+router.put("/posts/:id", checkPostData(), (req, res) => {
+	// if (!req.body.title || !req.body.contents) {
+	// 	return res.status(400).json({
+	// 		errorMessage: "Please provide title and contents for the post.",
+	// 	});
+	// }
 
 	posts
 		.update(req.params.id, req.body)
