@@ -96,7 +96,7 @@ router.delete("/:id", (req, res) => {
     .then((count) => {
             if (count > 0) {
                res.status(200).json({
-                  message: "The user has been nuked",
+                  message: "post deleted",
                 })
             } else {
                 res.status(404).json({
