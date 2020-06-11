@@ -1,15 +1,15 @@
 // POST Request
-POST http://localhost:8000/api/posts
+POST http://localhost:5000/api/posts
 Content-Type: application/json
 
 {
-	"title":"Title Tester", 
+	"tite":"Title Tester", 
 	"contents":"Mad Men IDE Test"
 }
 ###
 
 // POST REQUEST, NOT WORKING
-POST http://localhost:8000/api/posts/9/comments
+POST http://localhost:5000/api/posts/10/comments
 Content-Type: application/json
 
 {
@@ -19,27 +19,27 @@ Content-Type: application/json
 ###
 
 // GET REQUEST - GET ALL POST
-GET http://localhost:8000/api/posts/
+GET http://localhost:5000/api/posts/
 // Get all post
 
 ###
 
-GET http://localhost:8000/api/posts/4
+GET http://localhost:5000/api/posts/6
 // Get post by id
 
 ###
-GET http://localhost:8000/api/posts/12/comments
+GET http://localhost:5000/api/posts/8/comments
 // get post comments by ID
 
 ###
-DELETE http://localhost:8000/api/posts/26
+DELETE http://localhost:5000/api/posts/8
 // DELETE post by id
 
 ###
-PUT http://localhost:8000/api/posts/1
+PUT http://localhost:5000/api/posts/6
 Content-Type: application/json
 
 {
-	"title":"New Put Reqest", 
-	"contents":"Updating with Put Request"
+	"title":"Random Random Random", 
+	"contents":"Updating with Put Request TEST 2"
 }
