@@ -1,14 +1,14 @@
 const express = require("express");
 
-const db = require("../data/db");
+const db = require("../db.js");
 
 const router = express.Router();
 
 let comment = {
-  text: "", // String, required
-  post_id: "", // Integer, required, must match the id of a post entry in the database
-  created_at: Date.now(), // Date, defaults to current date
-  updated_at: Date.now(), // Date, defaults to current date
+  text: "",
+  post_id: "",
+  created_at: Date.now(),
+  updated_at: Date.now(),
 };
 
 router.get("/", (req, res) => {
@@ -31,7 +31,7 @@ router.get("/:id", (req, res) => {
       if (post.length == 0) {
         res
           .status(404)
-          .json({ error: "The post with the specified ID does not exist." });
+          .json({ error: "The post with that ID can not be found." });
       } else {
         res.status(200).json(post);
       }
@@ -39,7 +39,7 @@ router.get("/:id", (req, res) => {
     .catch((error) => {
       res
         .status(500)
-        .json({ error: "The posts information could not be retrieved." })
+        .json({ error: "The posts information can not be found." })
         .end();
     });
 });
@@ -66,11 +66,9 @@ router.get("/:id/comments", (req, res) => {
 
 router.post("/", (req, res) => {
   if (!req.body.title || !req.body.contents) {
-    res
-      .status(400)
-      .json({
-        message: "please make sure to send a valid title and valid contents",
-      });
+    res.status(400).json({
+      message: "please make sure to send a valid title and valid contents",
+    });
   } else {
     db.insert(req.body)
       .then((post) => {
@@ -120,12 +118,10 @@ router.put("/:id", (req, res) => {
         if (post) {
           res.status(200).json(post);
         } else {
-          res
-            .status(404)
-            .json({
-              message:
-                "The post with the specified ID does not exist, please try again.",
-            });
+          res.status(404).json({
+            message:
+              "The post with the specified ID does not exist, please try again.",
+          });
         }
       })
       .catch((error) => {
