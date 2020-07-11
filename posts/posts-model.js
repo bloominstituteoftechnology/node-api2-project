@@ -10,7 +10,7 @@ module.exports = {
     remove,
     update,
     findPostComments,
-    findCommentseById,
+    findCommentsById,
     insertComment,
 };
 
@@ -57,7 +57,7 @@ function findPostComments(postId) {
         .where({ post_id: postId})
 }
 
-function findCommentseById(id) {
+function findCommentsById(id) {
     return db('comments')
         .where({ id })
         .first();
