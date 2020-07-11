@@ -6,12 +6,12 @@ const db = knex(config.development);
 module.exports = {
     find,
     findById,
-    add, 
+    insert, 
     remove,
     update,
-    findPostMessages,
-    findMessageById,
-    addMessage,
+    findPostComments,
+    findCommentseById,
+    insertComment,
 };
 
 function find(query) {
@@ -32,7 +32,7 @@ function findById(id){
         .first();
 }
 
-async function add(post) {
+async function insert(post) {
     const [id] = await db('posts').insert(hub);
 
     return findById(id);
@@ -50,21 +50,21 @@ function update(id, changes) {
         .update(changes, '*');
 }
 
-function findPostMessages(postId) {
-    return db('messages as m')
-        .join('posts as p', 'm.post.id', 'p.id')
-        .select('m.id', 'm.text', 'm.sender', 'h.id as postId', 'h.name as post')
+function findPostComments(postId) {
+    return db('comments as c')
+        .join('posts as p', 'c.post.id', 'p.id')
+        .select('c.id', 'c.text', 'c.sender', 'h.id as postId', 'h.name as post')
         .where({ post_id: postId})
 }
 
-function findMessageById(id) {
-    return db('messages')
+function findCommentseById(id) {
+    return db('comments')
         .where({ id })
         .first();
 }
 
-async function addMessage(message) {
-    const [id] = await db('messages').insert(message);
+async function insertComment(comment) {
+    const [id] = await db('comments').insert(comment);
 
-    return findMessageById(id);
+    return findCommentseById(id);
 }
