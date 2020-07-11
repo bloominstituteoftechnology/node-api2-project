@@ -1,5 +1,5 @@
 const knex = require('knex');
-const configure = require('../knewfile.js');
+const config = require('../knexfile.js');
 const { off } = require('../server.js');
 const db = knex(config.development);
 
