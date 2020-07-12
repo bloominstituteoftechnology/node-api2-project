@@ -1,17 +1,29 @@
 {
-    "name": "node-api2-project",
-    "version": "0.0.1",
-    "description": "Project for Node API 2 Module",
-    "private": true,
-    "main": "index.js",
-    "scripts": {
-        "server": "nodemon index.js"
-    },
-    "dependencies": {
-        "knex": "^0.21.1",
-        "sqlite3": "^5.0.0"
-    },
-    "devDependencies": {
-        "nodemon": "^2.0.4"
-    }
+  "name": "api2-project",
+  "version": "0.0.1",
+  "description": "Project for Node API 2 Module",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "server": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "knex": "^0.21.1",
+    "sqlite3": "^5.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scottynate05/node-api2-project.git"
+  },
+  "author": "Nathan Brown",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scottynate05/node-api2-project/issues"
+  },
+  "homepage": "https://github.com/scottynate05/node-api2-project#readme"
 }
