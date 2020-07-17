@@ -1,5 +1,9 @@
 # Building RESTful APIs with Express
 
+## Deployed api link
+
+https://nbpostsapi.herokuapp.com/
+
 ## Topics
 
 - Express Routing
