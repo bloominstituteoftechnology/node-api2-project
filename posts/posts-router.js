@@ -3,6 +3,7 @@ const Posts = require("../data/db");
 const { restart } = require("nodemon");
 const router = express.Router();
 
+/////////////////////////////////////
 //POST - API/POSTS
 router.post("/", (req, res) => {
   const newPost = req.body;
@@ -28,8 +29,8 @@ router.post("/", (req, res) => {
   }
 });
 
+/////////////////////////////////////
 //POST - API/POSTS/:id/COMMENTS
-
 router.post("/:id/comments", (req, res) => {
   const newComment = req.body;
 
@@ -64,6 +65,7 @@ router.post("/:id/comments", (req, res) => {
   }
 });
 
+/////////////////////////////////////
 //GET API/POSTS
 router.get("/", (req, res) => {
   Posts.find()
@@ -78,6 +80,7 @@ router.get("/", (req, res) => {
     });
 });
 
+/////////////////////////////////////
 //GET API/POSTS/:id
 router.get("/:id", (req, res) => {
   Posts.findById(req.params.id)
@@ -100,6 +103,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
+//////////////////////////////////////////
 //GET API/POSTS/:id/COMMENTS
 router.get("/:id/comments", (req, res) => {
   Posts.findPostComments(req.params.id)
@@ -120,24 +124,58 @@ router.get("/:id/comments", (req, res) => {
         .json({ error: "The comments information could not be retrieved." });
     });
 });
-
+////////////////////////////////////////
+//DELETE API/POSTS/:id
 router.delete("/:id", (req, res) => {
   Posts.remove(req.params.id)
-  .then(check => {
-      if(check > 0) {
-          res.status(200).json({message: "Your post has been successfully deleted."  })
+    .then((check) => {
+      if (check > 0) {
+        res
+          .status(200)
+          .json({ message: "Your post has been successfully deleted." });
+      } else {
+        res
+          .status(404)
+          .json({ error: "The post with the specified ID does not exist." });
       }
-      else {
-          res.status(404).json({error:"The post with the specified ID does not exist."})
-      }
-  })
-  .catch(err => {
-      res.status(500).json({error:"The posts information could not be retrieved." })
-  })
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .json({ error: "The posts information could not be retrieved." });
+    });
 });
 
 router.put("/:id", (req, res) => {
-  res.status(200).send(`hello from the PUT /posts /${id} `);
+  const id = req.params.id;
+  const post = req.body;
+
+  if (!post.title || !post.contents) {
+    res
+      .status(400)
+      .json({
+        errorMessage: "Please provide title and contents for the post.",
+      });
+  } else {
+    Posts.update(id, post)
+      .then((item) => {
+        if (item > 0) {
+          res.status(200).json(post);
+        } else {
+          res
+            .status(404)
+            .json({
+              message: "The post with the specified ID does not exist.",
+            });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        res
+          .status(500)
+          .json({ error: "The posts information could not be retrieved." });
+      });
+  }
 });
 
 module.exports = router;
