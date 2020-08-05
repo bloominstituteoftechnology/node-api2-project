@@ -1,3 +1,9 @@
+# Let students use Yarn
+package-lock.json
+
+# Mac files
+.DS_Store
+
 # Logs
 logs
 *.log
@@ -56,6 +62,3 @@ typings/
 
 # dotenv environment variables file
 .env
-
-# Mac files
-.DS_Store
