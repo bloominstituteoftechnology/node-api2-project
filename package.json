@@ -5,7 +5,9 @@
     "private": true,
     "main": "index.js",
     "scripts": {
-        "server": "nodemon index.js"
+        "server": "nodemon index.js",
+        "start": "node index.js",
+        "watch": "nodemon index.js"
     },
     "dependencies": {
         "knex": "^0.21.2",
