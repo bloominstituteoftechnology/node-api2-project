@@ -33,3 +33,66 @@ router.get("/posts/:id", (req,res) => {
         })
     })
 })
+
+router.get("/posts/id/comments", (req,res) => {
+    posts.findPostComments(req.params.id)
+    .then((comments) => {
+        if (comments) {
+            res.status(200).json(comments)
+        }else{
+            res.status(404).json({
+                errorMessage: "The comments with the specified ID does not exist."
+            })
+    })
+    .catch((err) => {
+        console.log(err)
+        res.status(500).json({
+            errorMessage: "The comments information could not be retrieved."
+        })
+    })
+})
+
+router.post("/posts", (req,res) => {
+    if (!req.body.title || !req.body.contents) {
+        return res.status(400).json({
+            errorMessage: "Please provide a title and contents for the post."
+        })
+    }
+
+    posts.insert(req.body)
+    .then((post) => {
+        res.status(201).json(post)
+    })
+    .catch((err) => {
+        console.log(err)
+        res.status(500).json({
+            errorMessage: "There was an error while saving the post to the database."
+        })
+    })
+})
+
+router.post("/posts/:id/comments", (req,res) => {
+    users.insertComment(comment)
+    if (!req.params.id) {
+        return res.status(404).json({
+            errorMessage: "The post with the specified ID does not exist."
+        })
+    }
+
+    if (!req.params.text) {
+        return res.status(400).json({
+            errorMessage: "Please provide text for the comment"
+        })
+    }
+
+    posts.insert(req.body)
+    .then((comment) => {
+        res.status(201).json(comment)
+    })
+    .catch((err) => {
+        console.log(err)
+        res.status(500).json({
+            errorMessage: "There was an error while saving the comment to the database."
+        })
+    })
+})
