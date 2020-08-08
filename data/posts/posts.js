@@ -85,7 +85,7 @@ router.post("/posts/:id/comments", (req,res) => {
         })
     }
 
-    posts.insert(req.body)
+    posts.insertComment(req.body)
     .then((comment) => {
         res.status(201).json(comment)
     })
@@ -95,4 +95,25 @@ router.post("/posts/:id/comments", (req,res) => {
             errorMessage: "There was an error while saving the comment to the database."
         })
     })
+})
+
+router.delete("/posts/:id", (req,res) => {
+    posts.remove(req.params.id)
+        .then((id) => {
+            if (id > 0) {
+                res.status(200).json({
+                    message: "The post has been deleted."
+                })
+            }else{
+                res.status(404).json({
+                    errorMessage: "The post with the specified ID does not exist"
+                })
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+            res.status(500).json({
+                errorMessage: "The post could not be removed."
+            })
+        })
 })
