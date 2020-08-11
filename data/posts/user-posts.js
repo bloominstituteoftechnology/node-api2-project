@@ -19,12 +19,12 @@ router.get("/posts", (req, res) => {
 router.get("/posts/:id", (req,res) => {
     posts.findById(req.params.id)
         .then((post) => {
-            if (post) {
-                res.status(200).json(post)
-            }else {
+            if (post.length == 0) {
                 res.status(404).json({
-                    errorMessage: "The post with the specified ID does not exist."
+                    message: "The post with the specified ID does not exist."
                 })
+            }else {
+                res.status(200).json(post)
             }
         })
         .catch((err) => {
@@ -74,20 +74,19 @@ router.post("/posts", (req,res) => {
 })
 
 router.post("/posts/:id/comments", (req,res) => {
-    users.insertComment(comment)
     if (!req.params.id) {
         return res.status(404).json({
             errorMessage: "The post with the specified ID does not exist."
         })
     }
 
-    if (!req.params.text) {
+    if (!req.body.text) {
         return res.status(400).json({
             errorMessage: "Please provide text for the comment"
         })
     }
 
-    posts.insertComment(req.body)
+    posts.insertComment({post_id: req.params.id, ...req.body})
     .then((comment) => {
         res.status(201).json(comment)
     })
