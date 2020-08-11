@@ -21,7 +21,7 @@ router.get("/posts/:id", (req,res) => {
         .then((post) => {
             if (post) {
                 res.status(200).json(post)
-            }else{
+            }else {
                 res.status(404).json({
                     errorMessage: "The post with the specified ID does not exist."
                 })
