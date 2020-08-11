@@ -36,7 +36,7 @@ router.get("/posts/:id", (req,res) => {
     })
 
 
-router.get("/posts/id/comments", (req,res) => {
+router.get("/posts/:id/comments", (req,res) => {
     if (!req.params.id) {
         return res.status(404).json({
             errorMessage: "The post with the specified ID does not exist."
@@ -120,7 +120,7 @@ router.delete("/posts/:id", (req,res) => {
         })
 })
 
-router.put("/posts/id", (req,res) => {
+router.put("/posts/:id", (req,res) => {
     if (!req.body.title || !req.body.contents) {
         return res.status(400).json({
             errorMessage: "Please provide title and contents for the post."
