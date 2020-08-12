@@ -22,8 +22,8 @@ router.post('/posts', (req, res) => {
 
 router.get('/posts', (req,res) => {
     posts.find(req.query)
-    .then((users) => {
-        res.status(200).json(users);
+    .then((posts) => {
+        res.status(200).json(posts);
     })
     .catch((error) => {
         console.log(error);
