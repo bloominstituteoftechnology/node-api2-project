@@ -7,17 +7,9 @@
 - Sub-routes
 - API design and development.
 
-## Description
+## Introduction
 
 Use `Node.js` and `Express` to build an API that performs _CRUD_ operations on `blog posts`.
-
-### Project Setup
-
-- import this repository into your account
-- clone **your copy** of this repository.
-- **CD into the folder** where you cloned the repository.
-- Type `npm install` to download all dependencies.
-- To start the server, type `npm run server` from the root folder (where the _package.json_ file is). The server is configured to restart automatically as you make changes.
 
 ### Database Persistence Helpers
 
@@ -64,12 +56,22 @@ A Comment in the database has the following structure:
 }
 ```
 
-### Minimum Viable Product
+## Instructions
+
+### Task 1: Project Setup
+
+- import this repository into your account
+- clone **your copy** of this repository.
+- **CD into the folder** where you cloned the repository.
+- Type `npm install` to download all dependencies.
+- To start the server, type `npm run server` from the root folder (where the _package.json_ file is). The server is configured to restart automatically as you make changes.
+
+### Task 2a: Minimum Viable Product
 
 - Add the code necessary to implement the endpoints listed below.
 - Separate the endpoints that begin with `/api/posts` into a separate `Express Router`.
 
-### Endpoints
+#### Endpoints
 
 Configure the API to handle to the following routes:
 
@@ -195,8 +197,15 @@ When the client makes a `PUT` request to `/api/posts/:id`:
   - update the post document in the database using the new information sent in the `request body`.
   - return HTTP status code `200` (OK).
   - return the newly updated _post_.
+  
+### Task 2b: Exit Ticket
 
-## Stretch Problems
+Once you begin, you will have 15 minutes to answer the questions [here](https://app.codesignal.com/public-test/qWhRyWPqYgxaT7GzJ/cnWWa5SxfpfGgm).
+
+The completion of these questions is mandatory for MVP. However, passing the quiz doesn't affect your standing as a Lambda School student whatsoever. This is Lambda School testing itself! Please answer honestly and to the best of your ability without using external references.
+ 
+
+### Task 3: Stretch Problems
 
 To work on the stretch problems you'll need to enable the `cors` middleware. Follow these steps:
 
