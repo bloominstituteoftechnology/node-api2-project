@@ -85,14 +85,18 @@ router.post('/', async (req, res) => {
 //New Comment
 router.post('/:id/comments', async (req, res) => {
 	const { id } = req.params;
-	const comment = req.body;
-	console.log(comment.length);
-	if (comment) {
+	// console.log(comment.length);
+	if (req.body.text) {
+		const comment = {
+			text: req.body.text,
+			post_id: id,
+		};
 		try {
 			const post = await db.findById(id);
 			if (post.length > 0) {
-				const newComment = await db.insertComment(comment);
-				res.status(201).json({ ...newComment, ...comment });
+				const commentID = await db.insertComment(comment);
+				const newComment = await db.findCommentById(commentID.id);
+				res.status(201).json(newComment[0]);
 			} else {
 				res
 					.status(404)
