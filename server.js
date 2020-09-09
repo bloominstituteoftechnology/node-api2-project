@@ -12,11 +12,13 @@ server.use('/myapi/theposts', blogRouter);
 server.get('/', (req, res) => {
   const {name = 'user' } = req.query;  
   res.send(`
-    <h2>Lambda Blog Post API</h>
-    <p>Welcome ${name} to the Lambda Posts API</p>
+    <h2>Lambda Blog Posts API</h>
+    <p>Welcome ${name} to the Lambda Post API</p>
   `);
 });
 
 
 
 module.exports = server;
+
+
