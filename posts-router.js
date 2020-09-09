@@ -57,8 +57,6 @@ router.get("/api/posts/:id", (req, res) => {
     }
 });
 
-// --
-
 router.get("/api/posts/:id/comments", (req, res) => {
     const id = req.params.id;
     const comment = req.body;
@@ -72,6 +70,47 @@ router.get("/api/posts/:id/comments", (req, res) => {
     } else {
         res.status(500).json({ message: "The comments information could not be retrieved." });
     }
+});
+
+router.delete("/api/posts/:id/comments", (req, res) => {
+    const id = req.params.id;
+
+    let removed = posts.find(post => post.id === id);
+
+    if (removed) {
+        posts = post.filter(post => post.id !== id)
+        res.status(200).json(removed);
+    } else if (removed === undefined) {
+        res.status(500).json({ errorMessage: "The post could not be removed"})
+    } else {
+        res.status(404).json({ message: "The post with the specified ID does not exist." })
+    }
+});
+
+// --
+
+router.put("/api/posts/:id", (req, res) => {
+    const id = req.params.id;
+    const update = req.body;
+    update.id = id;
+
+    let index = posts.find(post => id === post.id);
+
+    if(update.title || update.contents) {
+        if(index !== -1) {
+            posts[index] = update;
+            res.status(200).json({ post : index });
+        } else {
+            res.status(500).json({ errorMessage: "The post information could not be modified." });
+        }
+    } else if (update === undefined) {
+        res.status(400).json({ errorMessage: "Please provide title and contents for the post." });
+        
+    } else {
+        res.status(404).json({ message: "The post with the specified ID does not exist." });
+    }
+
+    module.exports = router;
 
 
 });
