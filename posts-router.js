@@ -1,5 +1,5 @@
 const express = require("express");
-const db = require("./data/db.js");
+const posts = require("./data/db.js");
 const router = express.Router();
 router.use(express.json());
 
@@ -9,7 +9,7 @@ router.post("/api/posts", (req, res) => {
     const post = req.body;
 
     if (post.title || post.contents) {
-        if(db.insert(req.body)) {
+        if(posts.insert(req.body)) {
             res.status(201).json({ post })
         } else {
             res.status(500).json({ errorMessage: "There was an error while saving the post to the database" })
@@ -109,8 +109,6 @@ router.put("/api/posts/:id", (req, res) => {
     } else {
         res.status(404).json({ message: "The post with the specified ID does not exist." });
     }
-
-    module.exports = router;
-
-
 });
+
+module.exports = router;
