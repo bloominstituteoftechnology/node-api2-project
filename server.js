@@ -1,9 +1,13 @@
 const express = require("express");
+const postsRouter = require("./posts-router");
+
 const server = express();
 
 server.use(express.json());
-const PORT = 5000;
+server.use("/api/posts", postsRouter);
 
-server.listen(PORT, () => {
-    console.log(`listening on port ${PORT}...`);
+server.get("/", (req, res) => {
+    res.send(`<h2>Is this thing on?</h2>`);
 });
+
+module.exports = server;

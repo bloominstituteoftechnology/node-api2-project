@@ -19,21 +19,59 @@ router.post("/api/posts", (req, res) => {
     }
 });
 
-// --
-
 router.post("/api/posts/:id/comments", (req, res) => {
 const id = req.params.id;
 const comment = req.body;
 
-if(comment) {
-    posts.insert(comment);
-    res.status(201).json({ post });
-} else if (comment === undefined) {
+    if(comment) {
+        posts.insert(comment);
+        res.status(201).json({ post });
+    } else if (comment === undefined) {
+        res.status(500).json({ error: "There was an error while saving the comment to the database" });
+    } else if (!comment.text) {
+        res.status(400).json({ errorMessage: "Please provide text for the comment." });
+    } else {
+        res.status(404).json({ message: "The post with the specified ID does not exist." });
+    }
+});
 
-} else if (!comment.text) {
+router.get("/api/posts", (req, res) => {
+    if(!posts) {
+        res.status(500).json({ error: "The posts information could not be retrieved." });
+    } else {
+        res.status(200).json(posts);
+    }
+});
 
-} else {
+router.get("/api/posts/:id", (req, res) => {
+    const id = req.params.id;
 
-}
+    let fetch = posts.find(post => id === post.id);
+
+    if (fetch) {
+        res.status(200.).json(fetch);
+    } else if (fetch === undefined) {
+        res.status(404).json({ message: "The post with the specified ID does not exist." });
+    } else {
+        res.status(500).json({ error: "The post information could not be retrieved." });
+    }
+});
+
+// --
+
+router.get("/api/posts/:id/comments", (req, res) => {
+    const id = req.params.id;
+    const comment = req.body;
+
+    let fetch = posts.find(post => id === post.id);
+
+    if (fetch) {
+        res.status(200.).json(fetch);
+    } else if (fetch === undefined) {
+        res.status(404).json({ errorMessage: "The post with the specified ID does not exist." });
+    } else {
+        res.status(500).json({ message: "The comments information could not be retrieved." });
+    }
+
 
 });
