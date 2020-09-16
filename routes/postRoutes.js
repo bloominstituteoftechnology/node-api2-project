@@ -80,6 +80,31 @@ router.post("/:id/comments", (req, res) => {
 });
 
 // `DELETE` request to `/api/posts/:id`:
+router.delete("/:id", (req, res) => {
+  // Define the data I need to delete the specified post
+  const id = req.params.id;
+  const locatePost = db.findById(id);
+  const deletePost = db.remove(id);
+
+  // What are the requirments that need to be meet to remove the post from the database?
+  // The post needs to exist
+  locatePost
+    .then((post) => {
+      if (!post[0]) {
+        res.status(404).json({ message: `Post with id:${id} does not exist` });
+      } else {
+        res.status(200).json({
+          message: `Post with id:${id} was successfully deleted`,
+          deleted_post: post,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log("Oops seems there was an error:", err);
+      res.status(500).json({ message: "The post could not be removed" });
+    });
+  // Then I can know for certian that I can delete the post if the id matches the id
+});
 
 // `PUT` request to `/api/posts/:id`:
 
