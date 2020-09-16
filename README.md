@@ -79,7 +79,7 @@ Configure the API to handle to the following routes:
 | ------ | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | POST   | /api/posts              | Creates a post using the information sent inside the `request body`.                                                                                                        |
 | POST   | /api/posts/:id/comments | Creates a comment for the post with the specified id using information sent inside of the `request body`.                                                                   |
-| GET    | /api/posts              | Returns an array of all the post objects contained in the database.                                                                                                         |
+| <!--   | GET                     | /api/posts                                                                                                                                                                  | Returns an array of all the post objects contained in the database. | --> |
 | GET    | /api/posts/:id          | Returns the post object with the specified id.                                                                                                                              |
 | GET    | /api/posts/:id/comments | Returns an array of all the comment objects associated with the post with the specified id.                                                                                 |
 | DELETE | /api/posts/:id          | Removes the post with the specified id and returns the **deleted post object**. You may need to make additional calls to the database in order to satisfy this requirement. |
@@ -87,7 +87,7 @@ Configure the API to handle to the following routes:
 
 #### Endpoint Specifications
 
-When the client makes a `POST` request to `/api/posts`:
+<!-- When the client makes a `POST` request to `/api/posts`:
 
 - If the request body is missing the `title` or `contents` property:
 
@@ -104,7 +104,7 @@ When the client makes a `POST` request to `/api/posts`:
 - If there's an error while saving the _post_:
   - cancel the request.
   - respond with HTTP status code `500` (Server Error).
-  - return the following JSON object: `{ error: "There was an error while saving the post to the database" }`.
+  - return the following JSON object: `{ error: "There was an error while saving the post to the database" }`. -->
 
 When the client makes a `POST` request to `/api/posts/:id/comments`:
 
