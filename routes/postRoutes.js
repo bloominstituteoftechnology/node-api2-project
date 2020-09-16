@@ -107,6 +107,55 @@ router.delete("/:id", (req, res) => {
 });
 
 // `PUT` request to `/api/posts/:id`:
+router.put("/:id", (req, res) => {
+  // What data, and operation do I need in order to update a post
+  // post id
+  // findById operation
+  // update operation which takes an id, post parameter
+  // I also need the post parameter title, and contents
+  const { title, contents } = req.body;
+  const id = req.params.id;
+  const getPost = db.findById(id);
+  const updatePost = db.update(id, req.body);
+
+  // Now what?
+  // - need to check if the requested post even exist and if so update the post with the clients data, if they have included both text for title, and contents
+
+  getPost
+    .then((post) => {
+      // check if the post exist
+      // check if the client has included text for both title, and contents
+      if (!post[0]) {
+        res.status(404).json({ message: `Post with id:${id} does not exist` });
+      } else if (!title || !contents) {
+        res.status(400).json({
+          message: "You need to include text for both title, and contents",
+        });
+      } else {
+        updatePost
+          .then((newPost) => {
+            console.log("I am the new post:", newPost);
+            if (newPost > 0) {
+              res.status(201).json({
+                message: "Post was succesfully updated",
+                new_post: req.body,
+              });
+            } else {
+              res.status(500).json({
+                message: "There was trying to update the post",
+              });
+            }
+          })
+          .catch((err) => {
+            console.log("Oops there was an error:", err);
+          });
+      }
+    })
+    .catch((err) => {
+      console.log("Error trying to find Post", err);
+      res.status(500).json({ message: "Error trying locate post" });
+    });
+});
 
 // `GET` request to `/api/posts`:
 router.get("/", (req, res) => {
