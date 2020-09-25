@@ -1,60 +1,8 @@
-# Building RESTful APIs with Express
-
-## Topics
-
-- Express Routing
-- Reading Request data from body and URL parameters
-- Sub-routes
-- API design and development.
+# Server Side Routing Module Project
 
 ## Introduction
 
 Use `Node.js` and `Express` to build an API that performs _CRUD_ operations on `blog posts`.
-
-### Database Persistence Helpers
-
-The `data` folder contains a database populated with test `posts`.
-
-Database access will be done using the `db.js` file included inside the `data` folder.
-
-The `db.js` publishes the following methods.
-
-- `find()`: calling find returns a promise that resolves to an array of all the `posts` contained in the database.
-- `findById()`: this method expects an `id` as it's only parameter and returns a promise that resolves to the post corresponding to the `id` provided or an empty array if no post with that `id` is found.
-- `insert()`: calling insert passing it a `post` object will add it to the database and return a promise that resolves to an object with the `id` of the inserted post. The object looks like this: `{ id: 123 }`.
-- `update()`: accepts two arguments, the first is the `id` of the post to update and the second is an object with the `changes` to apply. It returns a promise that resolves to the count of updated records. If the count is 1 it means the record was updated correctly.
-- `remove()`: the remove method accepts an `id` as its first parameter and upon successfully deleting the post from the database it returns a promise that resolves to the number of records deleted.
-- `findPostComments()`: the findPostComments accepts a `postId` as its first parameter and returns a promise that resolves to an array of all comments on the post associated with the post id.
-- `findCommentById()`: accepts an `id` and returns a promise that resolves to the comment associated with that id.
-- `insertComment()`: calling insertComment while passing it a `comment` object will add it to the database and return a promise that resolves to an object with the `id` of the inserted comment. The object looks like this: `{ id: 123 }`. This method will throw an error if the `post_id` field in the `comment` object does not match a valid post id in the database.
-
-Now that we have a way to add, update, remove and retrieve data from the provided database, it is time to work on the API.
-
-### Blog Post Schema
-
-A Blog Post in the database has the following structure:
-
-```js
-{
-  title: "The post title", // String, required
-  contents: "The post contents", // String, required
-  created_at: Mon Aug 14 2017 12:50:16 GMT-0700 (PDT) // Date, defaults to current date
-  updated_at: Mon Aug 14 2017 12:50:16 GMT-0700 (PDT) // Date, defaults to current date
-}
-```
-
-### Comment Schema
-
-A Comment in the database has the following structure:
-
-```js
-{
-  text: "The text of the comment", // String, required
-  post_id: "The id of the associated post", // Integer, required, must match the id of a post entry in the database
-  created_at: Mon Aug 14 2017 12:50:16 GMT-0700 (PDT) // Date, defaults to current date
-  updated_at: Mon Aug 14 2017 12:50:16 GMT-0700 (PDT) // Date, defaults to current date
-}
-```
 
 ## Instructions
 
@@ -66,7 +14,7 @@ A Comment in the database has the following structure:
 - Type `npm install` to download all dependencies.
 - To start the server, type `npm run server` from the root folder (where the _package.json_ file is). The server is configured to restart automatically as you make changes.
 
-### Task 2a: Minimum Viable Product
+### Task 2: Minimum Viable Product
 
 - Add the code necessary to implement the endpoints listed below.
 - Separate the endpoints that begin with `/api/posts` into a separate `Express Router`.
@@ -198,12 +146,50 @@ When the client makes a `PUT` request to `/api/posts/:id`:
   - return HTTP status code `200` (OK).
   - return the newly updated _post_.
   
-### Task 2b: Exit Ticket
+### Database Persistence Helpers
 
-Once you begin, you will have 15 minutes to answer the questions [here](https://app.codesignal.com/public-test/qWhRyWPqYgxaT7GzJ/cnWWa5SxfpfGgm).
+The `data` folder contains a database populated with test `posts`.
 
-The completion of these questions is mandatory for MVP. However, passing the quiz doesn't affect your standing as a Lambda School student whatsoever. This is Lambda School testing itself! Please answer honestly and to the best of your ability without using external references.
- 
+Database access will be done using the `db.js` file included inside the `data` folder.
+
+The `db.js` publishes the following methods.
+
+- `find()`: calling find returns a promise that resolves to an array of all the `posts` contained in the database.
+- `findById()`: this method expects an `id` as it's only parameter and returns a promise that resolves to the post corresponding to the `id` provided or an empty array if no post with that `id` is found.
+- `insert()`: calling insert passing it a `post` object will add it to the database and return a promise that resolves to an object with the `id` of the inserted post. The object looks like this: `{ id: 123 }`.
+- `update()`: accepts two arguments, the first is the `id` of the post to update and the second is an object with the `changes` to apply. It returns a promise that resolves to the count of updated records. If the count is 1 it means the record was updated correctly.
+- `remove()`: the remove method accepts an `id` as its first parameter and upon successfully deleting the post from the database it returns a promise that resolves to the number of records deleted.
+- `findPostComments()`: the findPostComments accepts a `postId` as its first parameter and returns a promise that resolves to an array of all comments on the post associated with the post id.
+- `findCommentById()`: accepts an `id` and returns a promise that resolves to the comment associated with that id.
+- `insertComment()`: calling insertComment while passing it a `comment` object will add it to the database and return a promise that resolves to an object with the `id` of the inserted comment. The object looks like this: `{ id: 123 }`. This method will throw an error if the `post_id` field in the `comment` object does not match a valid post id in the database.
+
+Now that we have a way to add, update, remove and retrieve data from the provided database, it is time to work on the API.
+
+### Blog Post Schema
+
+A Blog Post in the database has the following structure:
+
+```js
+{
+  title: "The post title", // String, required
+  contents: "The post contents", // String, required
+  created_at: Mon Aug 14 2017 12:50:16 GMT-0700 (PDT) // Date, defaults to current date
+  updated_at: Mon Aug 14 2017 12:50:16 GMT-0700 (PDT) // Date, defaults to current date
+}
+```
+
+### Comment Schema
+
+A Comment in the database has the following structure:
+
+```js
+{
+  text: "The text of the comment", // String, required
+  post_id: "The id of the associated post", // Integer, required, must match the id of a post entry in the database
+  created_at: Mon Aug 14 2017 12:50:16 GMT-0700 (PDT) // Date, defaults to current date
+  updated_at: Mon Aug 14 2017 12:50:16 GMT-0700 (PDT) // Date, defaults to current date
+}
+```
 
 ### Task 3: Stretch Problems
 
@@ -217,3 +203,9 @@ Create a new React application and connect it to your server:
 - Use `create-react-app` to create an application inside the root folder, name it `client`.
 - From the React application connect to the `/api/posts` endpoint in the API and show the list of posts.
 - Style the list of posts however you see fit.
+
+## Submission format
+
+Follow these steps for completing your project.
+
+- [ ] Submit a pull request to merge <firstName-lastName> Branch into master (student's  Repo). **Please don't merge your own pull request**
