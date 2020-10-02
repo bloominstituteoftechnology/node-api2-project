@@ -119,4 +119,26 @@ res.status(200).json(comments)
   })
 })
 
+//create comment for a post
+router.post("/posts/:id/comments", (req, res) => {
+if(!req.body.text) {
+  return res.status(400).json({
+    message: "Text required",
+  })
+}
+
+  posts
+  .insertComment(req.params.id, req.body)
+  .then((comment) => {
+res.status(200).json(comment)
+  })
+  .catch((error) => {
+    res.status(500).json({
+      message: "Error adding comment",
+    })
+  })
+})
+
+
+
 module.exports = router;
