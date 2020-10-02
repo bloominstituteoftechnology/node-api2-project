@@ -104,6 +104,19 @@ router.delete("/posts/:id", (req, res) => {
     });
 });
 
-
+//get comments for a post
+router.get("/posts/:id/comments",
+(req, res) => {
+  posts
+  .findPostComments(req.params.id)
+  .then((comments) => {
+res.status(200).json(comments)
+  })
+  .catch((error) => {
+    res.status(500).json({
+      message: "Error getting comments",
+    })
+  })
+})
 
 module.exports = router;
