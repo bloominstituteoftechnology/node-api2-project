@@ -1,13 +1,17 @@
 const express = require('express');
+const homeRouter = require('./home/home-router');
+const postsRouter = require('./posts/posts-router');
 
 const server = express();
-server.use(express.json());
-
 const port = 3000;
 
-server.get("/", (req, res) => {
-  res.send("MY API SERVER")
-})
+server.use(express.json());
+server.use(homeRouter);
+server.use(postsRouter);
+
+
+
+
 
 
 
