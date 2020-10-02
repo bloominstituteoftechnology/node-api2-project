@@ -82,4 +82,28 @@ router.put("/posts/:id", (req, res) => {
     });
 });
 
+//delete a post
+router.delete("/posts/:id", (req, res) => {
+  posts
+    .remove(req.params.id)
+    .then((count) => {
+      if (count > 0) {
+        res.status(200).json({
+          message: "Post deleted",
+        });
+      } else {
+        res.status(404).json({
+          message: "Post not found",
+        });
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({
+        message: "Error in deleting post",
+      });
+    });
+});
+
+
+
 module.exports = router;
