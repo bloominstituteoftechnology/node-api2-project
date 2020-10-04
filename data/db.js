@@ -42,14 +42,14 @@ function remove(id) {
 function findPostComments(postId) {
   return db('comments')
     .join('posts', 'posts.id', 'post_id')
-    .select('comments.*', 'title as post')
+    .select('text as comment', 'title as post')
     .where('post_id', postId);
 }
 
 function findCommentById(id) {
   return db('comments')
     .join('posts', 'posts.id', 'post_id')
-    .select('comments.*', 'title as post')
+    .select('text as comment', 'title as post')
     .where('comments.id', id);
 }
 
