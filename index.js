@@ -26,7 +26,13 @@ app.get("/api/posts/:id", (req, res) => {
   const id = req.params.id;
   try {
     db.findById(id).then((post) => {
-      res.status(200).json(post[0]);
+      if (!post.length) {
+        res.status(400).json({
+          message: "The post with the specified ID does not exist.",
+        });
+      } else {
+        res.status(200).json(post[0]);
+      }
     });
   } catch (err) {
     res.status(500).json({
@@ -72,6 +78,79 @@ app.post("/api/posts", (req, res) => {
           message: "There was an error while saving the post to the database",
         });
       });
+  }
+});
+
+app.post("/api/posts/:id/comments", (req, res) => {
+  const comment = { post_id: req.params.id, ...req.body };
+
+  if (!req.body.text) {
+    res
+      .status(400)
+      .json({ errorMessage: "Please provide text for the comment." });
+  } else {
+    try {
+      db.insertComment(comment)
+        .then((post) => {
+          res.status(201).json(comment);
+        })
+        .catch((err) => {
+          res.status(404).json({
+            message: "The post with the specified ID does not exist.",
+          });
+        });
+    } catch (err) {
+      res.status(500).json({
+        error: "There was an error while saving the comment to the database",
+      });
+    }
+  }
+});
+
+app.delete("/api/posts/:id", (req, res) => {
+  const { id } = req.params;
+  try {
+    db.remove(id)
+      .then((post) => {
+        res.status(200).json({
+          message: "The post is deleted.",
+        });
+      })
+      .catch((err) => {
+        res.status(404).json({
+          message: "The post with the specified ID does not exist.",
+        });
+      });
+  } catch (err) {
+    res.status(500).json({
+      error: "The post could not be removed",
+    });
+  }
+});
+
+app.put("/api/posts/:id", (req, res) => {
+  const { id } = req.params;
+  const { title, contents } = req.body;
+  if (!title || !contents) {
+    res.status(400).json({
+      errorMessage: "Please provide title and contents for the post.",
+    });
+  } else {
+    try {
+      db.update(id, req.body)
+        .then((post) => {
+          res.status(200).json("The post is updated.");
+        })
+        .catch((err) => {
+          res.status(404).json({
+            message: "The post with the specified ID does not exist.",
+          });
+        });
+    } catch (err) {
+      res.status(500).json({
+        error: "The post information could not be modified.",
+      });
+    }
   }
 });
 
