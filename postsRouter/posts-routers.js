@@ -51,7 +51,7 @@ router.get("/:id/comments", (req, res) => {
       console.log(error, "error, could not retrieve comment from server");
       res
         .status(500)
-        .json({ error: "The comments information could not be retrieved." });
+        .json({ error: "The comments information could not be retrieved" });
     });
 });
 

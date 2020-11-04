@@ -39,7 +39,7 @@ function remove(id) {
   return db("posts").where("id", Number(id)).del();
 }
 
-//GET /api/posts/:id/comments
+//GET  /api/posts/:id/comments
 function findPostComments(postId) {
   return db("comments")
     .join("posts", "posts.id", "post_id")

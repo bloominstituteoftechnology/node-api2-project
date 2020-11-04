@@ -9,7 +9,7 @@ server.use(express.json());
 //WELCOME ROUTER
 server.use("/", welcomeRouter);
 
-//GET /api/posts
+//CRUD /api/posts
 server.use("/api/posts", postsRouter);
 
 server.listen(8000, () => {
