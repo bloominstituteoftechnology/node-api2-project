@@ -97,6 +97,7 @@ router.post("/", (req, res) => {
 
 //POST COMMENTS /api/posts/:id/comments
 router.post("/:id/comments", (req, res) => {
+  const post_id = req.params.id;
   //if no text input return error
   const text = req.body.text;
   if (!text) {
@@ -105,26 +106,22 @@ router.post("/:id/comments", (req, res) => {
       .json({ errorMessage: "please provide text for comment" });
   }
 
-  const commentID = Posts.findById(req.params.id);
-  //if ID found of POST then insert new Comment
-  if (commentID) {
-    const newComment = req.body;
-    console.log("New Comment =", newComment);
-    Posts.insertComment(newComment)
-      .then((postComment) => {
-        postComment
-          ? res.status(201).json(postComment)
-          : res.status(404).json({
-              message: "The post with the specified ID does not exist.",
-            });
-      })
-      .catch((error) => {
-        console.log(error, "error in posting comment on server");
-        res
-          .status(500)
-          .json({ error: "there was an error while saving the comment to DB" });
-      });
-  }
+  const newComment = { post_id, text };
+
+  Posts.insertComment(newComment)
+    .then((postComment) => {
+      postComment
+        ? res.status(201).json(postComment)
+        : res.status(404).json({
+            message: "The post with the specified ID does not exist.",
+          });
+    })
+    .catch((error) => {
+      console.log(error, "error in posting comment on server");
+      res
+        .status(500)
+        .json({ error: "there was an error while saving the comment to DB" });
+    });
 });
 
 ///PUT /api/posts/:id
@@ -132,7 +129,7 @@ router.put("/:id", (req, res) => {
   const title = req.body.title;
   const contents = req.body.contents;
 
-  if (!title && !contents) {
+  if (!title || !contents) {
     return res.status(400).json({
       errorMessage: "Please provide title and contents for the post.",
     });
