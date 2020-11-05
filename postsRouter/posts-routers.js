@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Posts = require("../data/db");
+const { checkUserID, checkPostData } = require("../middleware/post");
 
 //GET//  ----> /api/posts
 router.get("/", (req, res) => {
@@ -10,30 +11,18 @@ router.get("/", (req, res) => {
       res.status(200).json(post);
     })
     .catch((err) => {
-      console.log(error, "error retrieving posts");
-      res
-        .status(500)
-        .json({ error: "The posts could not be retrieved, server error" });
+      ///middleware APPLIED TO EVERY ROUTER ENDPOINT on CATCH
+      //calling next with a parameter moves to the error middleware
+      // at the end of the middleware stack
+      next(error);
     });
 });
 
 //GET BY ID// ----> /api/posts/:id
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-  Posts.findById(id)
-    .then((postById) => {
-      if (postById) {
-        res.status(200).json(postById);
-      } else {
-        res.status(404).json({ message: "Cant find user by post ID" });
-      }
-    })
-    .catch((error) => {
-      console.log(error, "error in get BY ID catch");
-      res
-        .status(500)
-        .json({ error: "can't retrieve the post, error on server" });
-    });
+///APPLYING MIDDLEWARE now
+router.get("/:id", checkUserID(), (req, res) => {
+  // user ges attached to the request in checkUserID
+  res.status(200).json(req.postById);
 });
 
 //GET BY ID/COMMENTS// ----> /api/posts/:id/comments
@@ -47,16 +36,11 @@ router.get("/:id/comments", (req, res) => {
             message: `post of specified ID of ${id} does not exist`,
           });
     })
-    .catch((error) => {
-      console.log(error, "error, could not retrieve comment from server");
-      res
-        .status(500)
-        .json({ error: "The comments information could not be retrieved" });
-    });
+    .catch(next); //short way to call next with the error on catch
 });
 
 //GET BY ID/COMMENTS// ----> /api/posts/:id/comments/:id
-router.get("/:id/comments/:id", (req, res) => {
+router.get("/:id/comments/:id", checkUserID(), (req, res) => {
   const { id } = req.params;
   console.log(`params id is ${id}`);
   Posts.findCommentById(id)
@@ -68,17 +52,14 @@ router.get("/:id/comments/:id", (req, res) => {
           });
     })
     .catch((error) => {
-      console.log(error, "error, could not retrieve comment from server");
-      res
-        .status(500)
-        .json({ error: "The comments information could not be retrieved." });
+      next(error);
     });
 });
 
 //POST /api/posts
-router.post("/", (req, res) => {
+router.post("/", checkPostData(), (req, res) => {
+  // add MIDDLEWARE checkPostData to check if title and contents missing
   const newPost = req.body;
-  console.log("new POST = ", newPost);
   Posts.insert(newPost)
     .then((newPost) => {
       newPost
@@ -88,10 +69,7 @@ router.post("/", (req, res) => {
           });
     })
     .catch((error) => {
-      console.log(error, "error posting newPOST");
-      res.status(500).json({
-        error: "There was an error while saving the post to the database",
-      });
+      next(error);
     });
 });
 
@@ -107,7 +85,6 @@ router.post("/:id/comments", (req, res) => {
   }
 
   const newComment = { post_id, text };
-
   Posts.insertComment(newComment)
     .then((postComment) => {
       postComment
@@ -117,24 +94,13 @@ router.post("/:id/comments", (req, res) => {
           });
     })
     .catch((error) => {
-      console.log(error, "error in posting comment on server");
-      res
-        .status(500)
-        .json({ error: "there was an error while saving the comment to DB" });
+      next(error);
     });
 });
 
 ///PUT /api/posts/:id
-router.put("/:id", (req, res) => {
-  const title = req.body.title;
-  const contents = req.body.contents;
-
-  if (!title || !contents) {
-    return res.status(400).json({
-      errorMessage: "Please provide title and contents for the post.",
-    });
-  }
-
+router.put("/:id", checkPostData(), checkUserID(), (req, res) => {
+  //apply checkPostData middleware to check for title and contents
   const changes = req.body;
   const { id } = req.params;
   console.log(`Id#${id}`);
@@ -149,15 +115,12 @@ router.put("/:id", (req, res) => {
           });
     })
     .catch((error) => {
-      console.log(error, "post info could not be modified/updated");
-      res
-        .status(500)
-        .json({ error: "The post information could not be modified." });
+      next(error);
     });
 });
 
 //DELETE /api/posts/:id
-router.delete("/:id", (req, res) => {
+router.delete("/:id", checkUserID(), (req, res) => {
   const { id } = req.params;
   Posts.remove(id)
     .then((deletePost) => {
@@ -170,10 +133,7 @@ router.delete("/:id", (req, res) => {
           });
     })
     .catch((error) => {
-      console.log(error, "error deleting in ID");
-      res
-        .status(500)
-        .json({ error: "post could not be removed, check server" });
+      next(error);
     });
 });
 
