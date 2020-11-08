@@ -19,7 +19,7 @@ Use `Node.js` and `Express` to build an API that performs _CRUD_ operations on `
 - Add the code necessary to implement the endpoints listed below.
 - Separate the endpoints that begin with `/api/posts` into a separate `Express Router`.
 
-#### Endpoints
+#### Endpoints.
 
 Configure the API to handle to the following routes:
 
