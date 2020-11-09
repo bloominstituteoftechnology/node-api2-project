@@ -96,7 +96,26 @@ router.put('/:id', (req, res)=>{
 });
 
 router.delete('/:id', (req, res)=>{
-    pass
+    postDB.findById(req.params.id)
+    .then(data => {
+        if(data.length < 1 ){
+            res.status(404).json({ message: "The post with the specified ID does not exist." })
+            return
+        }
+    })
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({message: "error orrured while searching database for post"})
+        return
+    })
+    postDB.remove(req.params.id)
+    .then(data => {
+        res.status(200).json({message: "error orrured while searching database for post"})
+    })
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({message: "error orrured while searching database for post"})
+    })
 });
 
 module.exports = router;
