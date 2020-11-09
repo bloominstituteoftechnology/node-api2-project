@@ -32,20 +32,31 @@ router.get('/:id', (req, res)=>{
 });
 
 router.get('/:id/comments', (req, res)=>{
-    pass
+    postDB.findPostComments(req.params.id)
+    .then(data => {
+        if (data.length>0){
+            res.status(200).json(data)
+        }else{
+            res.status(404).json({ message: "The post with the specified ID does not exist." })
+        }
+    })
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({ error: "The comments information could not be retrieved." })
+    })
 });
 
 router.post('/', (req, res)=>{
-    const post = req.body;
-    if ((!post['title'] || !posts["contents"]) || (post.title == "" || post.contents == "")) {
-        res.status(400).json({errorMessage: "Please provide title and contents for the post."});
+    // const post = req.body;
+    if ((!req.body['title'] || !req.body['contents']) || (req.body.title == '' || req.body.contents == '')) {
+        res.status(400).json({errorMessage: 'Please provide title and contents for the post.'});
     }
-    postDB.insert(post)
-    .then(post => {
-        res.status(201).json(post);
+    postDB.insert(req.body)
+    .then(data => {
+        res.status(201).json(req.body);
     })
     .catch(err =>{
-        res.status(500).json({ error: "There was an error while saving the post to the database"});
+        res.status(500).json({ error: 'There was an error while saving the post to the database'});
     });
 });
 
