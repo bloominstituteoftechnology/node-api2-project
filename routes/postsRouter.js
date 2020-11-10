@@ -68,11 +68,18 @@ router.post('/:id/comments', (req, res)=>{
     .then(postList => {
         if(!comment['text'] || comment.text == ""){
             res.status(400).json({ errorMessage: "Please provide text for the comment." });
-            return;
-        }
-        if(postList.length < 1){
+        }else if(postList.length < 1){
             res.status(404).json({ message: "The post with the specified ID does not exist." });
-            return;
+        }else{
+            postDB.insertComment(comment)
+            .then(data => {
+            res.status(201).json(data)
+            })
+            .catch(er => {
+                console.log(er)
+                res.status(500).json({ error: "There was an error while saving the comment to the database" })
+                return;
+            })
         }
         console.log("validated")
     })
@@ -80,37 +87,47 @@ router.post('/:id/comments', (req, res)=>{
         res.status(500).json({ error: "There was an error while locating the comment in the database", err: er });
     });
 
-    postDB.insertComment(comment)
-    .then(r => {
-        // id = r.id
-        res.status(201).json(comment)
-    })
-    .catch(er => {
-        res.status(500).json({ error: "There was an error while saving the comment to the database" })
-        return;
-    });
+
 });
 
 router.put('/:id', (req, res)=>{
-    pass
-});
-
-router.delete('/:id', (req, res)=>{
     postDB.findById(req.params.id)
     .then(data => {
-        if(data.length < 1 ){
+        if(data[0]){
+            if ((!req.body['title'] || !req.body['contents']) || (req.body.title == '' || req.body.contents == '')){
+                res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+            }else{
+                postDB.update(req.params.id, req.body)
+                .then(data => {
+                    res.status(200).json(req.body)
+                })
+                .catch(error => {
+                    console.log(error)
+                    res.status(500).json({ error: "The post information could not be modified." })
+                })
+            }
+        }else{
             res.status(404).json({ message: "The post with the specified ID does not exist." })
-            return
         }
     })
     .catch(error => {
         console.log(error)
-        res.status(500).json({message: "error orrured while searching database for post"})
-        return
+        res.status(404).json({ message: "The post with the specified ID does not exist." })
     })
+
+});
+
+router.delete('/:id', (req, res)=>{
+
     postDB.remove(req.params.id)
     .then(data => {
-        res.status(200).json({message: "error orrured while searching database for post"})
+        console.log(data)
+        if(data > 0 ){
+            res.status(200).json({message: `Post id: ${req.params.id} has been deleted`})
+        }else{
+            res.status(404).json({ message: "The post with the specified ID does not exist." })
+        }
+
     })
     .catch(error => {
         console.log(error)
