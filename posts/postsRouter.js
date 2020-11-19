@@ -111,11 +111,9 @@ router.delete("/:id", (req, res) => {
           .status(404)
           .json({ message: "The post with the specified ID does not exist." });
       } else {
-        res
-          .status(202)
-          .json({
-            message: `The post with the id ${req.params.id} was deleted`,
-          });
+        res.status(202).json({
+          message: `The post with the id ${req.params.id} was deleted`,
+        });
       }
     })
     .catch((error) => {
@@ -128,12 +126,15 @@ router.delete("/:id", (req, res) => {
 
 router.put("/:id", (req, res) => {
   const { id } = req.params;
-  const newPost = req.body;
-  post.update(id, newPost).then((data) => {
-    if (data.length === 0) {
-      res.status(404).json({ message: 'there was an error updating the post. Please chack that the id and body are correct'})
+  const changes = req.body;
+  post.update(id, changes).then((data) => {
+    console.log(data);
+    if (data === 0) {
+      res
+        .status(404)
+        .json({ message: "The post with the specified ID does not exist." });
     } else {
-        res.status(200).json(newPost)
+      res.status(200).json(changes);
     }
   });
 });
