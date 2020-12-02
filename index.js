@@ -10,32 +10,19 @@ server.post('/api/posts', (req, res) => {
 
 server.post('/api/posts/:id/comments', (req, res) => {
     const { id } = req.params;
-    const { comments } = req.body;
+    const text  = req.body;
 
-    HelperFunc.findPostComments(id)
-        .then(value => {
-            if (!comments) {
-                res.status(400).json({ errorMessage: "Please provide text for the comment." })
-            } else if (value > 0) {
-                console.log("here is value...", value)
-                HelperFunc.insertComment(comments)
-                    .then(value => {
-                        if (value > 0) {
-                            return HelperFunc.findPostComments(id)
-                        } else {
-                            res.json(500).json({ error: "There was an error while saving the comment to the database" })
-                        }
-                    })
-                    .then(post => {
-                        res.status(201).json(post)
-                    })
-            } else {
-                res.status(404).json({ message: "The post with the specified ID does not exist!" })
-            }
+    if (!text){
+        res.status(404).json({ errorMessage: "Please provide title and contents for the post." })
+    } else {
+        HelperFunc.insertComment(text)
+        .then(newComment => {
+            res.status(201).json(newComment)
         })
         .catch(error => {
             res.status(500).json({ error: "There was an error while saving the comment to the database" })
         })
+    }
 })
 
 server.get('/api/posts', (req, res) => {
@@ -54,7 +41,7 @@ server.get('/api/posts/:id', (req, res) => {
 
     HelperFunc.findById(id)
         .then(post => {
-            if (post > 0) {
+            if (post.length > 0) {
                 res.status(200).json(post)
             } else {
                 res.status(404).json({ message: "The post with the specified ID does not exist." })
@@ -68,7 +55,7 @@ server.get('/api/posts/:id', (req, res) => {
 server.get('/api/posts/:id/comments', (req, res) => {
     const { id } = req.params;
 
-    try {
+    try { //really should check that the post exists before grabbing comments ..
         HelperFunc.findPostComments(id)
         .then(comments => {
             res.status(200).json(comments)
