@@ -6,6 +6,7 @@ const server = express()
 const port = 4000
 
 server.use(express.json())
+server.use('/api/posts', posts)
 
 server.get("/", (req,res) => {
     res.json({
