@@ -96,4 +96,24 @@ router.delete('/:id', (req,res) => {
         })
     })
 })
+
+router.post('/', (req,res) => {
+    if (!req.body.title || !req.body.contents) {
+        res.status(400).json({
+            message: "Please provide title and contents for the post"
+        })
+    }
+
+    posts.insert(req.body)
+
+    .then((posts) => {
+        res.status(201).json(posts)
+    })
+
+    .catch(() => {
+        res.status(500).json({
+           message: "error saving post to the database" 
+        })
+    })
+})
 module.exports = router
