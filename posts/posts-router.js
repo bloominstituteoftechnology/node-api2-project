@@ -116,4 +116,25 @@ router.post('/', (req,res) => {
         })
     })
 })
+
+router.post('/:id/comments', (req,res) => {
+    if (!req.body.text) {
+        res.status(400).json({
+            message: " please provide text for the comment"
+        })
+    }
+    
+
+    posts.insertComment(req.params.id, req.body)
+
+    .then((comment) => {
+      res.status(201).json(comment)
+    })
+    .catch((err) => {
+        console.log(err)
+        res.status(500).json({
+            message: "There was an error while saving the comment"
+        })
+    })
+})
 module.exports = router
