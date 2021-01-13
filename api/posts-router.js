@@ -1,10 +1,10 @@
-const POST = require('./db-helpers');
+const Post = require('./db-helpers');
 const express = require('express');
 
 const router = express.Router();
 
 // retrieve all posts
-router.get('/api/posts', (req, res) => {
+router.get('/', (req, res) => {
     Post.find()
         .then(posts => {
             res.status(200).json(data);
@@ -15,7 +15,7 @@ router.get('/api/posts', (req, res) => {
 });
 
 // retrieve post by id
-router.get('/api/posts/:id', (req, res) => {
+router.get('/:id', (req, res) => {
     Post.findById(req.params.id)
         .then(post => {
             if(!post) {
@@ -30,7 +30,7 @@ router.get('/api/posts/:id', (req, res) => {
 });
 
 // create a new post
-router.post('/api/posts', (req, res) => {
+router.post('/', (req, res) => {
     Post.insert(req.body)
         .then(post => {
             if (!post.title || !post.contents) {
@@ -64,7 +64,7 @@ router.put('/:id', (req, res) => {
 });
 
 // delete a post
-router.delete('/api/posts/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     Post.remove(req.params.id)
         .then(post => {
             if (!post) {
@@ -79,7 +79,7 @@ router.delete('/api/posts/:id', (req, res) => {
 });
 
 // get comments for a post
-router.get('/api/posts/:id/comments', (req, res) => {
+router.get('/:id/comments', (req, res) => {
     Post.findPostComments(req.params.id)
         .then(comments => {
             if (!comments.length) {
@@ -94,7 +94,7 @@ router.get('/api/posts/:id/comments', (req, res) => {
 });
 
 // make comment for post
-router.post('/api/posts/:id/comments', (req, res) => {
+router.post('/:id/comments', (req, res) => {
     Post.insertComment(req.body)
         .then(comment => {
             if (!comment) {
