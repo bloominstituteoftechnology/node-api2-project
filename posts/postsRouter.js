@@ -1,6 +1,6 @@
 const express = require("express");
 
-const post = require("../data/db");
+const post = require("../data/seeds/01-posts");
 
 const router = express.Router();
 
