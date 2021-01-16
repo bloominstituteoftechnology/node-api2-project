@@ -26,12 +26,19 @@ function findById(id) {
 function insert(post) {
   return db("posts")
     .insert(post, "id")
-    .then((ids) => ({ id: ids[0] }));
+    .then((ids) => {
+      return db("posts").where({ id: ids }).first();
+    });
 }
 
 //PUT
 function update(id, post) {
-  return db("posts").where("id", Number(id)).update(post);
+  return db("posts")
+    .update(post)
+    .where({ id })
+    .then((ids) => {
+      return db("posts").where({ id: id }).first();
+    });
 }
 
 //DELETE
@@ -59,5 +66,7 @@ function findCommentById(id) {
 function insertComment(comment) {
   return db("comments")
     .insert(comment)
-    .then((ids) => ({ id: ids[0] }));
+    .then((ids) => {
+      return db("comments").where({ id: ids }).first();
+    });
 }

@@ -4,7 +4,7 @@ const Posts = require("../data/db");
 const { checkUserID, checkPostData } = require("../middleware/post");
 
 //GET//  ----> /api/posts
-router.get("/", (req, res) => {
+router.get("/", (req, res, next) => {
   const postsList = req.body;
   Posts.find(postsList)
     .then((post) => {
@@ -20,13 +20,13 @@ router.get("/", (req, res) => {
 
 //GET BY ID// ----> /api/posts/:id
 ///APPLYING MIDDLEWARE now
-router.get("/:id", checkUserID(), (req, res) => {
+router.get("/:id", checkUserID(), (req, res, next) => {
   // user ges attached to the request in checkUserID
   res.status(200).json(req.postById);
 });
 
 //GET BY ID/COMMENTS// ----> /api/posts/:id/comments
-router.get("/:id/comments", (req, res) => {
+router.get("/:id/comments", checkUserID(), (req, res, next) => {
   const { id } = req.params;
   Posts.findPostComments(id)
     .then((comment) => {
@@ -40,7 +40,7 @@ router.get("/:id/comments", (req, res) => {
 });
 
 //GET BY ID/COMMENTS// ----> /api/posts/:id/comments/:id
-router.get("/:id/comments/:id", checkUserID(), (req, res) => {
+router.get("/:id/comments/:id", checkUserID(), (req, res, next) => {
   const { id } = req.params;
   console.log(`params id is ${id}`);
   Posts.findCommentById(id)
@@ -51,13 +51,13 @@ router.get("/:id/comments/:id", checkUserID(), (req, res) => {
             message: `post of specified ID of ${id} does not exist`,
           });
     })
-    .catch((error) => {
-      next(error);
+    .catch((err) => {
+      next(err);
     });
 });
 
 //POST /api/posts
-router.post("/", checkPostData(), (req, res) => {
+router.post("/", checkPostData(), (req, res, next) => {
   // add MIDDLEWARE checkPostData to check if title and contents missing
   const newPost = req.body;
   Posts.insert(newPost)
@@ -74,7 +74,7 @@ router.post("/", checkPostData(), (req, res) => {
 });
 
 //POST COMMENTS /api/posts/:id/comments
-router.post("/:id/comments", (req, res) => {
+router.post("/:id/comments", checkUserID(), (req, res, next) => {
   const post_id = req.params.id;
   //if no text input return error
   const text = req.body.text;
@@ -99,7 +99,7 @@ router.post("/:id/comments", (req, res) => {
 });
 
 ///PUT /api/posts/:id
-router.put("/:id", checkPostData(), checkUserID(), (req, res) => {
+router.put("/:id", checkPostData(), checkUserID(), (req, res, next) => {
   //apply checkPostData middleware to check for title and contents
   const changes = req.body;
   const { id } = req.params;
@@ -120,7 +120,7 @@ router.put("/:id", checkPostData(), checkUserID(), (req, res) => {
 });
 
 //DELETE /api/posts/:id
-router.delete("/:id", checkUserID(), (req, res) => {
+router.delete("/:id", checkUserID(), (req, res, next) => {
   const { id } = req.params;
   Posts.remove(id)
     .then((deletePost) => {
