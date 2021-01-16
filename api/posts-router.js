@@ -25,7 +25,7 @@ router.post('/', async (req,res)=>{
 })
 
 //post comments!!!
-//to create comments object - we need below data, we only  have text  and post_id frm req. we need  post!
+//to create comments object - we need text and post_id property obj
 // "id": 1,
 // "text": "Let your workings remain a mystery. Just show people the results.",
 // "created_at": "2019-05-11 01:55:52",
@@ -34,23 +34,23 @@ router.post('/', async (req,res)=>{
 // "post": "I wish the ring had never come to me. I wish none of this had happened."
 router.post('/:id/comments',async (req,res)=>{
 const postId=req.params.id;
+//post obj 
 const addComment={
-   ...req.body,
+    text: req.body.text,
     post_id: postId,
-    // post:  ''
   }
+  //test for missing text property
 if(!req.body.text){
     res.status(400).json({ errorMessage: "Please provide text for the comment"})
 }else{
+    //check if the post is found for the req postID
     try {
-        //gets post from postID
-        comment = await dbhelpers.findById(postId)
+        //gets post from postID and error if the post not found
+        postFound = await dbhelpers.findById(postId)
     } catch (err) {
         res.status(404).json({errorMessage: "post ID not found to insert comment"})
     }
-   
-      console.log('addcomment=',addComment);
-
+    //post comment with obj that has text and post id
     try {
        const postComment= await dbhelpers.insertComment(addComment) 
         res.status(201).json(postComment);
@@ -75,6 +75,7 @@ router.get('/',async (req,res)=>{
 //get comments for the post id
 router.get('/:id/comments', async (req,res)=>{
     const postId= req.params.id
+    console.log('post id in comments router',postId)
     try {
         const getComments = await dbhelpers.findPostComments(postId)
         res.status(200).json(getComments)
@@ -99,6 +100,7 @@ router.delete('/:id', async (req,res)=>{
     }
 })
 
+//update post with the id
 router.put('/:id',async (req,res)=>{
     const updateId=req.params.id;
     const updatePost=req.body;
@@ -108,12 +110,16 @@ router.put('/:id',async (req,res)=>{
         res.status(400).json({errorMessage: "Please provide title and contents for the post."})
     }else{
     try {
-        const udpated= await dbhelpers.update(updateId,updatePost)
-        if(udpated){
-            res.status(200).json(updated)
-        }else{
-            res.status(404).json({ message: "The post with the specified ID does not exist." })
+        const postFound = await dbhelpers.findById(updateId)
+        if(!postFound){
+            res.status(404).json({error: "The post information could not be modified."})
         }
+    } catch (err) {
+        res.status(500).json({ message: "The post with the specified ID does not exist." })
+    }
+    try {
+        const putPost= await dbhelpers.update(updateId,updatePost)
+            res.status(200).json(putPost)
     } catch (err) {
         res.status(500).json({error: "The post information could not be modified."})
     }}
