@@ -24,21 +24,40 @@ router.post('/', async (req,res)=>{
     }
 })
 
-//post comments
+//post comments!!!
+//to create comments object - we need below data, we only  have text  and post_id frm req. we need  post!
+// "id": 1,
+// "text": "Let your workings remain a mystery. Just show people the results.",
+// "created_at": "2019-05-11 01:55:52",
+// "updated_at": "2019-05-11 01:55:52",
+// "post_id": 1,
+// "post": "I wish the ring had never come to me. I wish none of this had happened."
 router.post('/:id/comments',async (req,res)=>{
 const postId=req.params.id;
-const comment=req.body.text;
-if(!comment){
+const addComment={
+   ...req.body,
+    post_id: postId,
+    // post:  ''
+  }
+if(!req.body.text){
     res.status(400).json({ errorMessage: "Please provide text for the comment"})
 }else{
     try {
-       const postComment= await dbhelpers.insertComment(postId,comment) 
-       if(postComment){
-           res.status(404).json({ message: "The post with the specified ID does not exist." })
-       }
+        //gets post from postID
+        comment = await dbhelpers.findById(postId)
+    } catch (err) {
+        res.status(404).json({errorMessage: "post ID not found to insert comment"})
+    }
+   
+      console.log('addcomment=',addComment);
+
+    try {
+       const postComment= await dbhelpers.insertComment(addComment) 
+        res.status(201).json(postComment);
     } catch (error) {
         res.status(500).json({error: "There was an error while saving the comment to the database" })
     }
+
 }
 
 })
