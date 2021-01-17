@@ -112,6 +112,58 @@ router.put('/:id',(req,res)=>{
     })
 })
 
+//create a new post to the DB LETS GET IT
+router.post('/',(req,res)=>{
+    const newPost = req.body;
+
+    if(!newPost.title || !newPost.contents){
+        res.status(400).json({error:'Please provide title and contents for the post.'})
+        return;
+    }
+
+    DB.insert(newPost)
+        .then((post)=>{
+            res.status(201).json(...post,...newPost)
+        })
+        .catch(()=>{
+            res.status(500).json({error:"there was an error while saving the post to the database"})
+        })
+
+})
+
+// /api/posts/:id/comments
+
+
+router.post('/:id/comments',(req,res)=>{
+    const {id} = req.params;
+    const newComment = {...req.body,post_id:id};
+
+    DB.findById(id)
+    .then((post)=>{
+        if(post[0]===undefined){
+            res.status(404).json({error:error.message})
+        }else{
+            if(!newComment.text){
+                res.status(400).json({error:"please provide text for the comment"});
+                return;
+            }
+            DB.insertComment(newComment)
+            .then((comment)=>{
+                res.status(201).json({...comment,...newComment})
+            })
+            .catch((err)=>{
+                res.status(500).json(err.message)
+            })
+        }
+    })
+    .catch((err)=>{
+        res.status(500).json({error:"this post information could not be retrieved"})
+    })
+})
+
+
+
+
 
 
 
