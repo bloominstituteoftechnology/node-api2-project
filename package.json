@@ -8,6 +8,7 @@
         "server": "nodemon index.js"
     },
     "dependencies": {
+        "express": "^4.17.1",
         "install": "^0.13.0",
         "knex": "^0.21.16",
         "node-pre-gyp": "^0.17.0",
