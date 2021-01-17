@@ -8,10 +8,12 @@
         "server": "nodemon index.js"
     },
     "dependencies": {
-        "knex": "^0.21.2",
+        "install": "^0.13.0",
+        "knex": "^0.21.16",
+        "node-pre-gyp": "^0.17.0",
         "sqlite3": "^5.0.0"
     },
     "devDependencies": {
-        "nodemon": "^2.0.4"
+        "nodemon": "^2.0.7"
     }
 }
