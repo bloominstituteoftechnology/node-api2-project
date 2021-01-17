@@ -19,20 +19,24 @@ function Post({item,setPosts,remove,setRemove}){
         setDisplayOrNot({
             close: true,
             name:'Close Comments'})
-        console.log('comments=',comments);
+     
         }else{
             setDisplayOrNot({
                 close: false,
                 name:'View Comments!'})
         }
     }
-    const addPost=()=>{
-        //here item.id is the post Id
-         history.push(`/addpost/${item.id}`)
-    }
+  
     const handleDelete=()=>{
-        console.log('to delete',item.id)
         deletePost(item.id,setPosts)
+    }
+    const handleUpdate=()=>{
+        history.push(`/updatepost/${item.id}/${item.title}/${item.contents}`)   
+    }
+    const handleAddComment=()=>{
+        //postId is passed in params.id
+        history.push(`/addcomment/${item.id}/${item.title}`)
+        console.log('to add comment',item.id);
     }
 
     return(
@@ -44,11 +48,11 @@ function Post({item,setPosts,remove,setRemove}){
                Created :{item.created_at}</h4>
             <p>
             <Button color="success" className='m-2'
-             onClick={addPost}>Add Post 
+             onClick={handleAddComment}>Add Comment 
              </Button>
 
              <Button color="primary" className='m-2'
-             onClick={addPost}>Update Post 
+             onClick={handleUpdate}>Update Post 
              </Button>
              
              <Button color="warning" className='m-2'
@@ -61,7 +65,9 @@ function Post({item,setPosts,remove,setRemove}){
 
             {!displayOrNot.close ? null : 
              <div>
-                 {comments.map(item=> item.text)}
+                 {comments.length === 0? <p>"No comments yet"</p> :
+                    comments.map(item=> <li key={item.id}>{item.text}</li>)
+                 }
              </div>
             } 
          </Card>

@@ -1,12 +1,14 @@
 import React,{useState,useEffect} from 'react';
 import MainPost from './MainPost';
-import {Route, useHistory} from 'react-router-dom';
+import {Route} from 'react-router-dom';
 import AddPost from './AddPost';
+import AddComment from './AddComment';
+import UpdatePost from './UpdatePost';
 import fetchPosts from './api/fetchPosts';
  
 
 function Home(){
-    const history=useHistory();
+ 
     const [posts,setPosts]=useState([]);
     const [remove,setRemove]=useState(false);
     
@@ -20,11 +22,17 @@ function Home(){
                 <h3>Spin your thoughts!</h3>
             </div>
            
-            <Route exact path="/home">
+            <Route exact path="/">
                 <MainPost posts={posts} setPosts={setPosts} remove={remove}setRemove={setRemove}/>
             </Route>
-            <Route exact path="/addpost/:id">
+            <Route exact path="/addpost">
                 <AddPost posts={posts} setPosts={setPosts}/>
+            </Route>
+            <Route exact path="/addcomment/:id/:title">
+                <AddComment posts={posts} setPosts={setPosts}/>
+            </Route>
+            <Route exact path="/updatepost/:id/:title/:contents">
+                <UpdatePost posts={posts} setPosts={setPosts}/>
             </Route>
         </div>
     )

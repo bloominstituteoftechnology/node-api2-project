@@ -1,50 +1,51 @@
 import React,{useState} from 'react';
 import {useHistory,useParams} from 'react-router-dom';
 import {Form,Input,Label,Button} from 'reactstrap';
- import addPost from './api/addPost';
+import updatePost from './api/updatePost';
 
-function AddPost({setPosts}){
-const {postId}=useParams();
+function UpdatePost({setPosts}){
+const params=useParams();
 const history=useHistory();
-
- const [newPost,setNewPost]=useState({
-     title:'',
-     contents:''
+ 
+ const [updatePosts,setUpdatePost]=useState({
+     title:params.title,
+     contents:params.contents
  })
 
  const handleChange=(e)=>{
      e.persist();
-     setNewPost({
-         ...newPost,
+     setUpdatePost({
+         ...updatePosts,
          [e.target.name]:e.target.value
      })
  }
 
  const handleSubmit=(e)=>{
      e.preventDefault();
-     addPost(newPost,setPosts)
+     updatePost(updatePosts,params.id,setPosts)
      history.push('/')
  }
 
     return(
         <div className="p-5">
+             <h3>Update Post!</h3>
              <Form onSubmit={handleSubmit} className="addForm">
                  <Label htmlFor="title">Title</Label>
                  <Input id="title"
                  name="title"
-                 value= {newPost.title}
+                 value= {updatePosts.title}
                  onChange= {handleChange}
                  placeholder="Post Title ..."/>
 
                 <Label htmlFor="contents">Contents</Label>
                 <Input id="contents"
                  name="contents"
-                 value= {newPost.contents}
+                 value= {updatePosts.contents}
                  onChange= {handleChange}
                  placeholder="Post Content..."/>
-                 <Button className="m-3">Add Post!</Button>
+                 <Button className="m-3">Update Post!</Button>
              </Form>
         </div>
     )
 }
-export default AddPost;
+export default UpdatePost;

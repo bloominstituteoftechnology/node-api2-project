@@ -54,3 +54,19 @@ box-shadow: dimgray 4px 4px ;
 font-size: 1.2rem;
 font-family: cursive;
 }
+
+ 
+.addForm{
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 1.2rem;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: rgb(248, 226, 218);
+  margin: 2% auto;
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  box-shadow: white 4px 4px;
+  max-width: 50%;
+}
