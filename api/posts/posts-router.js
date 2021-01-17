@@ -28,3 +28,17 @@ router.get('/api/posts/:id',async(req,res)=>{
         res.status(500).json({error:'the post information could not be retrieved'})
     }
 })
+
+//DELETE SPECIFIC POST 
+router.delete('/api/posts/:id',async(req,res)=>{
+    const {id} = req.params;
+    try{
+        const user = await Post.remove();
+        if(!user){
+            res.status(404).json({error:'the post with the specified id does not exist.'})
+        }
+    }catch{
+        user.abort();
+        res.status(500).json({error:'the post could not be removed.'})
+    }
+})
