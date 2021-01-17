@@ -7,7 +7,7 @@ const { post } = require('../server');
 const errorMessage = 'The post with the specficied id does not exist'
 
 // GET posts
-router.get('/api/posts', async (req,res)=>{
+router.get('/', async (req,res)=>{
     const posts = await Post.find();
     try{
         res.status(200).json(posts);
@@ -17,7 +17,7 @@ router.get('/api/posts', async (req,res)=>{
 })
 
 //get specific post
-router.get('/api/posts/:id',async(req,res)=>{
+router.get('/:id',async(req,res)=>{
     const {id} = req.params;
     const post = await Post.findById(id);
     try{
@@ -32,7 +32,7 @@ router.get('/api/posts/:id',async(req,res)=>{
 })
 
 //DELETE SPECIFIC POST 
-router.delete('/api/posts/:id',async(req,res)=>{
+router.delete('/:id',async(req,res)=>{
     const {id} = req.params;
     try{
         const user = await Post.remove();
@@ -47,7 +47,7 @@ router.delete('/api/posts/:id',async(req,res)=>{
 
 //CREATE POST
 
-router.post('/api/posts',async(req,res)=>{
+router.post('/',async(req,res)=>{
     const post = req.body;
     if(!post.title || !post.contents){
         abort()
@@ -63,7 +63,7 @@ router.post('/api/posts',async(req,res)=>{
 })
 
 // UPDATE POST
-router.put('/api/posts/:id', async(req,res)=>{
+router.put('/:id', async(req,res)=>{
     const {id} = req.params;
     const changes = req.body;
     
