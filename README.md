@@ -152,7 +152,7 @@ The `data` folder contains a database populated with test `posts`.
 
 Database access will be done using the `db.js` file included inside the `data` folder.
 
-The `api/db-helpers.js` publishes the following methods.
+The `db.js` publishes the following methods.
 
 - `find()`: calling find returns a promise that resolves to an array of all the `posts` contained in the database.
 - `findById()`: this method expects an `id` as it's only parameter and returns a promise that resolves to the post corresponding to the `id` provided or an empty array if no post with that `id` is found.
@@ -208,4 +208,4 @@ Create a new React application and connect it to your server:
 
 Follow these steps for completing your project.
 
-- [ ] Submit a pull request to merge `<firstName-lastName>` Branch into main (student's  Repo). **Please don't merge your own pull request**
+- [ ] Submit a pull request to merge <firstName-lastName> Branch into master (student's  Repo). **Please don't merge your own pull request**
