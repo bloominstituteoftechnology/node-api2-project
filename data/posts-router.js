@@ -30,7 +30,7 @@ When the client makes a `POST` request to `/api/posts`:
 router.post('/api/posts', (req, res) => {
     Posts.insert(req.body)
     .then(post => {
-        if(req.body.title | req.body.contents === undefined){
+        if(post.title | post.contents === undefined){
             res.status(400).json({ error: "Please provide title and contents for the post. 400 /api/posts" });
             return
         }else{
@@ -79,11 +79,19 @@ router.post('/api/posts/:id/comments', (req, res) => {
     const commentInfo = { ...req.body, post_id: req.params.id }
     Posts.insertComment(commentInfo)
     .then(comment => {
+        if(!comment){
+            res.status(404).json({ message: "404 The post with the specified ID does not exist. /api/posts/:id/comments" });
+        
+        }
+        if(comment.length < 1){
+            res.status(400).json({ errorMessage: "400 /api/posts/:id/comments Please provide text for the comment." }
+            );
+        }
         res.status(201).json(comment)
     })
     .catch(err => {
         res.status(500).json({
-            message: `Error While POST /:id/comments 500 ${err}`,
+            error: `There was an error while saving the comment to the database api/posts/:id/comments 500 ${err}`,
             err
         })
     })
@@ -93,6 +101,24 @@ router.post('/api/posts/:id/comments', (req, res) => {
 GET    | /api/posts | Returns an array of all the 
 post objects contained in the database.    
 
+When the client makes a `GET` request to `/api/posts`:
+
+- If there's an error in retrieving the _posts_ from the database:
+  - cancel the request.
+  - respond with HTTP status code `500`.
+  - return the following JSON object: `{ error: "The posts information could not be retrieved." }`.
+
+When the client makes a `GET` request to `/api/posts/:id`:
+
+- If the _post_ with the specified `id` is not found:
+
+  - return HTTP status code `404` (Not Found).
+  - return the following JSON object: `{ message: "The post with the specified ID does not exist." }`.
+
+- If there's an error in retrieving the _post_ from the database:
+  - cancel the request.
+  - respond with HTTP status code `500`.
+  - return the following JSON object: `{ error: "The post information could not be retrieved." }`.
 */
 router.get('/api/posts', (req, res) => {
     Posts.find(req.query)
@@ -102,7 +128,7 @@ router.get('/api/posts', (req, res) => {
     .catch(error => {
         console.log(error)
         res.status(500).json({
-            message: `Wont retrieve GET/ 500 ${err}`
+            error: `The posts information could not be retrieved. GET /api/posts 500 ${err}`
         })
     })
 })
@@ -111,6 +137,17 @@ router.get('/api/posts', (req, res) => {
 GET    | /api/posts/:id  | Returns the post object 
 with the specified
 
+When the client makes a `GET` request to `/api/posts/:id`:
+
+- If the _post_ with the specified `id` is not found:
+
+  - return HTTP status code `404` (Not Found).
+  - return the following JSON object: `{ message: "The post with the specified ID does not exist." }`.
+
+- If there's an error in retrieving the _post_ from the database:
+  - cancel the request.
+  - respond with HTTP status code `500`.
+  - return the following JSON object: `{ error: "The post information could not be retrieved." }`.
 */
 router.get('/api/posts/:id', (req, res) => {
     Posts.findById(req.params.id)
