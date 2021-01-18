@@ -1,13 +1,16 @@
-
-
 const express = require('express')
-
-
 const router = express.Router()
 const Posts = require('./db.js')
 
+/*
+| POST   | /api/posts | Creates a post using the 
+nformation sent inside the `request body`.       
 
-router.post('/', (req, res) => {
+
+
+*/
+
+router.post('/api/posts', (req, res) => {
     Posts.insert(req.body)
     .then(post => {
         res.status(201).json(post)
@@ -20,9 +23,13 @@ router.post('/', (req, res) => {
     })
 })
 
+/*
+| POST   | /api/posts/:id/comments | Creates a comment for 
+the post with the specified id using information sent inside of the `request body`.      
 
+*/
 
-router.post('/:id/comments', (req, res) => {
+router.post('/api/posts/:id/comments', (req, res) => {
     const commentInfo = { ...req.body, post_id: req.params.id }
     Posts.insertComment(commentInfo)
     .then(comment => {
@@ -36,9 +43,12 @@ router.post('/:id/comments', (req, res) => {
     })
 })
 
+/*
+GET    | /api/posts | Returns an array of all the 
+post objects contained in the database.    
 
-
-router.get('/', (req, res) => {
+*/
+router.get('/api/posts', (req, res) => {
     Posts.find(req.query)
     .then(posts => {
         res.status(200).json(posts)
@@ -51,9 +61,12 @@ router.get('/', (req, res) => {
     })
 })
 
+/*
+GET    | /api/posts/:id  | Returns the post object 
+with the specified
 
-
-router.get('/:id', (req, res) => {
+*/
+router.get('/api/posts/:id', (req, res) => {
     Posts.findById(req.params.id)
     .then(post => {
         if (post) {
@@ -71,9 +84,11 @@ router.get('/:id', (req, res) => {
         })
     })
 })
-
-
-router.get('/:id/comments', (req, res) => {
+/*
+GET | /api/posts/:id/comments | Returns an array of all the comment objects associated 
+with the post with the specified id. 
+*/
+router.get('/api/posts/:id/comments', (req, res) => {
     Posts.findCommentById(req.params.id)
     .then(post => {
         if (post) {
@@ -92,8 +107,11 @@ router.get('/:id/comments', (req, res) => {
     })
 })
 
-
-router.put('/:id', (req, res) => {
+/*
+PUT    | /api/posts/:id          | Updates the post with the specified `id` using data from the 
+`request body`. Returns the modified document
+*/
+router.put('/api/posts/:id', (req, res) => {
     const changes = req.body
     Posts.update(req.params.id, changes)
     .then(post => {
@@ -113,10 +131,11 @@ router.put('/:id', (req, res) => {
     })
 })
 
-
-
-
-router.delete('/:id', (req, res) => {
+/*
+DELETE | /api/posts/:id          | Removes the post with the specified id and returns the **deleted post object**. You may need to make additional calls to the
+database in order to satisfy this requirement. 
+*/
+router.delete('/api/posts/:id', (req, res) => {
     Posts.remove(req.params.id)
     .then(id => {
         if (id > 0) {

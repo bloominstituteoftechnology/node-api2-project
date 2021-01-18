@@ -11,7 +11,7 @@ server.use('/api/posts', postsRouter)
 
 
 server.get('/', (req, res) => {
-    res.send('You made it.')
+    res.send('Luanched')
 });
 
 module.exports = server;
