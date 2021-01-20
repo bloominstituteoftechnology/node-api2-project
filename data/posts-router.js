@@ -81,11 +81,12 @@ router.post('/api/posts/:id/comments', (req, res) => {
     .then(comment => {
         if(!comment){
             res.status(404).json({ message: "404 The post with the specified ID does not exist. /api/posts/:id/comments" });
-        
+        return
         }
         if(comment.length < 1){
             res.status(400).json({ errorMessage: "400 /api/posts/:id/comments Please provide text for the comment." }
             );
+        return 
         }
         res.status(201).json(comment)
     })
@@ -108,17 +109,6 @@ When the client makes a `GET` request to `/api/posts`:
   - respond with HTTP status code `500`.
   - return the following JSON object: `{ error: "The posts information could not be retrieved." }`.
 
-When the client makes a `GET` request to `/api/posts/:id`:
-
-- If the _post_ with the specified `id` is not found:
-
-  - return HTTP status code `404` (Not Found).
-  - return the following JSON object: `{ message: "The post with the specified ID does not exist." }`.
-
-- If there's an error in retrieving the _post_ from the database:
-  - cancel the request.
-  - respond with HTTP status code `500`.
-  - return the following JSON object: `{ error: "The post information could not be retrieved." }`.
 */
 router.get('/api/posts', (req, res) => {
     Posts.find(req.query)
@@ -156,20 +146,34 @@ router.get('/api/posts/:id', (req, res) => {
             res.status(200).json(post)
         } else {
             res.status(404).json({
-                message: `GET/:id 404 ${err}`
+                message: `The post with the specified ID does not exist. GET/api/posts/:id 404 ${err}`
             })
         }
     })
     .catch(err => {
+        
         console.log(err)
         res.status(500).json({
-            message:`GET/:id 500 ${err}`
+            error:`The post information could not be retrieved. GET/api/posts/:id 500 ${err}`
         })
     })
 })
 /*
 GET | /api/posts/:id/comments | Returns an array of all the comment objects associated 
 with the post with the specified id. 
+
+When the client makes a `GET` request to `/api/posts/:id/comments`:
+
+- If the _post_ with the specified `id` is not found:
+
+  - return HTTP status code `404` (Not Found).
+  - return the following JSON object: `{ message: "The post with the specified ID does not exist." }`.
+
+- If there's an error in retrieving the _comments_ from the database:
+  - cancel the request.
+  - respond with HTTP status code `500`.
+  - return the following JSON object: `{ error: "The comments information could not be retrieved." }`.
+
 */
 router.get('/api/posts/:id/comments', (req, res) => {
     Posts.findCommentById(req.params.id)
@@ -178,14 +182,14 @@ router.get('/api/posts/:id/comments', (req, res) => {
             res.status(200).json(post)
         } else {
             res.status(404).json({
-                message: `GET/:id/comments 404  ${req.params.id}`
+                message: `The post with the specified ID does not exist. GET/:id/comments 404  ${req.params.id}`
             })
         }
     })
     .catch(err => {
         console.log(err)
         res.status(500).json({
-            message: `GET/:id/comments 500 ${err}`
+            error: `The comments information could not be retrieved GET/:id/comments 500 ${err}`
         })
     })
 })
@@ -193,23 +197,69 @@ router.get('/api/posts/:id/comments', (req, res) => {
 /*
 PUT    | /api/posts/:id          | Updates the post with the specified `id` using data from the 
 `request body`. Returns the modified document
+When the client makes a `DELETE` request to `/api/posts/:id`:
+
+- If the _post_ with the specified `id` is not found:
+
+  - return HTTP status code `404` (Not Found).
+  - return the following JSON object: `{ message: "The post with the specified ID does not exist." }`.
+
+- If there's an error in removing the _post_ from the database:
+  - cancel the request.
+  - respond with HTTP status code `500`.
+  - return the following JSON object: `{ error: "The post could not be removed" }`.
+
+When the client makes a `PUT` request to `/api/posts/:id`:
+
+- If the _post_ with the specified `id` is not found:
+
+  - return HTTP status code `404` (Not Found).
+  - return the following JSON object: `{ message: "The post with the specified ID does not exist." }`.
+
+- If the request body is missing the `title` or `contents` property:
+
+  - cancel the request.
+  - respond with HTTP status code `400` (Bad Request).
+  - return the following JSON response: `{ errorMessage: "Please provide title and contents for the post." }`.
+
+- If there's an error when updating the _post_:
+
+  - cancel the request.
+  - respond with HTTP status code `500`.
+  - return the following JSON object: `{ error: "The post information could not be modified." }`.
+
+- If the post is found and the new information is valid:
+
+  - update the post document in the database using the new information sent in the `request body`.
+  - return HTTP status code `200` (OK).
+  - return the newly updated _post_.
+
+
+
 */
 router.put('/api/posts/:id', (req, res) => {
     const changes = req.body
     Posts.update(req.params.id, changes)
     .then(post => {
         if (post) {
+            if(!post.title | !post.contents){
+                res.status(400).json( { errorMessage: 
+                    "Please provide title and contents for the post. PUT/api/posts/:id 400" 
+                })
+                return 
+            }  // Found with new valid information using info from req.body 200
             res.status(200).json(post)
+            
             } else {
             res.status(404).json({
-                message: `PUT/:id 404 ${req.body}`
+                message: `The post with the specified ID does not exist. PUT/api/posts/:id 404 ${req.body}`
             })
         }
     })
     .catch(err => {
         console.log(err)
         res.status(500).json({
-            message: `PUT /:id 500 ${err}`
+            error: `The post information could not be modified. PUT /api/posts/:id 500 ${err}`
         })
     })
 })
@@ -217,6 +267,20 @@ router.put('/api/posts/:id', (req, res) => {
 /*
 DELETE | /api/posts/:id          | Removes the post with the specified id and returns the **deleted post object**. You may need to make additional calls to the
 database in order to satisfy this requirement. 
+
+When the client makes a `DELETE` request to `/api/posts/:id`:
+
+- If the _post_ with the specified `id` is not found:
+
+  - return HTTP status code `404` (Not Found).
+  - return the following JSON object: `{ message: "The post with the specified ID does not exist." }`.
+
+- If there's an error in removing the _post_ from the database:
+  - cancel the request.
+  - respond with HTTP status code `500`.
+  - return the following JSON object: `{ error: "The post could not be removed" }`.
+
+
 */
 router.delete('/api/posts/:id', (req, res) => {
     Posts.remove(req.params.id)
@@ -227,14 +291,14 @@ router.delete('/api/posts/:id', (req, res) => {
             })
             } else {
             res.status(404).json({
-                message: `DELETE/:id 404 ${'id '+id+' ',req.body }`
+                message: `The post with the specified ID does not exist. DELETE/api/posts/:id 404 ${'id '+id+' ',req.body }`
             })
         }
     })
     .catch(err => {
         console.log(err)
         res.status(500).json({
-            message: `DELETE/:id 500 ${'err '+err,req.body }`
+            error: `The post could not be removed DELETE/api/posts/:id 500 ${'err '+err,req.body }`
         })
     })
 })
