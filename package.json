@@ -15,7 +15,7 @@
         "gitignore": "^0.6.0",
         "knex": "^0.21.16",
         "npm": "^6.14.11",
-        "sqlite3": "^5.0.1"
+        "sqlite3": "^4.1.1"
     },
     "devDependencies": {
         "nodemon": "^2.0.4"
