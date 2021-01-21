@@ -14,7 +14,7 @@
         "gitignore": "^0.6.0",
         "knex": "^0.21.16",
         "node-pre-gyp": "^0.17.0",
-        "sqlite3": "^5.0.0"
+        "sqlite3": "^5.0.1"
     },
     "devDependencies": {
         "nodemon": "^2.0.4"
