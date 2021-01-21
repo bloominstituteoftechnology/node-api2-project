@@ -10,7 +10,7 @@ router.post('/', async (req,res)=>{
     const newPost= req.body;
     console.log(newPost)
     if(!newPost.title || !newPost.contents){
-        res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
+        res.status(400).json({ errorMessage: "Please provide title and contents for post." })
     }
     else{
         try {
