@@ -16,7 +16,8 @@ router.post('/', async (req,res)=>{
         try {
             const postId= await dbhelpers.insert(req.body)
                 // res.status(201).json(postId)
-                res.status(201).json({message: process.env.WELCOME})
+                const welcome=process.env.WELCOME || "hello world!"
+                res.status(201).json({message: welcome})
             }
         catch (err) {
             res.status(500).json({ error: "There was an error while saving the post to the database"})
