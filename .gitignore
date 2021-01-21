@@ -1,5 +1,5 @@
 # Let students use Yarn package manager
-package-lock.json
+# package-lock.json
 
 # Mac files
 .DS_Store
