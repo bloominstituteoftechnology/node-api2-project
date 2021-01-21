@@ -1,10 +1,10 @@
 import React,{useState} from 'react';
-import {useHistory,useParams} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import {Form,Input,Label,Button} from 'reactstrap';
  import addPost from './api/addPost';
 
 function AddPost({setPosts,setWelcome}){
-const {postId}=useParams();
+// const {postId}=useParams();
 
 const history=useHistory();
 
