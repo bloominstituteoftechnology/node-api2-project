@@ -9,6 +9,7 @@
         "server": "nodemon index.js"
     },
     "dependencies": {
+        "bcryptjs": "^2.4.3",
         "cors": "^2.8.5",
         "dotenv": "^8.2.0",
         "gitignore": "^0.6.0",
