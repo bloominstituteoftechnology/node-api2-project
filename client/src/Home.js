@@ -11,6 +11,7 @@ function Home(){
  
     const [posts,setPosts]=useState([]);
     const [remove,setRemove]=useState(false);
+    const [welcome,setWelcome]=useState('');
     
     useEffect(()=>{
         fetchPosts(setPosts)
@@ -23,10 +24,10 @@ function Home(){
             </div>
            
             <Route exact path="/">
-                <MainPost posts={posts} setPosts={setPosts} remove={remove}setRemove={setRemove}/>
+                <MainPost posts={posts} setPosts={setPosts} remove={remove}setRemove={setRemove} welcome={welcome}/>
             </Route>
             <Route exact path="/addpost">
-                <AddPost posts={posts} setPosts={setPosts}/>
+                <AddPost posts={posts} setPosts={setPosts} setWelcome={setWelcome}/>
             </Route>
             <Route exact path="/addcomment/:id/:title">
                 <AddComment posts={posts} setPosts={setPosts}/>

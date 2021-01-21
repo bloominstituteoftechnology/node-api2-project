@@ -3,8 +3,9 @@ import {useHistory,useParams} from 'react-router-dom';
 import {Form,Input,Label,Button} from 'reactstrap';
  import addPost from './api/addPost';
 
-function AddPost({setPosts}){
+function AddPost({setPosts,setWelcome}){
 const {postId}=useParams();
+
 const history=useHistory();
 
  const [newPost,setNewPost]=useState({
@@ -22,7 +23,7 @@ const history=useHistory();
 
  const handleSubmit=(e)=>{
      e.preventDefault();
-     addPost(newPost,setPosts)
+     addPost(newPost,setPosts,setWelcome)
      history.push('/')
  }
 
