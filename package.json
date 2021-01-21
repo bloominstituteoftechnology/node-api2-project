@@ -12,7 +12,8 @@
         "cors": "^2.8.5",
         "dotenv": "^8.2.0",
         "gitignore": "^0.6.0",
-        "knex": "^0.21.2",
+        "knex": "^0.21.16",
+        "node-pre-gyp": "^0.17.0",
         "sqlite3": "^5.0.0"
     },
     "devDependencies": {
