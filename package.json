@@ -10,7 +10,6 @@
     },
     "dependencies": {
         "cors": "^2.8.5",
-        "dotenv": "^8.2.0",
         "knex": "^0.21.2",
         "sqlite3": "^5.0.0"
     },
