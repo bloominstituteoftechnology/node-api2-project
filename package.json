@@ -10,7 +10,8 @@
     },
     "dependencies": {
         "cors": "^2.8.5",
-        "knex": "^0.21.2",
+        "cross-env": "^7.0.3",
+        "knex": "^0.21.12",
         "sqlite3": "^5.0.0"
     },
     "devDependencies": {
