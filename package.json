@@ -11,9 +11,7 @@
     "dependencies": {
         "cors": "^2.8.5",
         "knex": "^0.21.2",
-        "node-pre-gyp": "^0.17.0",
-        "sqlite": "^4.0.19",
-        "sqlite3": "^5.0.1"
+        "sqlite3": "^5.0.0"
     },
     "devDependencies": {
         "nodemon": "^2.0.4"
