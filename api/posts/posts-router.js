@@ -3,7 +3,7 @@ const Posts = require('./posts-model');
 const express = require('express');
 const router = express.Router();
 
-//Gets all posts
+//GET all posts
 router.get('/', (req, res) =>{
     Posts.find()
     .then((posts) =>{
@@ -15,7 +15,7 @@ router.get('/', (req, res) =>{
 });
 
 
-//Gets post at specified id
+//GET post at specified id
 router.get('/:id', (req, res) =>{
     const { id } = req.params;
     Posts.findById(id)
@@ -43,6 +43,28 @@ router.post('/', (req, res) =>{
         });
     }
 });
+
+//PUT will update post with specified id
+router.put('/:id', (req, res) =>{
+    const { id } = req.params;
+    const changes = req.body;
+
+    try{
+        if(!changes.title || !changes.contents){
+            res.status(404).json({message: 'The post with the specified ID does not exist'})
+        } else{
+            Posts.update(id, changes)
+            .then((post) =>{
+                res.status(200).json({post});
+            })
+            .catch((error) =>{
+                res.status(400).json({message: 'Please provide title and contents for the post'});
+            });
+        }
+    } catch(error){
+        res.status(500).json({message: 'The post information could not be modified'});
+    }
+})
 
 
 module.exports = router;
