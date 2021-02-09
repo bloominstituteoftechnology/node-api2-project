@@ -17,7 +17,7 @@ router.get('/', (req, res) =>{
 
 //GET post at specified id
 router.get('/:id', (req, res) =>{
-    const { id } = req.params;
+    const id = req.params.id;
     Posts.findById(id)
     .then((user) =>{
         user ? res.status(200).json(user) : res.status(404).json({message: 'The post with the specified ID does not exist'});
@@ -46,7 +46,7 @@ router.post('/', (req, res) =>{
 
 //PUT will update post with specified id
 router.put('/:id', (req, res) =>{
-    const { id } = req.params;
+    const id = req.params.id;
     const changes = req.body;
 
     try{
@@ -64,7 +64,25 @@ router.put('/:id', (req, res) =>{
     } catch(error){
         res.status(500).json({message: 'The post information could not be modified'});
     }
-})
+});
+
+//DELETE post with specified id
+router.delete('/:id/', (req,res) =>{
+    const id = req.params.id;
+    Posts.remove(id)
+    .then((count) =>{
+        if (count > 0){
+            res.status(200).json({message: 'The Post has been deleted'});
+        } else{
+            res.status(404).json({message: 'The post with the specified ID does not exist'});
+        }
+    })
+    .catch((error) =>{
+        res.status(500).json({message: 'The post could not be removed'});
+    });
+});
+
+//GET comments from post with specified id
 
 
 module.exports = router;
