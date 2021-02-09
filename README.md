@@ -27,9 +27,9 @@ There are two possible ways to submit your project. Your instructor should have 
 
 ### Task 2: Minimum Viable Product
 
-- Add the code necessary to implement the endpoints listed below.
-- Separate the endpoints that begin with `/api/posts` into a separate `Express Router`.
-- Configure the API to handle to the following routes. Some of these endpoints might require more than one call to the provided database persistence helpers.
+- Add the code necessary to `index.js`, `api/server.js` and `api/posts/posts-router.js` to implement the endpoints listed below.
+- Separate the endpoints that begin with `/api/posts` into a separate Express Router inside `api/posts/posts-router.js`.
+- Configure the API to handle to the following routes. Some of these endpoints might require more than one call to the provided database helpers inside `api/posts/posts-model.js`.
 
 | N | Method | Endpoint                | Description                                                                                                                              |
 | - | ------ | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -128,13 +128,11 @@ The `data` folder contains a database populated with test `posts`.
 Database access will be done using the `posts-model.js` file included inside the `api/posts` folder:
 
 - `find()`: calling find returns a promise that resolves to an array of all the `posts` contained in the database.
-- `findById()`: this method expects an `id` as it's only parameter and returns a promise that resolves to the post corresponding to the `id` provided or null if no post with that `id` is found.
+- `findById()`: this method expects an `id` as it's only parameter and returns a promise that resolves to the post corresponding to the `id` provided or `undefined` if no post with that `id` is found.
 - `insert()`: calling insert passing it a `post` object will add it to the database and return a promise that resolves to an object with the `id` of the inserted post. The object looks like this: `{ id: 123 }`.
 - `update()`: accepts two arguments, the first is the `id` of the post to update and the second is an object with the `changes` to apply. It returns a promise that resolves to the count of updated records. If the count is 1 it means the record was updated correctly.
 - `remove()`: the remove method accepts an `id` as its first parameter and upon successfully deleting the post from the database it returns a promise that resolves to the number of records deleted.
 - `findPostComments()`: the findPostComments accepts a `postId` as its first parameter and returns a promise that resolves to an array of all comments on the post associated with the post id.
-
-Now that we have a way to add, update, remove and retrieve data from the provided database, it is time to work on the API.
 
 ### Blog Post Schema
 
