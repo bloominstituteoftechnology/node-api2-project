@@ -16,7 +16,6 @@ router.get('/', (req,res) => {
 })
 
 router.get('/:id', (req,res) => {
-  //console.log(req.params.id);
   db.findById(req.params.id)
   .then((response) => {
     if(response)
@@ -27,6 +26,24 @@ router.get('/:id', (req,res) => {
   .catch(() => {
     res.status(500).send({ message: "The post information could not be retrieved" });
   })
+})
+
+router.post('/', (req,res) => {
+  if(!req.body.title || !req.body.contents)
+    res.status(400).send({ message: "Please provide title and contents for the post" });
+  else{
+    db.insert(req.body)
+    .then((response) => {
+      db.findById(response.id)
+      .then((response) => {
+        res.status(201).send(response);
+      })
+    })
+    .catch(() => {
+      res.status(500).send({ message: "There was an error while saving the post to the database" });
+    })
+  }
+  
 })
 
 module.exports = router;
