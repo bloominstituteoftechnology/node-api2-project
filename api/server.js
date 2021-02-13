@@ -8,7 +8,7 @@ const server = express();
 
 server.use(express.json());
 server.use(express.urlencoded({extended: false}));
-server.use('/posts', postsRouter);
+server.use('/api/posts', postsRouter);
 
 server.get("/", (req,res) => {
   res.json({message: "Hello!"});
