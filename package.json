@@ -6,8 +6,7 @@
     "test": "cross-env NODE_ENV=testing jest --watch --verbose --runInBand --silent"
   },
   "dependencies": {
-    "knex": "^0.21.17",
-    "sqlite3": "^5.0.1"
+    "knex": "^0.21.17"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
