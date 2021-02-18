@@ -145,25 +145,25 @@ describe('server.js', () => {
       expect(post).toBeFalsy()
     }, 500)
   })
-  describe('6 [GET] /api/posts/:id/messages', () => {
+  describe('6 [GET] /api/posts/:id/comments', () => {
     it('reponds with a 404 if the post is not found', async () => {
       let res = await request(server).get('/api/posts/66/comments')
       expect(res.status).toBe(404)
       expect(res.body.message).toMatch(/does not exist/i)
     }, 500)
-    it('can get all the messages associated to the posts with given id', async () => {
+    it('can get all the comments associated to the posts with given id', async () => {
       await db('posts').insert(post1)
       await db('posts').insert(post2)
-      const messages = [
+      const comments = [
         { text: 'foo', post_id: 1 }, { text: 'bar', post_id: 1 }, { text: 'baz', post_id: 2 }
       ]
-      await db('comments').insert(messages)
+      await db('comments').insert(comments)
       let res = await request(server).get('/api/posts/1/comments')
       expect(res.body).toHaveLength(2)
-      expect(res.body).toMatchObject([messages[0], messages[1]])
+      expect(res.body).toMatchObject([comments[0], comments[1]])
       res = await request(server).get('/api/posts/2/comments')
       expect(res.body).toHaveLength(1)
-      expect(res.body).toMatchObject([messages[2]])
+      expect(res.body).toMatchObject([comments[2]])
     }, 500)
   })
 })
