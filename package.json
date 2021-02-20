@@ -19,5 +19,14 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LambdaSchool/node-api2-project.git"
-  }
+  },
+  "description": "## Introduction",
+  "bugs": {
+    "url": "https://github.com/LambdaSchool/node-api2-project/issues"
+  },
+  "homepage": "https://github.com/LambdaSchool/node-api2-project#readme",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
