@@ -18,7 +18,7 @@ if(process.env.NODE_ENV !== 'production') {
     server.use(cors());
 }
 server.use('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'api/build', 'index.html'))
+    res.sendFile(path.join(__dirname, 'api/build', 'index.js'))
 })
 
 server.use('/api/posts', postsRouter)
