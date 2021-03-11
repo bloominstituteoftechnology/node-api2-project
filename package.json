@@ -2,8 +2,13 @@
   "name": "node-api2-project",
   "version": "0.0.1",
   "scripts": {
+    "start": "node index.js",
     "server": "nodemon index.js",
     "test": "cross-env NODE_ENV=testing jest --watch --verbose --runInBand --silent"
+  },
+  "engines": {
+    "node":"14.15.4",
+    "npm": "6.14.11"
   },
   "dependencies": {
     "cors": "^2.8.5",
