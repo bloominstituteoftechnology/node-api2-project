@@ -13,7 +13,7 @@ const server = express();
 server.use(express.json());
 server.use(express.static(path.join(__dirname, 'api/build')))
 
-if(process.env.NODE_ENV !== 'development') {
+if(process.env.NODE_ENV !== 'production') {
     const cors = require('cors');
     server.use(cors());
 }
