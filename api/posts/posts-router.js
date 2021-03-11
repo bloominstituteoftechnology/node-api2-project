@@ -40,4 +40,21 @@ router.post('/api/posts', (req, res) => {
         .catch(res.status(500).json({message: "There was an error while saving the post to the database"}))
 })
 
+router.put('/api/posts/:id', (req, res) => {
+    const {id} = req.params;
+    const updates = req.body;
+   
+    if(!updates.title || !updates.contents) {
+        res.status(422).json({ message: "Please provide title and contents for the post" })
+    } else {
+        Posts.update(id, updates)
+          .then(response => {
+            !response ? res.status(404).json({ message: "The post with the specified ID does not exist" }) : res.status(200).json(updates);
+          })
+          .catch(err => {
+              res.status(500).json({ message: err.message });
+          })
+    }
+})
+
 module.exports = router;
