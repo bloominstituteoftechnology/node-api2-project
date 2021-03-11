@@ -48,7 +48,7 @@ router.put('/api/posts/:id', (req, res) => {
         res.status(422).json({ message: "Please provide title and contents for the post" })
     } else {
         Posts.update(id, updates)
-          .then(response => {
+          .then(response => { // DO NOT UNDERSTAND, DB RETURNS NOTHING?
             !response ? res.status(404).json({ message: "The post with the specified ID does not exist" }) : res.status(200).json(updates);
           })
           .catch(err => {
@@ -56,5 +56,26 @@ router.put('/api/posts/:id', (req, res) => {
           })
     }
 })
+
+router.delete('/api/posts/:id', (req,res)=>{
+    const {id} = req.params
+    let deletedPost = {}
+
+    Posts.findById(id)
+        .then(postToBeDeleted => {
+            deletedPost = postToBeDeleted
+            Posts.remove(id)
+                .then(res.status(202).json({deletedPost}))
+                .catch(err => {
+                    res.status(500).json({message:"The post could not be removed"})
+                })
+        })
+        .catch(err => {
+            res.status(404).json({message:"The post with the specified ID does not exist"})
+        })
+})
+
+
+
 
 module.exports = router;
