@@ -1,5 +1,5 @@
 
-
+/*
 
 const Posts = require('./posts-model.js');
 
@@ -23,3 +23,4 @@ module.exports = {
 
 
 
+*/
