@@ -12,7 +12,7 @@ const postsRouter= require('./posts/posts-router.js')
 
 
 server.use(express.json());
-server.use('./api/posts', postsRouter);
+server.use('/api/posts', postsRouter);
 
 
 

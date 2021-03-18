@@ -97,7 +97,7 @@ router.get('/:id/comments', (req, res) => {
       .catch(error => {
         console.log(error);
         res.status(500).json({
-          message: 'Error retrieving the dogs for this adopter',
+          message: 'Error retrieving the comments for this post',
         });
       });
   });
