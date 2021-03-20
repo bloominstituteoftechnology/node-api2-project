@@ -75,7 +75,6 @@ router.get('/', (req, res) => {
         
         if (!findPost) {
             res.status(404).json({message: "the post with the specified ID does not exist"})
-
         }
         else {
             if ( !changes.title || !changes.contents) {
@@ -86,19 +85,16 @@ router.get('/', (req, res) => {
             else {
                 Posts.update(id, changes)
             
-                
                 .then(update => {
                     res.status(200).json(update)
-
                 })
                 .catch(error => {
                     console.log(error)
                     res.status(500).json({message: "The post information could not be modified"})
 
-                })
-                 
+                })  
             }
-            
+ 
         }
 
     })
