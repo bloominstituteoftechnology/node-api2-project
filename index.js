@@ -8,4 +8,4 @@ server.listen(PORT, () => {
     console.log(`\n *** Listening on Port ${PORT} *** \n`);
 });
 
-const myName = "Sharon";
+const myNameIs = "Sharon";
