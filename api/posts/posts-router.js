@@ -48,9 +48,10 @@ router.put('/:id', async (req,res) => {
     if (!oldPost){
         res.status(404).json({ message: "The post with the specified ID does not exist" });
     }
-    (!updatedPost.title || !updatedPost.contents)
-    ? res.status(400).json({ message: "Please provide title and contents for the post" })
-    : Post.update(id,updatedPost)
+    else{
+        (!updatedPost.title || !updatedPost.contents)
+        ? res.status(400).json({ message: "Please provide title and contents for the post" })
+        : Post.update(id,updatedPost)
         .then(() => {
             return Post.findById(id)
         })
@@ -60,7 +61,8 @@ router.put('/:id', async (req,res) => {
         .catch(() => {
             res.status(500).json({ message: "The post information could not be modified" })
         })
-
+    }
+        
 })
 
 router.delete('/:id', async (req,res) => {
@@ -69,6 +71,7 @@ router.delete('/:id', async (req,res) => {
     if (!oldPost){
         res.status(404).json({ message: "The post with the specified ID does not exist" });
     }
+    else{
     Post.remove(id)
         .then(() => {
             return Post.findById(id)
@@ -81,6 +84,7 @@ router.delete('/:id', async (req,res) => {
         .catch(() => {
             res.status(500).json({ message: "The post could not be removed" })
         })
+    }
 })
 
 router.get('/:id/comments', async (req,res) => {
