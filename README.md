@@ -119,7 +119,7 @@ There are two possible ways to submit your project. Your instructor should have 
 - If there's an error in retrieving the _comments_ from the database:
 
   - respond with HTTP status code `500`.
-  - return the following JSON: `c`.
+  - return the following JSON: `{ message: "The comments information could not be retrieved" }`.
 
 ### Database Persistence Helpers
 

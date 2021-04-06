@@ -37,7 +37,7 @@ router.post('/',  (req,res) => {
             res.status(201).json(post)
         })
         .catch(() => {
-            res.status(500).json
+            res.status(500).json({ message: "There was an error while saving the post to the database" })
         })
     })
 
