@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "scripts": {
     "server": "nodemon index.js",
-    "test": "cross-env NODE_ENV=testing jest --watch --verbose --runInBand --silent"
+    "test": "cross-env NODE_ENV=testing jest --watch --verbose --runInBand --silent",
+    "resetdb": "knex migrate:rollback && knex migrate:latest && knex seed:run"
   },
   "dependencies": {
     "knex": "^0.95.4",
