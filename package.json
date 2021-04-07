@@ -2,12 +2,14 @@
   "name": "node-api2-project",
   "version": "0.0.1",
   "scripts": {
+    "start": "node index.js",
     "server": "nodemon index.js",
     "test": "cross-env NODE_ENV=testing jest --watch --verbose --runInBand --silent"
   },
   "dependencies": {
+    "express": "^4.17.1",
     "knex": "^0.21.17",
-    "sqlite3": "^5.0.1"
+    "sqlite3": "^5.0.2"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
