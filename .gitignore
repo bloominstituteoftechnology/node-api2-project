@@ -117,3 +117,5 @@ dist
 
 .DS_Store
 .vscode
+
+testing.db3
