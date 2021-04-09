@@ -57,20 +57,33 @@ router.put("/api/posts/:id", (req, res) => {
         res.status(400).json({ message: "Please provide title and contents for the post" })
     }else{
         posts.update(req.params.id, req.body)
-            .then(() => {
-                posts.findById(req.params.id)
+            .then((count) => {
+                if(count >= 1){
+                    posts.findById(req.params.id)
                     .then((post) => {
                         res.status(201).json(post)
                     })
                     .catch(() => {
                         res.status(500).json({ message: "There was an error while saving the post to the database" })
                     })
+                }
+                else{
+                    res.status(404).json({ message: "The post with the specified ID does not exist" })
+                }
             })
             .catch(() => {
-                res.status(404).json({ message: "The post with the specified ID does not exist" })
+                res.status(500).json({ message: "There was an error while saving the post to the database" })
             })
     }
 });
 
-
+/* router.delete("/api/posts/:id", (req,res) => {
+    posts.remove(req.params.id)
+        .then((res) => {
+            console.log
+        })
+        .catch(() => {
+            res.status(500).json({ message: "The comments information could not be retrieved" })
+        })
+}) */
 module.exports = router
