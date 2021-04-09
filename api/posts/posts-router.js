@@ -29,4 +29,25 @@ router.get("/api/posts/:id", (req, res) => {
             res.status(500).json({ message: "The post information could not be retrieved" })
         })
 });
+
+//endpoint that creates a post 
+router.post("/api/posts", (req, res) => {
+    if(!req.body.title || !req.body.contents){
+        res.status(400).json({ message: "Please provide title and contents for the post" })
+    }else{
+        posts.insert(req.body)
+            .then(item => {
+                posts.findById(item.id)
+                    .then((post) => {
+                        res.status(201).json(post)
+                    })
+                    .catch(() => {
+                        res.status(500).json({ message: "There was an error while saving the post to the database" })
+                    })
+            })
+            .catch(() => {
+                res.status(500).json({ message: "There was an error while saving the post to the database" })
+            })
+    }
+})
 module.exports = router
