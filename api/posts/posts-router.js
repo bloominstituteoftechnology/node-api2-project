@@ -77,13 +77,19 @@ router.put("/api/posts/:id", (req, res) => {
     }
 });
 
-/* router.delete("/api/posts/:id", (req,res) => {
+//endpoint that deletes a post
+router.delete("/api/posts/:id", (req,res) => {
     posts.remove(req.params.id)
-        .then((res) => {
-            console.log
-        })
-        .catch(() => {
-            res.status(500).json({ message: "The comments information could not be retrieved" })
-        })
-}) */
+    .then((count) => {
+        if(count >= 1){
+            res.end()
+        }
+        else{
+            res.status(404).json({ message: "The post with the specified ID does not exist" })
+        }
+    })
+    .catch(() => {
+        res.status(500).json({ message: "The post could not be removed" })
+    })
+})
 module.exports = router
