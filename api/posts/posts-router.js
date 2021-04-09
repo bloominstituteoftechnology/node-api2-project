@@ -49,5 +49,28 @@ router.post("/api/posts", (req, res) => {
                 res.status(500).json({ message: "There was an error while saving the post to the database" })
             })
     }
-})
+});
+
+//endpoint that updates the post of a specified id and returns the updated post
+router.put("/api/posts/:id", (req, res) => {
+    if(!req.body.title || !req.body.contents){
+        res.status(400).json({ message: "Please provide title and contents for the post" })
+    }else{
+        posts.update(req.params.id, req.body)
+            .then(() => {
+                posts.findById(req.params.id)
+                    .then((post) => {
+                        res.status(201).json(post)
+                    })
+                    .catch(() => {
+                        res.status(500).json({ message: "There was an error while saving the post to the database" })
+                    })
+            })
+            .catch(() => {
+                res.status(404).json({ message: "The post with the specified ID does not exist" })
+            })
+    }
+});
+
+
 module.exports = router
