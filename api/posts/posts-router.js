@@ -95,4 +95,18 @@ router.delete("/api/posts/:id", async (req,res) => {
         res.status(500).json({ message: "The post could not be removed" })
     })
 })
+
+router.get("/api/posts/:postId/comments/", (req, res) => {
+    posts.findPostComments(req.params.postId)
+        .then(comments => {
+            if(comments.length > 0){
+                res.json(comments)
+            }else{
+                res.status(404).json({ message: "The post with the specified ID does not exist" })
+            }
+        })
+        .catch(() => {
+            res.status(500).json({ message: "The comments information could not be retrieved" })
+        })
+})
 module.exports = router
