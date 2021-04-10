@@ -7,8 +7,10 @@
     "resetdb": "knex migrate:rollback && knex migrate:latest && knex seed:run"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "express": "^4.17.1",
     "knex": "^0.95.4",
+    "react-router-dom": "^5.2.0",
     "sqlite3": "^5.0.2"
   },
   "devDependencies": {
