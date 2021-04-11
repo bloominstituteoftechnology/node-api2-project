@@ -46,7 +46,7 @@ router.post("/api/posts", (req, res) => {
 
     posts.insert(req.body)
             .then(post => {
-                res.status(201).json({post})
+                res.status(201).json(post)
             })
             .catch(err => {
                 console.log(err)
@@ -56,7 +56,7 @@ router.post("/api/posts", (req, res) => {
             })
 })
 
-router.put("/api/posts/:id", (req, res) => {
+router.put("http://localhost:4000/api/posts/:id", (req, res) => {
     if(!req.params.id){
         res.status(404).json({
             message: "The post with the specified ID does not exist"
@@ -81,7 +81,7 @@ router.put("/api/posts/:id", (req, res) => {
         })
 })
 
-router.delete("/api/posts/:id", (req, res) => {
+router.delete("http://localhost:4000/api/posts/:id", (req, res) => {
     if(!req.params.id){
         res.status(404).json({
             message: "The post with the specified ID does not exist"
@@ -102,7 +102,7 @@ router.delete("/api/posts/:id", (req, res) => {
         })
 })
 
-router.get("/api/posts/:id/comments", (req, res) => {
+router.get("http://localhost:4000/api/posts/:id/comments", (req, res) => {
     if(!req.params.id){
         res.status(404).json({
             message: "The post with the specified ID does not exist"

@@ -1,14 +1,10 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
-import AddPost from "./AddPost";
+import { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 
-const initialState = {
-    title: "",
-    contents: ""
-}
-
-const Home = () => {
-    const [postList, setPostList] = useState([initialState])
+const Home = ({postList, setPostList}) => {
+   
+    const { push } = useHistory()
 
     useEffect(() => {
         axios.get("http://localhost:4000/api/posts")
@@ -18,24 +14,20 @@ const Home = () => {
         .catch(err => {
             console.log(err)
         })
-    }, [] )
+    }, [setPostList] )
   
     return(
         <div>
             <h1>Tweeter</h1>
+            
+            {postList.map((post) => (
+                <div key={post.id}>
+                    <h1>{post.title}</h1>
+                    <p>{post.contents}</p>
+                </div>
+            ))}
 
-            {postList.map(post => {
-                return(
-                    <div key={post.id}>
-                        <h1>{post.title}</h1>
-                        <p>{post.contents}</p>
-                    </div>
-                )
-            })}
-
-            <AddPost postList={postList} setPostList={setPostList}>
-                <button>Add New Post</button>
-            </AddPost>
+            <button onClick={() => push("/addPost")}>Add New Post</button>
         </div>
     )
 }
