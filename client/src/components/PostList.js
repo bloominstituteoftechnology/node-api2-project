@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import PostCard from "./PostCard"
 
-const Home = ({postList, setPostList}) => {
+const PostList = ({ postList, setPostList }) => {
    
     const { push } = useHistory()
 
@@ -18,18 +19,15 @@ const Home = ({postList, setPostList}) => {
   
     return(
         <div>
-            <h1>Tweeter</h1>
-            
-            {postList.map((post) => (
-                <div key={post.id}>
-                    <h1>{post.title}</h1>
-                    <p>{post.contents}</p>
-                </div>
-            ))}
+            <h1>Seven Stones</h1>
 
+            {postList.map(post => (
+                <PostCard key={post.id} post={post} />
+            ))}
+            
             <button onClick={() => push("/addPost")}>Add New Post</button>
         </div>
     )
 }
 
-export default Home
+export default PostList

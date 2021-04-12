@@ -1,6 +1,6 @@
 import { Switch, Route } from "react-router-dom";
 import { useState } from "react";
-import Home from "./components/Home";
+import PostList from "./components/PostList";
 import AddPost from "./components/AddPost";
 import EditPost from "./components/EditPost";
 
@@ -15,15 +15,15 @@ function App() {
   return (
     <Switch>
       <Route path="/addPost">
-        <AddPost postList={postList} setPostList={setPostList}/>
+        <AddPost />
       </Route>
 
-      <Route path="/editPost">
+      <Route path="/editPost/:id">
         <EditPost postList={postList} setPostList={setPostList}/>
       </Route>
 
       <Route path="/posts">
-        <Home postList={postList} setPostList={setPostList}/>
+        <PostList postList={postList} setPostList={setPostList}/>
       </Route>
     </Switch>
   );

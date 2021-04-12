@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useHistory } from "react-router-dom"
 
-const AddPost = ({postList, setPostList}) => {
+const AddPost = () => {
     const initialState = {
         title: "",
         contents: ""
