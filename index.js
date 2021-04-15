@@ -1,4 +1,6 @@
-// require your server and launch it here
+// require your server and launch it here\
+
+require('dotenv').config()
 
 const express = require('express');
 
@@ -10,4 +12,7 @@ const server = express();
 server.use('/api/posts', postRoutes);
 
 
-server.listen(8000, () => console.log('API running on port 8000'));
+const port = process.env.PORT;
+
+
+server.listen(port, () => console.log(`API running on port ${port}`));
