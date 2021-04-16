@@ -1,0 +1,81 @@
+@font-face { 
+    font-family: 'RingBearer'; 
+    src: url('RingbearerMedium-51mgZ.ttf'); 
+} 
+
+/* header */
+
+header {
+    display: flex;
+}
+
+.title {
+   font-family: 'RingBearer';
+   padding-left: 10%;
+   width: 100%;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+}
+
+.navlink {
+    font: 20px sans-serif;
+    width: 15%;
+    text-decoration: none;
+    color: black;
+    padding: 10px;
+    margin: 20px;
+    border-radius: 20px;
+    width: 70%;
+    text-align: center;
+}
+
+.post-link {
+    font: 20px sans-serif;
+    width: 15%;
+    background-color: #1D60E7;
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+    margin: 20px;
+    border-radius: 20px;
+    width: 70%;
+    text-align: center;
+}
+
+/* posts */
+
+.post-list-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-list-container a {
+    width: 30%;
+    display: flex;
+    align-self: center;
+    box-shadow: 5px 5px 5px rgba(68, 68, 68, 0.6);
+    border: 1px solid black;
+    padding: 2%;
+    margin: 2%;
+}
+
+.post-title {
+    font: 16px sans-serif;
+    text-decoration: none;
+    color: black;
+    text-align: center;
+}
+
+.post-contents {
+    font: 16px sans-serif;
+    text-decoration: none;
+    color: black;
+    text-align: center;
+}
+
+

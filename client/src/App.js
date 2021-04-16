@@ -13,6 +13,7 @@ function App() {
   const [postList, setPostList] = useState([initialState])
 
   return (
+    <>
     <Switch>
       <Route path="/addPost">
         <AddPost />
@@ -22,10 +23,11 @@ function App() {
         <EditPost postList={postList} setPostList={setPostList}/>
       </Route>
 
-      <Route path="/posts">
+      <Route path="/">
         <PostList postList={postList} setPostList={setPostList}/>
       </Route>
     </Switch>
+    </>
   );
 }
 

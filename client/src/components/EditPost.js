@@ -34,7 +34,7 @@ const EditPost = ({ postList, setPostList }) => {
 
         axios.put(`http://localhost:4000/api/posts/${id}`, post)
             .then(res => {
-                push('/posts');
+                push('/');
             })
             .catch(err => console.log(err));
     }
@@ -47,7 +47,7 @@ const EditPost = ({ postList, setPostList }) => {
                 setPostList(postList.filter(item => {
                     return item.id !== post.id
                 }))
-                push('/posts');
+                push('/');
             })
             .catch(err => console.log(err));
     };

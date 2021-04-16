@@ -23,7 +23,7 @@ const AddPost = () => {
         e.preventDefault()
         axios.post("http://localhost:4000/api/posts", newPost)
             .then(() => {
-                push("/posts")
+                push("/")
             })
             .catch(err => {
                 console.log(err)

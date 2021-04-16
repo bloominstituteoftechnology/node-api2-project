@@ -1,12 +1,9 @@
 import axios from "axios";
 import { useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import PostCard from "./PostCard"
+import Post from "./Post"
+import Header from "./Header"
 
 const PostList = ({ postList, setPostList }) => {
-   
-    const { push } = useHistory()
-
     useEffect(() => {
         axios.get("http://localhost:4000/api/posts")
         .then(res => {
@@ -18,15 +15,15 @@ const PostList = ({ postList, setPostList }) => {
     }, [setPostList] )
   
     return(
-        <div>
-            <h1>Seven Stones</h1>
+        <>
+        <Header />
 
-            {postList.map(post => (
-                <PostCard key={post.id} post={post} />
-            ))}
-            
-            <button onClick={() => push("/addPost")}>Add New Post</button>
+        <div className="post-list-container">
+                {postList.map(post => (
+                    <Post key={post.id} post={post} />
+                ))}
         </div>
+        </>
     )
 }
 
