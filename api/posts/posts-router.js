@@ -90,10 +90,37 @@ router.put("/:id", (req, res) => {
 });
 
 // [DELETE] post by id /api/posts/:id
+// router.delete("/:id", (req, res) => {
+//   Posts.remove(req.params.id)
+//     .then((post) => {
+//       if (post) {
+//         res.status(200).json(post);
+//       } else {
+//         res
+//           .status(404)
+//           .json({ message: "The post with the specified ID does not exist" });
+//       }
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       res.status(500).json({
+//         message: "The post could not be removed",
+//       });
+//     });
+// });
+
 router.delete("/:id", (req, res) => {
-  Posts.remove(req.params.id)
+  Posts.findById(req.params.id)
     .then((post) => {
-      res.status(200).json(post);
+      if (post) {
+        Posts.remove(req.params.id).then(() => {
+          res.status(404).json(post);
+        });
+      } else {
+        res.status(404).json({
+          message: "The post with the specified ID does not exist",
+        });
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -107,7 +134,6 @@ router.delete("/:id", (req, res) => {
 router.get("/:id/comments", (req, res) => {
   Posts.findPostComments(req.params.id)
     .then((comments) => {
-      console.log(comments);
       res.status(200).json(comments);
     })
     .catch((err) => {
