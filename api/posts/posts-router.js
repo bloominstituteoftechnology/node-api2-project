@@ -1,4 +1,4 @@
-const { response } = require('../server');
+const response = require('../server');
 const Post = require('./posts-model');
 
 // implement your posts router here
@@ -37,7 +37,7 @@ router.get('/api/posts:id', async (request, result) => {
     }
 })
 
-router.get('/api/posts/:id/comments)', async (request, respone) => {
+router.get('/api/posts/:id/comments)', async (request, response) => {
     Post.findPostComments(request.params.id)
     .then(post => {
         if (post.length > 0) {
@@ -49,6 +49,7 @@ router.get('/api/posts/:id/comments)', async (request, respone) => {
         }
     })
     .catch(error => {
+        console.log(error)
         response.status(500).json({
             message: "The comments information could not be retrieved"
         })
