@@ -1,10 +1,10 @@
-const response = require('../server');
+
 const Post = require('./posts-model');
 
 // implement your posts router here
 const router = require('express').Router();
 
-router.get('/api/posts', (request, result) => {
+router.get('/', (request, result) => {
     Post.find()
     .then(post => {
         result.status(200).json(post)
@@ -18,7 +18,7 @@ router.get('/api/posts', (request, result) => {
     })
 })
 
-router.get('/api/posts:id', async (request, result) => {
+router.get('/:id', async (request, result) => {
     try {
         const post = await Post.findById(request.params.id)
         if (!post) {
@@ -37,7 +37,7 @@ router.get('/api/posts:id', async (request, result) => {
     }
 })
 
-router.get('/api/posts/:id/comments)', async (request, response) => {
+router.get('/:id/comments', (request, response) => {
     Post.findPostComments(request.params.id)
     .then(post => {
         if (post.length > 0) {
@@ -56,7 +56,7 @@ router.get('/api/posts/:id/comments)', async (request, response) => {
     })
 })
 
-router.post('/api/posts', async (request, res) => {
+router.post('/', async (request, res) => {
     try {
         const postFromClient = request.body
         if (!postFromClient.title || !postFromClient.contents) {
@@ -76,7 +76,7 @@ router.post('/api/posts', async (request, res) => {
     }
 })
 
-router.put('/api/posts/:id', async (request, response) => {
+router.put('/:id', async (request, response) => {
     try {
         const post = await Post.findById(request.params.id)
         const {id } = request.params
@@ -100,7 +100,7 @@ router.put('/api/posts/:id', async (request, response) => {
         })
 }})
 
-router.delete('/api/posts/:id', (request, response) => {
+router.delete('/:id', (request, response) => {
     Post.remove(request.params.id)
     .then(deletedPost => {
         if (!deletedPost) {

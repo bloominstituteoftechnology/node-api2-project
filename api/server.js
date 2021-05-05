@@ -3,8 +3,8 @@
 // BUILD YOUR SERVER HERE
 const express = require('express')
 const postRouter = require('./posts/posts-router')
-const server = require('express').express();
+const server = express();
 server.use(express.json());
 
-server.use(postRouter)
+server.use('/api/posts', postRouter)
 module.exports = server
