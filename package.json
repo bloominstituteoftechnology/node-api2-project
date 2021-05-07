@@ -2,11 +2,13 @@
   "name": "node-api2-project",
   "version": "0.0.1",
   "scripts": {
+    "start": "node index.js",
     "server": "nodemon index.js",
     "test": "cross-env NODE_ENV=testing jest --watch --verbose --runInBand --silent",
     "resetdb": "knex migrate:rollback && knex migrate:latest && knex seed:run"
   },
   "dependencies": {
+    "express": "^4.17.1",
     "knex": "^0.95.4",
     "sqlite3": "^5.0.2"
   },
