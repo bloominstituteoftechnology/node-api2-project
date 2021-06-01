@@ -21,7 +21,7 @@ There are two possible ways to submit your project. Your instructor should have 
 #### Option B - Pull Request
 
 - [x] Fork and clone the repository.
-- [ ] Implement your project in a `firstname-lastname` branch.
+- [x] Implement your project in a `firstname-lastname` branch.
 - [ ] Create a pull request of `firstname-lastname` against your `main` branch.
 - [ ] Open the assignment in Canvas and submit your pull request.
 
