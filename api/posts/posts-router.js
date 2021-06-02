@@ -37,6 +37,7 @@ router.get("/:id", (req, res) => {
       });
     });
 });
+
 router.post("/", (req, res) => {
   const { title, contents } = req.body;
   if (!title || !contents) {
@@ -60,7 +61,19 @@ router.post("/", (req, res) => {
       });
   }
 });
-router.delete("/:id", (req, res) => {});
+router.delete("/:id", async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      res.status(404).json({ message: "not found" });
+    } else {
+      await Post.remove(req.params.id);
+      res.json(post);
+    }
+  } catch (err) {
+    res.status(500);
+  }
+});
 router.put("/:id", (req, res) => {});
 router.get("/:id/messages", (req, res) => {});
 
