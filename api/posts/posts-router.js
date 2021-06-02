@@ -61,6 +61,7 @@ router.post("/", (req, res) => {
       });
   }
 });
+
 router.delete("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -74,7 +75,46 @@ router.delete("/:id", async (req, res) => {
     res.status(500);
   }
 });
-router.put("/:id", (req, res) => {});
-router.get("/:id/messages", (req, res) => {});
+
+//Incomplete
+router.put("/:id", (req, res) => {
+  const { title, contents } = req.body;
+  if (!title || !contents) {
+    res
+      .status(400)
+      .json({ message: "Please provide title and contents for the post" });
+  } else {
+    Post.findById(req.params.id)
+      .then((updatedPost) => {
+        if (!updatedPost) {
+          res.status(404);
+        } else {
+          Post.update(req.params.id, req.body);
+        }
+      })
+      .then((data) => {
+        if (data) {
+          return Post.findById(req.params.id);
+        }
+      })
+      .then((post) => {
+        res.json(post);
+      });
+  }
+});
+
+router.get("/:id/messages", async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      res.status(404).json({ message: "not found" });
+    } else {
+      const messages = await Post.findPostComments(req.params.id);
+      res.json(messages);
+    }
+  } catch (err) {
+    res.status(500);
+  }
+});
 
 module.exports = router;
