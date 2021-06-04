@@ -1,5 +1,5 @@
 // implement your server here
-//const Posts = require("./posts/posts-model.js"); --> This will get moved to one of the posts files
+
 
 const express = require("express");
 const adopterRouter = require("./adopters/adopters-router.js");
