@@ -1,8 +1,16 @@
 // implement your server here
+//const Posts = require("./posts/posts-model.js"); --> This will get moved to one of the posts files
+
 const express = require("express");
-const Posts = require("./posts/posts-model.js");
+const adopterRouter = require("./adopters/adopters-router.js");
+const postsRouter = require("./posts/posts-router.js");
 const server = express();
+
+
+
 server.use(express.json());
+server.use("./api/adopters", adopterRouter);
+server.use("./api/posts", postsRouter);
 //So now we're getting all of the methods from posts-model.js
 //  {find,
 //   findById,
@@ -30,6 +38,11 @@ server.use(express.json());
 //   }
 
 
+server.get('/', (req,res) => {
+    res.send(`
+        Lambda Blog Project
+    `);
+});
 
 
 // require your posts router and connect it here
