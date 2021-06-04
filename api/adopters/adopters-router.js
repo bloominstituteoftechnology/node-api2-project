@@ -1,7 +1,7 @@
-const Adopter = require('./adopters-model.js');
-const express = require("express");
+// const Adopter = require('./adopters-model.js');
+// const express = require("express");
 
-const router = express.Router();
+// const router = express.Router();
 
 //EXAMPLE
 // router.get('/', (req, res) => {
@@ -18,4 +18,4 @@ const router = express.Router();
 //       });
 //   });
 
-module.exports = router;
+//module.exports = router;

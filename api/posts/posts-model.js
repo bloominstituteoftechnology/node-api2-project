@@ -1,8 +1,8 @@
 //Import Knex and config to set up the communication b/tw JS and the database
 const knex = require('knex');
 const config = require('../../knexfile.js');
-
-const db = require('../../data/db-config');
+const db = knex(config.development);
+//const db = require('../../data/db-config');
 
 //Here all of the model methods are already created. 
 

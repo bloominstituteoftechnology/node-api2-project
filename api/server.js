@@ -2,14 +2,14 @@
 
 
 const express = require("express");
-const adopterRouter = require("./adopters/adopters-router.js");
+//const adopterRouter = require("./adopters/adopters-router.js");
 const postsRouter = require("./posts/posts-router.js");
 const server = express();
 
 
 
 server.use(express.json());
-server.use("./api/adopters", adopterRouter);
+//server.use("./api/adopters", adopterRouter);
 server.use("./api/posts", postsRouter);
 //So now we're getting all of the methods from posts-model.js
 //  {find,
