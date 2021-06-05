@@ -26,11 +26,21 @@ function insert(post) {
     .then(ids => ({ id: ids[0] }));
 }
 
+// function update(id, post) {
+//   return db('posts')
+//     .where('id', Number(id))
+//     .update(post);
+// }
+
 function update(id, post) {
   return db('posts')
     .where('id', Number(id))
-    .update(post);
+    .update(post, ["id", "title", "contents"]);
 }
+// Returns [1] in "mysql", "sqlite", "oracle"; [] in "postgresql" unless the 'returning' parameter is set
+// update — .update(data, [returning], [options]) / .update(key, value, [returning], [options])
+// http://knexjs.org/#Builder-update
+// need id, title, contents
 
 function remove(id) {
   return db('posts')
