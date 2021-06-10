@@ -36,7 +36,7 @@ router.get('/:id', (req, res) => {
         })
 });
 
-//POST (create)
+//POST (create) new post with title & contents
 router.post('/', (req, res) => {
     const body = req.body;
     if (!body.title || !body.contents) {
@@ -56,7 +56,7 @@ router.post('/', (req, res) => {
     }
 });
 
-// PUT (update)
+// PUT (update) post by id
 router.put('/:id', async (req, res) => {
     const lookupPost = await Posts.findById(req.params.id)
     if (!lookupPost) {
@@ -81,9 +81,42 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id',);
+// DELETE post by id
+router.delete('/:id', async (req, res) => {
+    const lookupPost = await Posts.findById(req.params.id)
+    if (!lookupPost) {
+        res.status(404).json({
+            message: "The post with the specified ID does not exist"
+        })
+    } else {
+        try {
+            const deletedPost = await Posts.remove(lookupPost.id)
+            res.status(200).json(deletedPost)
+        } catch (err) {
+            res.status(500).json({
+                message: "The post could not be removed"
+            })
+        }
+    }
+});
 
-router.get('/:id/comments',);
+router.get('/:id/comments', async (req, res) => {
+    const lookupPost = await Posts.findById(req.params.id)
+    if (!lookupPost) {
+        res.status(404).json({
+            message: "The post with the specified ID does not exist"
+        })
+    } else {
+        try {
+            const seeComments = await Posts.findPostComments(req.params.id)
+            res.status(200).json(seeComments);
+        } catch (err) {
+            res.status(500).json({
+                message: "The post information could not be modified"
+            })
+        }
+    }
+});
 
 
 module.exports = router;
