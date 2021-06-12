@@ -51,4 +51,15 @@ post.post("/:id/comments", (req, res) => {
     });
 });
 
+post.get("/", (req, res) => {
+  helper
+    .find()
+    .then((r) => res.status(200).json(r))
+    .catch((e) =>
+      res
+        .status(500)
+        .json({ message: "The post with the specified ID does not exist." })
+    );
+});
+
 module.exports = post;
