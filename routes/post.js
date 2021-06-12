@@ -102,4 +102,22 @@ post.get("/:id/comments", (req, res) => {
     });
 });
 
+post.delete("/:id", (req, res) => {
+  const ID = req.params.id;
+
+  helper
+    .remove(ID)
+    .then((r) => {
+      if (!r) {
+        return res
+          .status(404)
+          .json({ message: "The post with the specified ID does not exist." });
+      }
+      res.status(200).json(r);
+    })
+    .catch((e) => {
+      res.status(500).json({ error: "The post could not be removed" });
+    });
+});
+
 module.exports = post;
