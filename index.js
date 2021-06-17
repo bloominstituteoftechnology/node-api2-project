@@ -11,6 +11,7 @@ const logger = require("./middleware/logger");
 
 const welcomeRouter = require("./welcomeRouter/welcome-router");
 const postsRouter = require("./postsRouter/posts-routers");
+const commentsRouter = require("./commentsRouter/comments-router");
 
 // server.use(morgan("combined"));
 server.use(deny("insomnia"));
@@ -21,6 +22,9 @@ server.use("/", welcomeRouter);
 
 //CRUD /api/posts
 server.use("/api/posts", postsRouter);
+
+//GET only /api/comments
+server.use("/api/comments", commentsRouter);
 
 ///MIDDLEWARE FOR CATCH errors, when adding 4 parementers it knows
 //its handling an error from CATCH

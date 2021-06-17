@@ -11,6 +11,7 @@ module.exports = {
   findPostComments,
   findCommentById,
   insertComment,
+  getComments,
 };
 
 //GET
@@ -69,4 +70,9 @@ function insertComment(comment) {
     .then((ids) => {
       return db("comments").where({ id: ids }).first();
     });
+}
+
+//GET /api/comments
+function getComments() {
+  return db("comments");
 }

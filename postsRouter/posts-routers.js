@@ -5,8 +5,7 @@ const { checkUserID, checkPostData } = require("../middleware/post");
 
 //GET//  ----> /api/posts
 router.get("/", (req, res, next) => {
-  const postsList = req.body;
-  Posts.find(postsList)
+  Posts.find()
     .then((post) => {
       res.status(200).json(post);
     })
@@ -83,6 +82,8 @@ router.post("/:id/comments", checkUserID(), (req, res, next) => {
       .status(400)
       .json({ errorMessage: "please provide text for comment" });
   }
+
+  router.get("/id");
 
   const newComment = { post_id, text };
   Posts.insertComment(newComment)
