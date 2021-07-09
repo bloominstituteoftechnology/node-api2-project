@@ -3,11 +3,14 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "server": "nodemon index.js",
     "test": "cross-env NODE_ENV=testing jest --watch --verbose --runInBand --silent",
     "resetdb": "knex migrate:rollback && knex migrate:latest && knex seed:run"
   },
   "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
     "knex": "^0.95.6",
     "sqlite3": "^5.0.2"
   },
