@@ -66,6 +66,7 @@ router.post("/", (req, res) => {
       });
   }
 });
+
 /*[PUT] /api/posts/:id
 ✕ [8] responds with updated user
 ✓ [9] saves the updated user to the db
@@ -103,6 +104,54 @@ router.put("/:id", async (req, res) => {
       res.status(200).json(post);
     }
   }
+});
+
+/*[DELETE] /api/posts/:id
+✓ [12] reponds with a 404 if the post is not found
+✕ [13] reponds with the complete deleted post 
+✓ [14] removes the deleted post from the database 
+*/
+router.delete("/:id", async (req, res) => {
+  try {
+    const possiblePost = await Post.findById(req.params.id);
+    if (!possiblePost) {
+      res.status(404).json({
+        message: "The post with the specified ID does not exist",
+      });
+    } else {
+      const deletePost = await Post.remove(possiblePost.id);
+      res.status(200).json(deletePost);
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: "error creating post",
+      err: err.message,
+      stack: err.stack,
+    });
+  }
+});
+
+/*GET] /api/posts/:id/comments
+✓ [15] reponds with a 404 if the post is not found 
+✕ [16] can get all the comments associated to the posts with given id  */
+router.get("/:id/comments", async (req, res) => {
+  try {
+    const possiblePost = await Post.findById(req.params.id);
+    if (!possiblePost) {
+      res.status(404).json({
+        message:
+          "Please provide title and contents, The post with the specified ID does not exist",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: "error",
+    });
+  }
+});
+
+router.use("*", (req, res) => {
+  res.status(404).json({ message: "404 Not found )*:" });
 });
 
 module.exports = router;
