@@ -50,7 +50,7 @@ router.get("/:id", (req, res) => {
 
 /*[POST] /api/posts 
 ✓ [5] responds with a 201 
-✕ [6] responds with a new post
+✓ [6] responds with a new post
 ✓ [7] on missing title or contents responds with a 400 
 */
 router.post("/", (req, res) => {
@@ -79,7 +79,7 @@ router.post("/", (req, res) => {
 });
 
 /*[PUT] /api/posts/:id
-✕ [8] responds with updated user
+✓ [8] responds with updated user
 ✓ [9] saves the updated user to the db
 ✓ [10] responds with the correct message & status code on bad id
 ✓ [11] responds with the correct message & status code on validation problem 
@@ -122,7 +122,7 @@ router.put("/:id", (req, res) => {
 
 /*[DELETE] /api/posts/:id
 ✓ [12] reponds with a 404 if the post is not found
-✕ [13] reponds with the complete deleted post 
+✓ [13] reponds with the complete deleted post 
 ✓ [14] removes the deleted post from the database 
 */
 router.delete("/:id", async (req, res) => {
@@ -147,7 +147,7 @@ router.delete("/:id", async (req, res) => {
 
 /*GET] /api/posts/:id/comments
 ✓ [15] reponds with a 404 if the post is not found 
-✕ [16] can get all the comments associated to the posts with given id  */
+✓ [16] can get all the comments associated to the posts with given id  */
 router.get("/:id/comments", async (req, res) => {
   try {
     const possiblePost = await Post.findById(req.params.id);
@@ -166,10 +166,6 @@ router.get("/:id/comments", async (req, res) => {
       stack: err.stack,
     });
   }
-});
-
-router.use("*", (req, res) => {
-  res.status(404).json({ message: "404 Not found )*:" });
 });
 
 module.exports = router;

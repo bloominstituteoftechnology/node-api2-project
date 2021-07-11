@@ -12,4 +12,8 @@ server.get("/", (req, res) => {
   res.send("<h2> Welcome to my API </h2> <p>Labmda student: Stan Tudor</p>");
 });
 
+server.use("*", (req, res) => {
+  res.status(404).json({ message: "404 Not found )*:" });
+});
+
 module.exports = server;
