@@ -10,13 +10,15 @@ const router = express.Router();
 router.get("/", (req, res) => {
   Post.find(req.query)
     .then((posts) => {
-      console.log(posts);
+      //   console.log(posts);
       res.status(200).json(posts);
     })
     .catch((err) => {
-      console.log(err);
+      //   console.log(err);
       res.status(500).json({
         message: "The posts information could not be retrieved",
+        err: err.message,
+        stack: err.stack,
       });
     });
 });
@@ -31,12 +33,18 @@ router.get("/:id", (req, res) => {
       if (post) {
         res.status(200).json(post);
       } else {
-        res.status(404).json({ message: "Post does not exist" });
+        res.status(404).json({
+          message: "The post with the specified ID does not exist",
+        });
       }
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Error retrieving the post" });
+      res.status(500).json({
+        message: "The post information could not be retrieved",
+        err: err.message,
+        stack: err.stack,
+      });
     });
 });
 
@@ -53,19 +61,43 @@ router.post("/", (req, res) => {
     });
   } else {
     Post.insert(post)
+      .then(({ id }) => {
+        return Post.findById(id);
+      })
       .then((newPost) => {
         console.log(newPost);
         res.status(201).json(newPost);
       })
       .catch((err) => {
         res.status(500).json({
-          message: "error creating post",
+          message: "There was an error while saving the post to the database",
           err: err.message,
           stack: err.stack,
         });
       });
   }
 });
+// router.post("/", (req, res) => {
+//   const post = req.body;
+//   if (!post.title || !post.contents) {
+//     res.status(400).json({
+//       message: "Please provide title and contents for the post",
+//     });
+//   } else {
+//     Post.insert(post)
+//       .then((newPost) => {
+//         console.log(newPost);
+//         res.status(201).json(newPost);
+//       })
+//       .catch((err) => {
+//         res.status(500).json({
+//           message: "There was an error while saving the post to the database",
+//           err: err.message,
+//           stack: err.stack,
+//         });
+//       });
+//   }
+// });
 
 /*[PUT] /api/posts/:id
 ✕ [8] responds with updated user
@@ -78,13 +110,12 @@ router.put("/:id", async (req, res) => {
     const possiblePost = await Post.findById(req.params.id);
     if (!possiblePost) {
       res.status(404).json({
-        message:
-          "Please provide title and contents, The post with the specified ID does not exist",
+        message: "The post with the specified ID does not exist",
       });
     } else {
       if (!req.body.title || !req.body.contents) {
         res.status(400).json({
-          message: "Please provide title and contents",
+          message: "Please provide title and contents for the post",
         });
       } else {
         const updatePost = await Post.update(req.params.id, req.body);
@@ -93,16 +124,16 @@ router.put("/:id", async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({
-      message: "error updating post",
+      message: "The post information could not be modified",
       err: err.message,
       stack: err.stack,
     });
     const post = await Post.update(req.params.id, req.body);
-    if (!post) {
-      res.status(400).json({ message: `user ID does not exist` });
-    } else {
-      res.status(200).json(post);
-    }
+    // if (!post) {
+    //   res.status(400).json({ message: `user ID does not exist` });
+    // } else {
+    res.status(200).json(post);
+    // }
   }
 });
 
@@ -124,7 +155,7 @@ router.delete("/:id", async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({
-      message: "error creating post",
+      message: "The post could not be removed",
       err: err.message,
       stack: err.stack,
     });
@@ -139,13 +170,12 @@ router.get("/:id/comments", async (req, res) => {
     const possiblePost = await Post.findById(req.params.id);
     if (!possiblePost) {
       res.status(404).json({
-        message:
-          "Please provide title and contents, The post with the specified ID does not exist",
+        message: "The post with the specified ID does not exist",
       });
     }
   } catch (err) {
     res.status(500).json({
-      message: "error",
+      message: "The comments information could not be retrieved",
     });
   }
 });
