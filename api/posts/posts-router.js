@@ -77,27 +77,6 @@ router.post("/", (req, res) => {
       });
   }
 });
-// router.post("/", (req, res) => {
-//   const post = req.body;
-//   if (!post.title || !post.contents) {
-//     res.status(400).json({
-//       message: "Please provide title and contents for the post",
-//     });
-//   } else {
-//     Post.insert(post)
-//       .then((newPost) => {
-//         console.log(newPost);
-//         res.status(201).json(newPost);
-//       })
-//       .catch((err) => {
-//         res.status(500).json({
-//           message: "There was an error while saving the post to the database",
-//           err: err.message,
-//           stack: err.stack,
-//         });
-//       });
-//   }
-// });
 
 /*[PUT] /api/posts/:id
 ✕ [8] responds with updated user
@@ -150,8 +129,8 @@ router.delete("/:id", async (req, res) => {
         message: "The post with the specified ID does not exist",
       });
     } else {
-      const deletePost = await Post.remove(possiblePost.id);
-      res.status(200).json(deletePost);
+      await Post.remove(req.params.id);
+      res.status(200).json(possiblePost);
     }
   } catch (err) {
     res.status(500).json({
