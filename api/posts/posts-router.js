@@ -3,8 +3,10 @@ const express = require("express");
 const Post = require("./posts-model");
 
 const router = express.Router();
-
-router.get("/api/posts", (req, res) => {
+/*[GET] /api/posts
+✓ [1] can get the correct number of posts
+✓ [2] can get all the correct posts */
+router.get("/", (req, res) => {
   Post.find()
     .then((posts) => {
       console.log(posts);
