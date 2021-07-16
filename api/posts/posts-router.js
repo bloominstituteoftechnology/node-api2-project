@@ -74,8 +74,8 @@ router
             message:"Please provide title and contents for the post"
           });
         } else {
-          const updates = await Post.update(postID, {title, contents});
-          response.status(200).json(updates);
+          const updates = await Post.update(request.params.id,request.body);
+          response.json({...postID,title,contents});
         }
       }
     } catch (error) {
@@ -86,9 +86,28 @@ router
       });
     } 
   })
-  .put((request, response) => { })
-  .delete((request, response) => { });
+  .delete(async (request, response) => { 
+    try {
+      const postID = await Post.findById(request.params.id);
+      if (!postID) {
+        response.status(404).json({
+          message: "The post with the specified ID does not exist",
+        });
+        } else {
+         const removed = await Post.remove(request.params.id);
+         response.json(postID);
+        }
+    } catch (error) {
+      response.status(500).json({
+        message: "The post information could not be removed",
+        stack: error.stack,
+        error: error.message,
+      });
+    } 
+  });
 
-router.get("/:id/comments", (request, response) => { });
+router.get("/:id/comments", async(request, response) => {
+  
+ });
 
 module.exports = router;
