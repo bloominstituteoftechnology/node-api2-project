@@ -1,5 +1,5 @@
 
-exports.seed = function(knex) {
+exports.seed = function(knex, Promise) {
   return knex('comments').truncate()
     .then(function () {
       return knex('comments').insert([
