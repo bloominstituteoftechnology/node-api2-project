@@ -55,6 +55,7 @@ router.put('/:id', (req,res) => {
             }
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json({message: "The post information could not be modified"})
         }) 
 })
@@ -69,6 +70,7 @@ router.delete('/:id', (req,res) => {
             }
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json({message: "The post could not be removed"})
         })
 })
@@ -83,6 +85,9 @@ router.get('/:id/comments', (req,res) => {
             }
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json({message: "The comments information could not be retrieved"})
         })
 })
+
+module.exports = router;

@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "server": "nodemon index.js",
     "test": "cross-env NODE_ENV=testing jest --watch --verbose --runInBand --silent",
     "resetdb": "knex migrate:rollback && knex migrate:latest && knex seed:run"
   },
   "dependencies": {
     "knex": "^0.95.9",
-    "sqlite3": "^5.0.2"
+    "sqlite3": "^5.0.2",
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.24",
