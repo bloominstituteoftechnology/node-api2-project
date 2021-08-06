@@ -7,6 +7,10 @@
     "resetdb": "knex migrate:rollback && knex migrate:latest && knex seed:run"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "helmet": "^4.6.0",
     "knex": "^0.95.4",
     "sqlite3": "^5.0.2"
   },
