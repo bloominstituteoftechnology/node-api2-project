@@ -3,5 +3,28 @@ const express = require('express')
 
 const router = express.Router()
 
-module.exports = router
 
+
+router.get('/', (req, res) => {
+    res.json('foo')
+})
+router.get('/:id', (req, res) => {
+
+})
+router.post('/', (req, res) => {
+
+})
+router.delete('/:id', (req, res) => {
+
+})
+router.put('/:id', (req, res) => {
+
+})
+router.get('/:id/messages', (req, res) => { //or comments
+
+})
+
+
+
+
+module.exports = router
