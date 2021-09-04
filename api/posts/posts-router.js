@@ -5,7 +5,6 @@ const Post = require('./posts-model')
 const router = express.Router()
 
 
-
 router.get('/', (req, res) => {
     //res.json('foo')
     Post.find()
@@ -147,8 +146,6 @@ router.get('/:id/comments', async (req, res) => { //or comments
         })
     }
 })
-
-
 
 
 module.exports = router
