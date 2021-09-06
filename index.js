@@ -1,5 +1,14 @@
 const server = require("./api/server");
+const express = require("express");
 
-server.listen(4000, () => {
-  console.log("\n*** Server running on http://localhost:4000 ***\n");
+const PORT = process.env.PORT || 3001;
+
+const app = express();
+
+app.get("/api", (req, res) => {
+  res.json({ message: "Hello from server!" });
+});
+
+server.listen(PORT, () => {
+  console.log(`Server listening on ${PORT}`);
 });
