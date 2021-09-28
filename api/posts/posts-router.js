@@ -70,8 +70,45 @@ router.post("/", (req, res) => {
     })
   
 
+// #### 4 [PUT] /api/posts/:id
+router.put("/:id", (req, res) => {
+	const { title, contents } = req.body;
+	if (!title || !contents) {
+		res.status(400).json({
+			message: "Please provide title and contents for the post",
+		});
+	} else {
+		Posts.findById(req.params.id)
+			.then((stuff) => {
+				if (!stuff) {
+					res.status(404).json({
+						message: "The post with the specified ID does not exist",
+					});
+				} else {
+					return Posts.update(req.params.id, req.body);
+				}
+			})
+			.then((data) => {
+				if (data) {
+					return Posts.findById(req.params.id);
+				}
+			})
+			.then((posts) => {
+				if (posts) {
+					res.json(posts);
+				}
+			})
 
-
+			.catch((error) => {
+				console.log(error);
+				res.status(500).json({
+					message: "The post information could not be modified",
+					error: error.message,
+					stack: error.stack,
+				});
+			});
+	}
+});
 
 
 module.exports = router;
