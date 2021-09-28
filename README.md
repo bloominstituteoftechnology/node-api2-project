@@ -12,9 +12,9 @@ Your assignment page on Canvas should contain instructions for submitting this p
 
 ### Task 2: Minimum Viable Product
 
-- Add the code necessary to `index.js`, `api/server.js` and `api/posts/posts-router.js` to implement the endpoints listed below.
-- Separate the endpoints that begin with `/api/posts` into a separate Express Router inside `api/posts/posts-router.js`.
-- Configure the API to handle to the following routes. Some of these endpoints might require more than one call to the provided database helpers inside `api/posts/posts-model.js`.
+x Add the code necessary to `index.js`, `api/server.js` and `api/posts/posts-router.js` to implement the endpoints listed below.
+x Separate the endpoints that begin with `/api/posts` into a separate Express Router inside `api/posts/posts-router.js`.
+x Configure the API to handle to the following routes. Some of these endpoints might require more than one call to the provided database helpers inside `api/posts/posts-model.js`.
 
 | N | Method | Endpoint                | Description                                                                                                                     |
 | - | ------ | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
