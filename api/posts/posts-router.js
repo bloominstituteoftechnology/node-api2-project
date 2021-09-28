@@ -36,29 +36,49 @@ router.get('/:id', (req, res) => {
 });
 
 // [POST] /api/posts
-// Creates a post using the information sent inside the request body and returns the newly created post object
 router.post('/', (req, res) => {
-    Posts.insert(req.body)
-    .then(newPost => {
-        const { title, contents } = req.body;
-
-        if(!title.trim() || !contents.trim()){
-            res.status(400).json({
-                message: "Please provide title and contents for the post"
-            })
-        } else {
-            res.status(201).json({ id: newPost.id, title: title, contents: contents});
-        }
-    })
-    .catch(err => {
-        res.status(500).json({
-            message: "There was an error while trying to save the post to the database"
+    const { title, contents } = req.body;
+    if(!title || !contents){
+        res.status(400).json({
+            message: "Please provide title and contents for the post"
         })
-    })
-})
+    } else if (!title.trim() || !contents.trim()){
+        res.status(400).json({
+            message: "Please provide title and contents for the post"
+        })
+    } else {
+        Posts.insert(req.body)
+        .then(newPostId => {
+            res.status(201).json({ id: newPostId.id, title: title, contents: contents});
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: "The post information could not be retrieved"
+            })
+        })
+    }
+    
+});
 
 // [PUT] /api/posts/:id
 // Updates the post with the specified id using data from the request body and returns the modified document, not the original
+router.put('/:id', (req, res) => {
+    const changes = req.body;
+    const { id } = req.params;
+    
+    if(!changes.title || !changes.contents){
+        res.status(400).json({
+            message: "Please provide title and contents for the post"
+        })
+    } else if (!changes.title.trim() || !changes.contents.trim()){
+        res.status(400).json({
+            message: "Please provide title and contents for the post"
+        })
+    } else {
+        Posts.update(parseInt(id), changes)
+        res.status(200).json(changes);
+    }
+})
 
 // [DELETE] /api/posts/:id
 // Removes the post with the specified id and returns the deleted post object
