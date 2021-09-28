@@ -3,6 +3,7 @@ const express = require("express")
 const Posts = require('./posts-model')
 const router = express.Router();
 
+//  #### 1 [GET] /api/posts
 router.get("/", (req, res) => {
 	Posts.find(req.query)
 		.then(posts => {
@@ -16,6 +17,7 @@ router.get("/", (req, res) => {
 		})
 })
 
+// #### 2 [GET] /api/posts/:id
 router.get("/:id", (req, res) => {
 	Posts.findById(req.params.id)
 		.then((post) => {
@@ -37,7 +39,36 @@ router.get("/:id", (req, res) => {
 		});
 });
 
+// #### 3 [POST] /api/posts
 
+router.post("/", (req, res) => {
+	const { title, contents } = req.body
+    if(!title || !contents){
+            res.status(400).json({
+                message: 'Please provide title and contents for the post'
+            })
+        } else {
+            Posts.insert({ title, contents })
+				.then(({id}) => {
+				return Posts.findById(id)
+				})
+                    .then(posts => {
+                        res.status(201).json(posts)
+                    } )
+					.catch((error) => {
+					console.log(error);
+								res.status(500).json({
+									message:
+										"There was an error while saving the post to the database",
+                                    error: error.message,
+                                    stack: error.stack,
+
+								});
+							});
+           
+        }
+    })
+  
 
 
 
