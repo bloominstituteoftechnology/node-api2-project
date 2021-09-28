@@ -43,32 +43,29 @@ router.post("/", (req, res) => {
   }
 });
 
-//           .then((post) => {
-//   Post.update(id, changes)
-//         .then()=>{        res
-//           .status(201)
-//           .json({ id: id, title: changes.title, contents: changes.contents });}
-
-// res
-//           .status(404)
-//           .json({ message: "post could not be found, please check your id" });
-
 router.put("/:id", (req, res) => {
   const changes = req.body;
   const { id } = req.params;
   Post.update(id, changes)
     .then((post) => {
-      if (post) {
+      if (!post) {
+        res
+          .status(404)
+          .json({ message: "The post with the specified ID does not exist" });
+      } else if (!changes.title || !changes.contents) {
+        res
+          .status(400)
+          .json({ message: "Please provide title and contents for the post" });
+      } else {
         res.status(201).json({
           id: parseInt(id),
           title: changes.title,
           contents: changes.contents,
         });
-      } else {
-        res.status(404).json({ message: "didnt work" });
       }
     })
     .catch((err) => {
+      res.status(500);
       console.log(err);
     });
 });
