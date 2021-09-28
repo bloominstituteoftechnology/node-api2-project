@@ -16,14 +16,55 @@ router.get("/", (req, res) => {
       });
     });
 });
-router.get("/:id ", (req, res) => {
-  const { id } = req.params;
-  Post.findById(id)
+router.post("/", (req, res) => {
+  const { title, contents } = req.body;
+  if (!title || !contents) {
+    res.status(400).json({
+      message: "Please provide title and contents for the post",
+    });
+  } else {
+    console.log("success");
+    Post.insert({ title, contents })
+      .then((id) => {
+        res.status(201).json({
+          id: id,
+          title: title,
+          contents: contents,
+        });
+      })
+      .then((post) => {
+        res.status(201).json(post);
+      })
+      .catch(() => {
+        res.status(500).json({
+          message: "There was an error while saving the post to the database",
+        });
+      });
+  }
+});
+
+router.put("/:id", (req, res) => {
+  Post.update(req.query)
+    .then((posts) => {
+      res.status(200).json(posts);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({
+        message: "cant retreive posts bruh, try again",
+      });
+    });
+});
+
+router.get("/:id", (req, res) => {
+  Post.findById(req.params.id)
     .then((post) => {
       if (post) {
         res.status(200).json(post);
       } else {
-        res.status(404).json({ message: "post not found" });
+        res
+          .status(404)
+          .json({ message: "the post with the specified id does not exist" });
       }
     })
     .catch((error) => {
@@ -34,4 +75,5 @@ router.get("/:id ", (req, res) => {
       });
     });
 });
+
 module.exports = router;
