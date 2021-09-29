@@ -1,4 +1,3 @@
-// implement your posts router here
 const express = require("express")
 const Posts = require('./posts-model')
 const router = express.Router();
@@ -110,7 +109,7 @@ router.put("/:id", (req, res) => {
 	}
 })
 
-
+//#### 5 [DELETE] /api/posts/:id
 router.delete("/:id", async (req, res) => {
 	try {
 		const posts = await Posts.findById(req.params.id);
@@ -130,10 +129,10 @@ router.delete("/:id", async (req, res) => {
 		})
 	}
 })
-
+//#### 6 [GET] /api/posts/:id/comments
 router.get("/:id/comments", async (req, res) => {
 	try {
-		const post = await Posts.findById(req.params.id);
+		const post = await Posts.findCommentById(req.params.id);
 
 		if (!post) {
 			res.status(404).json({
@@ -149,7 +148,7 @@ router.get("/:id/comments", async (req, res) => {
 			message: "The comments information could not be retrieved",
 			error: error.message,
 			stack: error.stack,
-		});
+		})
 	}
 })
 
