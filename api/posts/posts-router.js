@@ -102,8 +102,8 @@ router.put("/:id", (req, res) => {
 				console.log(error)
 				res.status(500).json({
 					message: "The post information could not be modified",
-					error: error.message,
-					stack: error.stack,
+							error: error.message,
+							stack: error.stack,
 				})
 			})
 	}
