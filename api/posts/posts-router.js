@@ -56,11 +56,12 @@ router.post("/", (req, res) => {
                     } )
 					.catch((error) => {
 					console.log(error);
-								res.status(500).json({
-									message:
-										"There was an error while saving the post to the database",
-                                    error: error.message,
-                                    stack: error.stack,
+					res.status(500).json({
+					message:
+					"There was an error while saving the post to the database",
+                	error: error.message,
+                    stack: error.stack,
+
 
 								})
 							})
@@ -97,7 +98,6 @@ router.put("/:id", (req, res) => {
 					res.json(posts)
 				}
 			})
-
 			.catch((error) => {
 				console.log(error)
 				res.status(500).json({
