@@ -57,11 +57,9 @@ router.post('/', (req, res) => {
             })
         })
     }
-    
 });
 
 // [PUT] /api/posts/:id
-// Updates the post with the specified id using data from the request body and returns the modified document, not the original
 router.put('/:id', (req, res) => {
     const changes = req.body;
     const { id } = req.params;
@@ -99,6 +97,30 @@ router.put('/:id', (req, res) => {
 
 // [DELETE] /api/posts/:id
 // Removes the post with the specified id and returns the deleted post object
+router.delete('/:id', (req, res) => {
+    const { id } = req.params;
+    
+
+    Posts.remove(parseInt(id))
+    .then(postToRemove => {
+        if(postToRemove === 0){
+            res.status(404).json({
+                message: "The post with the specified ID does not exist"
+            })
+        } else {
+            res.status(200).json({
+                id: parseInt(id),
+                // contents: ,
+                // title:
+            })
+        }
+    })
+    .catch(err => {
+        res.status(500).json({
+            message: "The post could not be removed"
+        })
+    })
+})
 
 // [GET] /api/posts/:id/comments
 // Returns an array of all the comment objects associated with the post with the specified id
