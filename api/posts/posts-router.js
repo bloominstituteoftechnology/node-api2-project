@@ -33,4 +33,23 @@ router.get('/:id', (req, res) => {
         });
 });
 
+router.post('/', (req, res) => {
+    if (req.body.title && req.body.contents) {
+        Post.insert(req.body)
+            .then(({ id }) => {
+                res.status(201).json({ id, ...req.body });
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    message: 'Error inserting posts'
+                });
+            });
+    } else {
+        res.status(400).json({
+            message: 'Title and contents are required'
+        })
+    }
+});
+
 module.exports = router;
