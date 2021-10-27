@@ -4,7 +4,7 @@ const Post = require('./posts-model');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    Post.find(req.query)
+    Post.find()
         .then(posts => {
             res.status(200).json(posts);
         })
@@ -68,12 +68,12 @@ router.put('/:id', async (req, res) => {
                 if (newPost === 1) {
                     res.status(200).json({ id: Number(id), title, contents })
                 } else {
-                    res.status(500)
+                    res.status(500).json({ message: `Could not update` })
                 }
             }
         }
     } catch (err) {
-        res.status(500).json({ message: `ERROR updating post ` })
+        res.status(500).json({ message: `ERROR updating post` })
     }
 })
 
@@ -113,7 +113,7 @@ router.get('/:id/comments', async (req, res) => {
         res.status(500).json({
             message: 'Error retrieving comments for this post'
         });
-    }
+    }7
 });
 
 module.exports = router;
