@@ -21,13 +21,11 @@ server.get(`/:id`, (req, res) => {
   model
     .findById(id)
     .then((post) => {
-      if (post) {
-        res.status(200).send(post);
-      } else {
-        res
-          .status(400)
-          .send({ message: "The post with the specified ID does not exist" });
-      }
+      return post === undefined || post === null
+        ? res.status(200).send(post)
+        : res
+            .status(400)
+            .send({ message: "The post with the specified ID does not exist" });
     })
     .catch(() => {
       res
@@ -36,7 +34,7 @@ server.get(`/:id`, (req, res) => {
     });
 });
 
-server.post("/", async (req, res) => {
+server.post("/", (req, res) => {
   const post = req.body;
   if (!post.title || !post.contents) {
     res
@@ -56,43 +54,55 @@ server.post("/", async (req, res) => {
 
 server.put(`/:id`, (req, res) => {
   const id = req.params.id;
-  if (!req.body.title || !req.body.contents) {
+  const post = req.body;
+  if (!post.title || !post.contents) {
     res
       .status(400)
       .send({ message: "Please provide title and contents for the post" });
   } else {
-    const post = req.body;
-    try {
-      model.update(id, post);
-      res.status(200).send(post);
-    } catch (err) {
-      res.status(500).send({
-        message: { message: "The post information could not be modified" },
+    model
+      .update(id, post)
+      .then((updatedPost) => {
+        return updatedPost === null || updatedPost === undefined
+          ? res.status(400).send({
+              message: "The post with the specified ID does not exist",
+            })
+          : res.status(200).send(updatedPost);
+      })
+      .catch(() => {
+        res
+          .sendStatus(500)
+          .send({ message: "The post information could not be modified" });
       });
-    }
   }
 });
 
 server.delete(`/:id`, (req, res) => {
   const id = req.params.id;
-  try {
-    model.remove(id);
-    res.status(200).send("record deleted");
-  } catch (e) {
-    res.status(500).send({ message: "The post could not be removed" });
-  }
+  model
+    .remove(id)
+    .then((removedPost) => {
+      return removedPost === undefined || removedPost === null
+        ? res
+            .status(400)
+            .send({ message: "The post with the specified ID does not exist" })
+        : res.status(200).send(removedPost);
+    })
+    .catch(() => {
+      res.status(500).send({ message: "The post could not be removed" });
+    });
 });
 
 server.get(`/:id/comments`, (req, res) => {
   const id = req.params.id;
-  try {
-    const comments = model.findPostComments(id);
-    res.status(200).send(comments);
-  } catch (e) {
-    res
-      .status(500)
-      .send({ message: "The comments information could not be retrieved" });
-  }
+  model
+    .findPostComments(id)
+    .then((data) => res.status(200).send(data))
+    .catch(() => {
+      res
+        .status(500)
+        .send({ message: "The comments information could not be retrieved" });
+    });
 });
 
 module.exports = server;
