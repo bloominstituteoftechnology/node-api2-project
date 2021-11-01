@@ -43,7 +43,7 @@ server.post("/", (req, res) => {
   } else {
     model
       .insert(post)
-      .then((newPost) => res.status(201).send(newPost))
+      .then(() => res.status(201).send(post))
       .catch(() => {
         res.status(500).send({
           message: "There was an error while saving the post to the database",
@@ -62,7 +62,15 @@ server.put(`/:id`, (req, res) => {
   } else {
     model
       .update(id, post)
-      .then((updatedPost) => res.status(200).send(updatedPost))
+      .then((updatedPost) => {
+        return updatedPost === undefined ||
+          updatedPost === null ||
+          updatedPost === 0
+          ? res.status(400).send({
+              message: "The post with the specified ID does not exist",
+            })
+          : res.status(200).send(post);
+      })
       .catch(() => {
         res
           .sendStatus(500)
@@ -76,7 +84,9 @@ server.delete(`/:id`, (req, res) => {
   model
     .remove(id)
     .then((removedPost) => {
-      return removedPost === undefined || removedPost === null
+      return removedPost === undefined ||
+        removedPost === null ||
+        removedPost === 0
         ? res
             .status(400)
             .send({ message: "The post with the specified ID does not exist" })
