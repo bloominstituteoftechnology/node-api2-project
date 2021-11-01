@@ -5,8 +5,12 @@ const server = express();
 const model = require("./posts-model");
 
 server.get("/", async (req, res) => {
-  const posts = await model.find();
-  res.status(200).send(posts);
+  try {
+    const posts = await model.find();
+    res.status(200).send(posts);
+  } catch (err) {
+    res.status(500).send({ error: err });
+  }
 });
 
 server.get(`/:id`, (req, res) => {
