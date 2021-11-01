@@ -13,8 +13,14 @@ server.get("/", async (req, res) => {
   }
 });
 
-server.get(`/:id`, (req, res) => {
-  res.status(200).send(`GET response /:id`);
+server.get(`/:id`, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const post = await model.findById(id)
+    res.status(200).send(post);
+  } catch (err) {
+    res.status(500).send({error: err})
+  }
 });
 
 server.post("/", (req, res) => {
