@@ -22,10 +22,10 @@ server.get(`/:id`, (req, res) => {
     .findById(id)
     .then((post) => {
       return post === undefined || post === null
-        ? res.status(200).send(post)
-        : res
+        ? res
             .status(400)
-            .send({ message: "The post with the specified ID does not exist" });
+            .send({ message: "The post with the specified ID does not exist" })
+        : res.status(200).send(post);
     })
     .catch(() => {
       res
@@ -62,13 +62,7 @@ server.put(`/:id`, (req, res) => {
   } else {
     model
       .update(id, post)
-      .then((updatedPost) => {
-        return updatedPost === null || updatedPost === undefined
-          ? res.status(400).send({
-              message: "The post with the specified ID does not exist",
-            })
-          : res.status(200).send(updatedPost);
-      })
+      .then((updatedPost) => res.status(200).send(updatedPost))
       .catch(() => {
         res
           .sendStatus(500)
