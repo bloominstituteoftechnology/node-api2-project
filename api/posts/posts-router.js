@@ -90,7 +90,7 @@ server.delete(`/:id`, (req, res) => {
         ? res
             .status(400)
             .send({ message: "The post with the specified ID does not exist" })
-        : res.status(200).send(removedPost);
+        : res.status(200).send("Post removed");
     })
     .catch(() => {
       res.status(500).send({ message: "The post could not be removed" });
