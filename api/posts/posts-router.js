@@ -43,32 +43,27 @@ router.post('/', (req, res) => {
     }
 })
 
-router.put('/:id', (req, res) => {
-    const {title, contents} = req.body
-    if(!title || !contents){
-        res.status(400).json({message:'Please provide title and contents for the post'})
-    }else{
-        Posts.findById(req.params.id)
-        .then(info => {
-             if(!info){
-                res.status(404).json({message: 'The post with the specified ID does not exist'})
+router.put('/:id', async (req, res) => {
+    try{
+        const {id} = req.params
+        const {title, contents} = req.body
+        if(!title || !contents){
+            res.status(400).json({message: `Provide title and contents for ${id}` })
+        }else{
+            const post = await Posts.findById(id)
+            if(!post){
+                res.status(404).json(({message: `The post with the specified ${id} does not exist`}))
             }else{
-                return Posts.update(req.params.id, req.body)
+                const newPost = await Posts.update(id, {title, contents})
+                if(newPost === 1){
+                    res.status(200).json({id: Number(id), title, contents})
+                }else{
+                    res.status(500).json({message: 'The post information could not be modified'})
+                }
             }
-        })
-        .then(data => {
-            if(data){
-                return Posts.findById(req.paramas.id)
-            }
-        })
-        .then(post => {
-            if(post){
-                res.json(post)
-            }
-        })
-        .catch(err => {
-            res.status(500).json({err: err.message, message: 'There was an error while saving the post to the database', stack: err.stack})
-        })
+        }
+    }catch(err){
+        res.status(500).json({message: 'The post information could not be modified'})
     }
 })
 
