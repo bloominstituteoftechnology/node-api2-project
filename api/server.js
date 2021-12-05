@@ -3,13 +3,15 @@
 const express = require('express')
 
 const server = express()
+
 // MIDDLEWARE
 server.use(express.json())
 
-server.use('req,res')=>{
+server.use('*', (req,res)=>{
     res.status(404).json({
         message: 'not found'
     })
-}
+})
+
 // EXPORTS
 module.exports = server
