@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "knex": "^0.95.14",
-    "sqlite3": "^5.0.2"
+    "sqlite3": "^4.2.0"
   },
   "devDependencies": {
     "@types/jest": "^27.0.3",
