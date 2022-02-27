@@ -8,16 +8,16 @@
     "resetdb": "knex migrate:rollback && knex migrate:latest && knex seed:run"
   },
   "dependencies": {
-    "knex": "^0.95.14",
-    "sqlite3": "^5.0.2"
+    "@vscode/sqlite3": "5.0.7",
+    "knex": "^1.0.3"
   },
   "devDependencies": {
-    "@types/jest": "^27.0.3",
+    "@types/jest": "^27.4.1",
     "cross-env": "^7.0.3",
-    "eslint": "^8.3.0",
-    "jest": "^27.3.1",
+    "eslint": "^8.10.0",
+    "jest": "^27.5.1",
     "nodemon": "^2.0.15",
-    "supertest": "^6.1.6"
+    "supertest": "^6.2.2"
   },
   "repository": {
     "type": "git",
