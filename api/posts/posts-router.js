@@ -64,12 +64,9 @@ router.post(`/`, (req, res) => {
 
 // PUT Request:
 router.put(`/:id`, (req, res) => {
-   //PUT tests fail. 
-   //[8] - not sure why this is failing since on Postman, the response is {id: __, title: ___, contents: ___} - exactly what they are asking for
-   // I've tried turning the id into a number with parseInt, but that did not work
-
    const changes = req.body
    const { id } = req.params
+   const num_id = parseInt(id)
 
    Posts.update(id, changes)
       .then(updatedPost => {
@@ -79,7 +76,7 @@ router.put(`/:id`, (req, res) => {
          else if (!changes.title || !changes.contents) {
             return res.status(400).json({ message: "Please provide title and contents for the post" })
          }
-         res.status(200).json({ id, ...changes })
+         res.status(200).json({ id: num_id, ...changes })
       })
       .catch(err => {
          console.log(err)
@@ -94,13 +91,13 @@ router.put(`/:id`, (req, res) => {
 
 
 //Delete Request:
-router.delete(`/:id`, (req, res) => {
-   // DELETE test [13] fails b/c it expects to recieve the post back once deleted, but I cannot figure out how to do this. I even checked the express docs for the req methods.
+router.delete(`/:id`, async (req, res) => {
+   const post = await Posts.findById(req.params.id);
 
    Posts.remove(req.params.id)
       .then(deletePost => {
          if (deletePost > 0) {
-            return res.status(200).json(req.params)
+            return res.status(200).json(post)
          }
          res.status(404).json({ message: "The post with the specified ID does not exist" })
       })
